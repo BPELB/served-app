@@ -1256,9 +1256,30 @@ function ClaimModal({ onClose, onDashboard }) {
 // ADVERTISE MODAL — self-serve ad builder
 // ============================================================
 const AD_BUDGETS = [
-  {label:"Starter",amount:50,reach:"1,200–2,000",impressions:"Featured in 1 category"},
-  {label:"Growth",amount:150,reach:"4,000–6,500",impressions:"Featured in 3 categories"},
-  {label:"Pro",amount:350,reach:"10,000–16,000",impressions:"Featured everywhere + priority"},
+  {
+    label:"Starter", amount:50,
+    reach:"1,200–2,000", cpm:"$25",
+    placements:"Featured in 1 category feed",
+    audience:"Local users browsing your category",
+    billing:"Billed monthly · Cancel anytime",
+    best:"New to advertising",
+  },
+  {
+    label:"Growth", amount:150,
+    reach:"4,000–6,500", cpm:"$23",
+    placements:"Featured in 3 category feeds + search results",
+    audience:"Local + nearby-city users · interest-matched",
+    billing:"Billed monthly · Cancel anytime",
+    best:"Growing a loyal base",
+  },
+  {
+    label:"Pro", amount:350,
+    reach:"10,000–16,000", cpm:"$22",
+    placements:"All category feeds + search + home spotlight",
+    audience:"Broad local area · highest-intent users prioritized",
+    billing:"Billed monthly · Cancel anytime",
+    best:"Dominating local search",
+  },
 ];
 
 function AdvertiseModal({ onClose }) {
@@ -1301,25 +1322,49 @@ function AdvertiseModal({ onClose }) {
 
         {/* STEP 1 — Choose plan */}
         {step===1 && !launched && <>
-          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Choose your plan</div>
+          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Choose your ad plan</div>
           <p style={{fontSize:12,color:MUT,marginBottom:18,lineHeight:1.6}}>
-            All plans are month-to-month. Cancel anytime.
+            All plans are month-to-month with no contracts. Your ad goes live within 24 hours of approval.
           </p>
-          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
             {AD_BUDGETS.map((b,i)=>(
               <div key={b.label} onClick={()=>setBudget(i)}
                 style={{padding:"14px 16px",borderRadius:16,cursor:"pointer",
                   border:`2px solid ${budget===i?O:BDR}`,
                   background:budget===i?`${O}12`:BG2,
                   transition:"all 0.15s"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
-                  <span style={{fontSize:14,fontWeight:800,color:N}}>{b.label}</span>
-                  <span style={{fontSize:16,fontWeight:900,color:O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:MUT}}>/mo</span></span>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8}}>
+                    <span style={{fontSize:14,fontWeight:800,color:N}}>{b.label}</span>
+                    <span style={{fontSize:9,fontWeight:700,color:budget===i?O:MUT,
+                      background:budget===i?`${O}20`:BG3,borderRadius:6,padding:"2px 6px",
+                      textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
+                  </div>
+                  <span style={{fontSize:16,fontWeight:900,color:O}}>${b.amount}<span style={{fontSize:10,fontWeight:600,color:MUT}}>/mo</span></span>
                 </div>
-                <div style={{fontSize:11,color:MUT}}>{b.reach} estimated reach/mo</div>
-                <div style={{fontSize:11,color:MUT}}>{b.impressions}</div>
+                <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                    <span style={{fontSize:12}}>👥</span>
+                    <span style={{fontSize:11,color:MUT}}><strong style={{color:N}}>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
+                  </div>
+                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                    <span style={{fontSize:12}}>📍</span>
+                    <span style={{fontSize:11,color:MUT}}>{b.placements}</span>
+                  </div>
+                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                    <span style={{fontSize:12}}>🎯</span>
+                    <span style={{fontSize:11,color:MUT}}>{b.audience}</span>
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:12,
+            padding:"10px 14px",marginBottom:20,display:"flex",gap:8,alignItems:"flex-start"}}>
+            <span style={{fontSize:14}}>ℹ️</span>
+            <p style={{fontSize:11,color:MUT,margin:0,lineHeight:1.6}}>
+              Ad spend goes directly toward impressions on Served. There are no setup fees or hidden charges. You can pause or cancel from your dashboard at any time.
+            </p>
           </div>
           <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
             border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
@@ -1327,71 +1372,102 @@ function AdvertiseModal({ onClose }) {
         </>}
 
         {/* STEP 2 — Ad creative */}
-        {step===2 && !launched && <>
-          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Build your ad</div>
-          <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
-            This is what customers will see when your ad appears.
-          </p>
-          {/* Live preview */}
-          <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:16,
-            padding:"14px 16px",marginBottom:18}}>
-            <div style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",
-              letterSpacing:"0.1em",marginBottom:8}}>Ad preview</div>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:44,height:44,borderRadius:12,background:O,
-                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                <span style={{fontSize:22}}>🍕</span>
+        {step===2 && !launched && (()=>{
+          const CTA_PRESETS = ["Book now","Order online","Get directions","Call us","See menu","Learn more"];
+          const isCustom = !CTA_PRESETS.includes(adForm.cta);
+          return <>
+            <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Build your ad</div>
+            <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
+              Your ad appears as a sponsored card in category feeds and search results. Keep your headline punchy and your CTA action-oriented — shorter text performs better on mobile.
+            </p>
+
+            {/* Live preview */}
+            <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:16,
+              padding:"14px 16px",marginBottom:18}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <div style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Ad preview</div>
+                <div style={{fontSize:9,fontWeight:700,color:MUT,background:BG3,borderRadius:6,padding:"2px 8px"}}>Sponsored</div>
               </div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:14,fontWeight:800,color:N}}>
-                  {adForm.headline||"Your headline here"}
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{width:44,height:44,borderRadius:12,background:O,
+                  display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <span style={{fontSize:22}}>🍕</span>
                 </div>
-                <div style={{fontSize:11,color:MUT}}>
-                  {adForm.tagline||"Your tagline appears here"}
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,fontWeight:800,color:N,
+                    whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                    {adForm.headline||<span style={{color:MUT}}>Your headline here</span>}
+                  </div>
+                  <div style={{fontSize:11,color:MUT,
+                    whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                    {adForm.tagline||"Your tagline appears here"}
+                  </div>
+                </div>
+                <div style={{padding:"6px 10px",borderRadius:8,background:O,
+                  color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:80,
+                  whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",textAlign:"center"}}>
+                  {adForm.cta||"Book now"}
                 </div>
               </div>
-              <div style={{padding:"6px 10px",borderRadius:8,background:O,
-                color:"#fff",fontSize:10,fontWeight:800,flexShrink:0}}>
-                {adForm.cta||"Book now"}
+            </div>
+
+            <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:20}}>
+              <div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
+                  <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>Headline <span style={{color:"#ef4444"}}>*</span></div>
+                  <div style={{fontSize:10,color:MUT}}>{adForm.headline.length}/40</div>
+                </div>
+                <input placeholder="e.g. Best Italian in McKinney" value={adForm.headline}
+                  onChange={set("headline")} style={inp} maxLength={40}/>
+                <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>This is the first thing customers read — make it specific and local.</div>
               </div>
-            </div>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
-            <div>
-              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                letterSpacing:"0.06em",marginBottom:5}}>Headline</div>
-              <input placeholder="e.g. Best Italian in McKinney" value={adForm.headline}
-                onChange={set("headline")} style={inp} maxLength={40}/>
-            </div>
-            <div>
-              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                letterSpacing:"0.06em",marginBottom:5}}>Tagline</div>
-              <input placeholder="e.g. Authentic recipes since 1987" value={adForm.tagline}
-                onChange={set("tagline")} style={inp} maxLength={60}/>
-            </div>
-            <div>
-              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                letterSpacing:"0.06em",marginBottom:5}}>Call to action</div>
-              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-                {["Book now","Order online","Get directions","Call us","Learn more"].map(cta=>(
-                  <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
+              <div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
+                  <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>Tagline</div>
+                  <div style={{fontSize:10,color:MUT}}>{adForm.tagline.length}/60</div>
+                </div>
+                <input placeholder="e.g. Authentic recipes since 1987 · Dine-in & takeout" value={adForm.tagline}
+                  onChange={set("tagline")} style={inp} maxLength={60}/>
+                <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>Use this for a hook, offer, or differentiator. Emojis are welcome.</div>
+              </div>
+              <div>
+                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:8}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
+                  {CTA_PRESETS.map(cta=>(
+                    <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
+                      style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
+                        border:`1.5px solid ${adForm.cta===cta?O:BDR}`,
+                        background:adForm.cta===cta?O:"transparent",
+                        color:adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
+                  ))}
+                  <button onClick={()=>setAdForm(f=>({...f,cta:""}))}
                     style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
-                      border:`1.5px solid ${adForm.cta===cta?O:BDR}`,
-                      background:adForm.cta===cta?O:"transparent",
-                      color:adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
-                ))}
+                      border:`1.5px solid ${isCustom?O:BDR}`,
+                      background:isCustom?O:"transparent",
+                      color:isCustom?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
+                </div>
+                {isCustom && (
+                  <div>
+                    <input placeholder="e.g. Claim offer, Shop now, Reserve a table…" value={adForm.cta}
+                      onChange={set("cta")} style={inp} maxLength={20}/>
+                    <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>Max 20 characters. Keep it action-first.</div>
+                  </div>
+                )}
+                <div style={{fontSize:10,color:MUT,marginTop:6,paddingLeft:2}}>
+                  The CTA button appears on the right of your sponsored card. When tapped, it links to your Served listing where customers can call, get directions, or leave a review.
+                </div>
               </div>
             </div>
-          </div>
-          <div style={{display:"flex",gap:10}}>
-            <button onClick={()=>setStep(1)} style={{flex:1,padding:"13px",borderRadius:14,
-              border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
-              fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
-            <button onClick={()=>setStep(3)} style={{flex:2,padding:"13px",borderRadius:14,
-              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
-              cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
-          </div>
-        </>}
+            <div style={{display:"flex",gap:10}}>
+              <button onClick={()=>setStep(1)} style={{flex:1,padding:"13px",borderRadius:14,
+                border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
+                fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
+              <button onClick={()=>setStep(3)} style={{flex:2,padding:"13px",borderRadius:14,
+                border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+                cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
+            </div>
+          </>;
+        })()}
 
         {/* STEP 3 — Add funds */}
         {step===3 && !launched && <>
