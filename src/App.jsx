@@ -1189,7 +1189,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
             <div style={{
               width:44,height:24,borderRadius:12,
               background:"transparent",
-              border:`2px solid ${O}`,position:"relative",
+              border:`2px solid ${BDR}`,position:"relative",
               transition:"background 0.25s"
             }}>
               <div style={{
