@@ -34,11 +34,11 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(255,107,53,0.08)", bd:"rgba(255,107,53,0.3)", tx:"#FF6B35" };
-const SM = { bg:"rgba(251,191,36,0.08)", bd:"rgba(251,191,36,0.3)", tx:"#F59E0B" };
+const SH = { bg:"rgba(22,163,74,0.08)", bd:"rgba(22,163,74,0.3)", tx:"#16a34a" };
+const SM = { bg:"rgba(202,138,4,0.08)", bd:"rgba(202,138,4,0.3)", tx:"#ca8a04" };
 const SL = { bg:"rgba(239,68,68,0.08)",  bd:"rgba(239,68,68,0.25)", tx:"#EF4444" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=4?"#F59E0B":s>=3?"#F97316":"#EF4444";
+const stC = s => s>=4?"#16a34a":s>=3?"#ca8a04":"#EF4444";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -498,7 +498,7 @@ function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
       style={{width:full?"100%":"auto",padding:"13px 22px",borderRadius:14,border:"none",
         background:disabled?"#eee":G,color:disabled?"#555":"#fff",
         fontSize:14,fontWeight:700,cursor:disabled?"default":"pointer",
-        boxShadow:disabled?"none":"0 4px 16px rgba(255,107,53,0.3)",
+        boxShadow:disabled?"none":"0 4px 16px rgba(22,163,74,0.3)",
         transition:"all 0.2s",fontFamily:"inherit",...style}}>
       {children}
     </button>
@@ -612,7 +612,7 @@ function CatPill({ typeKey, selected, onClick }) {
 const STAR_LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // Renders 5 stars with partial fill support (e.g. 4.5 = 4 full + 1 half)
-function PartialStars({ value, size=14, color="#FF6B35" }) {
+function PartialStars({ value, size=14, color="#FBBF24" }) {
   // value is 0-5 (can be decimal)
   const stars = [1,2,3,4,5].map(n => {
     const diff = value - (n-1);
@@ -670,7 +670,7 @@ function StarCard({ cat, value, onChange, box }) {
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
         <div style={{width:38,height:38,borderRadius:11,flexShrink:0,
-          background:SC?"rgba(255,255,255,0.2)":"rgba(255,107,53,0.15)",
+          background:SC?"rgba(255,255,255,0.2)":"rgba(22,163,74,0.15)",
           border:`1.5px solid ${SC?"rgba(255,255,255,0.3)":"#FFD4C2"}`,
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           <svg width="18" height="18" viewBox="0 0 24 24" style={{color:SC?"#fff":O}}>
@@ -683,7 +683,7 @@ function StarCard({ cat, value, onChange, box }) {
         </div>
         {sv>0&&(
           <div style={{fontSize:12,fontWeight:800,color:SC?SC.tx:"rgba(255,255,255,0.9)",
-            background:SC?"#B8C8F0":"rgba(255,107,53,0.15)",padding:"3px 10px",borderRadius:20,
+            background:SC?"#B8C8F0":"rgba(22,163,74,0.15)",padding:"3px 10px",borderRadius:20,
             border:`1.5px solid ${SC?"#8AA4DC":O}`,whiteSpace:"nowrap"}}>
             {sv}/5
           </div>
@@ -694,7 +694,7 @@ function StarCard({ cat, value, onChange, box }) {
            onMouseLeave={()=>setHov(0)}>
         {[1,2,3,4,5].map(n=>{
           const filled = n<=show;
-          const boxBg  = filled ? O : SC?"rgba(255,255,255,0.15)":"rgba(255,107,53,0.12)";
+          const boxBg  = filled ? O : SC?"rgba(255,255,255,0.15)":"rgba(22,163,74,0.12)";
           const boxBd  = filled ? O : SC?"rgba(255,255,255,0.25)":"#FFD4C2";
           const starCol= filled ? "#fff" : O;
           return (
@@ -759,7 +759,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#FF6B35":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#16a34a":"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -806,7 +806,7 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#F59E0B",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:"#16a34a",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
@@ -861,7 +861,7 @@ function BusinessPage({ business, onBack, onRate }) {
       <div style={{background:BG,borderRadius:20,padding:"18px",marginBottom:12,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
-          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"flex-start",gap:12,position:"relative"}}>
           <IconBox type={business.type} size={50} emoji={business.emoji}/>
           <div style={{flex:1,minWidth:0}}>
@@ -873,16 +873,16 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#FF6B35":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?"#16a34a":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
           </div>
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
-              background:"#FF6B35",borderRadius:12,padding:"8px 12px"}}>
+              background:"#16a34a",borderRadius:12,padding:"8px 12px"}}>
               <div style={{fontSize:20,fontWeight:900,color:N,lineHeight:1}}>{(overall/2).toFixed(1)}</div>
-              <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="rgba(255,255,255,0.9)"/></div>
+              <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
             </div>
           )}
         </div>
@@ -896,16 +896,12 @@ function BusinessPage({ business, onBack, onRate }) {
                 background:BG2,
                 border:`1.5px solid ${BDR}`,
                 borderRadius:16,textAlign:"center"}}>
-                <div style={{display:"flex",justifyContent:"center",marginBottom:6}}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} color={O} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    {CAT_ICONS[cat.id]||CAT_ICONS.food}
-                  </svg>
-                </div>
-                <div style={{fontSize:14,fontWeight:800,color:N,lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
+                <div style={{fontSize:11,fontWeight:800,color:O,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginBottom:6}}>{cat.label}</div>
+                <div style={{fontSize:18,fontWeight:900,color:N,lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
                 <div style={{display:"flex",justifyContent:"center"}}>
-                  <PartialStars value={cat.avg/2} size={13} color="#FF6B35"/>
+                  <PartialStars value={cat.avg/2} size={13} color="#FBBF24"/>
                 </div>
-                <div style={{fontSize:10,fontWeight:600,color:MUT,marginTop:4}}>{cat.label}</div>
               </div>
             );
           })}
@@ -990,7 +986,7 @@ function RateView({ business, onBack, onDone }) {
         background:BG,border:`2px solid #2A3A6A`,borderRadius:16,marginBottom:14,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-15,right:-15,width:60,height:60,
-          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{width:40,height:40,borderRadius:12,flexShrink:0,
           background:BG2,border:`1.5px solid ${BDR}`,
           display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
@@ -1198,7 +1194,7 @@ function ClaimModal({ onClose, onDashboard }) {
           <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
           <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
             border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>
             Claim for free →
           </button>
         </>}
@@ -1232,7 +1228,7 @@ function ClaimModal({ onClose, onDashboard }) {
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
                 background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
-                boxShadow:"0 4px 16px rgba(255,107,53,0.35)"}}>
+                boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
                 View my dashboard →
               </button>
               <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,
@@ -1516,7 +1512,7 @@ function AdvertiseModal({ onClose }) {
             <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"13px",borderRadius:14,
               border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
-              boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>Launch campaign →</button>
+              boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
           </div>
           <p style={{textAlign:"center",fontSize:10,color:MUT,marginTop:12}}>
             Secured by Stripe · Cancel anytime in your dashboard
@@ -1694,8 +1690,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:BG2,
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#FF6B35,#FF8C5A)",
-              boxShadow:"0 4px 12px rgba(255,107,53,0.35)",
+              background:"linear-gradient(135deg,#16a34a,#15803d)",
+              boxShadow:"0 4px 12px rgba(22,163,74,0.35)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -1709,14 +1705,14 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
               background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim free →</button>
+              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim free →</button>
           </div>
           {/* Advertise */}
           <div onClick={()=>setShowAds(true)} style={{padding:"16px 18px",background:BG2,
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:O,
-              boxShadow:"0 4px 12px rgba(255,107,53,0.3)",
+              boxShadow:"0 4px 12px rgba(22,163,74,0.3)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
@@ -1755,7 +1751,7 @@ function DoneScreen({ business, reviewData, onReset }) {
       {shareOpen&&<ShareCard business={business} scores={reviewData?.scores||{}} onClose={()=>setShare(false)}/>}
       <div style={{width:72,height:72,borderRadius:20,background:G,
         display:"flex",alignItems:"center",justifyContent:"center",
-        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(255,107,53,0.3)"}}>
+        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
         </svg>
