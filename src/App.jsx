@@ -1171,7 +1171,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
   const changeCat = k => { setCat(k); setPage(0); setSearch(""); };
 
   return (
-    <div style={{maxWidth:480,margin:"0 auto"}}>
+    <div style={{width:"100%"}}>
       {/* Navy header */}
       <div style={{background:BG,padding:"1.5rem 1rem 1.25rem",borderRadius:"0 0 24px 24px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
@@ -1365,6 +1365,8 @@ export default function ServedApp() {
   const [reviewData,setReview] = useState(null);
   const [isDark,setIsDark]   = useState(true);
 
+  useEffect(() => { applyTheme(DARK_VARS); }, []);
+
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
       const next = !d;
@@ -1378,11 +1380,13 @@ export default function ServedApp() {
   const reset  = () => { setBiz(null); setReview(null); setView("home"); };
 
   return (
-    <div style={{background:BG,minHeight:"100vh",color:N}}>
-      {view==="home"     && <Home onSelect={select} isDark={isDark} toggleTheme={toggleTheme}/>}
-      {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
-      {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
-      {view==="done"     && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
+    <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
+      <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative"}}>
+        {view==="home"     && <Home onSelect={select} isDark={isDark} toggleTheme={toggleTheme}/>}
+        {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
+        {view==="done"     && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
+      </div>
     </div>
   );
 }
