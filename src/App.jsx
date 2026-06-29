@@ -180,27 +180,113 @@ function guessType(types=[]) {
 // ============================================================
 // DEMO DATA — per category
 // ============================================================
+const H = {
+  std:  {Mon:"9am–9pm", Tue:"9am–9pm", Wed:"9am–9pm", Thu:"9am–9pm", Fri:"9am–10pm", Sat:"10am–10pm", Sun:"11am–8pm"},
+  rest: {Mon:"11am–10pm",Tue:"11am–10pm",Wed:"11am–10pm",Thu:"11am–10pm",Fri:"11am–11pm",Sat:"10am–11pm",Sun:"10am–9pm"},
+  med:  {Mon:"8am–5pm", Tue:"8am–5pm", Wed:"8am–5pm", Thu:"8am–5pm", Fri:"8am–4pm", Sat:"9am–12pm", Sun:"Closed"},
+  gym:  {Mon:"5am–11pm",Tue:"5am–11pm",Wed:"5am–11pm",Thu:"5am–11pm",Fri:"5am–10pm",Sat:"7am–9pm",   Sun:"8am–8pm"},
+  auto: {Mon:"7am–6pm", Tue:"7am–6pm", Wed:"7am–6pm", Thu:"7am–6pm", Fri:"7am–6pm", Sat:"8am–4pm",  Sun:"Closed"},
+};
+
+function closeTime(hours) {
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const today = days[new Date().getDay()];
+  const h = hours?.[today];
+  if (!h || h === "Closed") return null;
+  return h.split("–")[1];
+}
+
 const DEMOS = {
-  food:        [{id:"d1",name:"Osteria Romana",   addr:"123 Main St, McKinney TX",  type:"food",       emoji:"🍕",rating:4.3,price:2,open:true},{id:"d2",name:"The Garden Bistro",addr:"456 Oak Ave, McKinney TX",  type:"food",       emoji:"🥗",rating:4.1,price:2,open:true},{id:"d3",name:"Sakura House",      addr:"789 Elm St, McKinney TX",   type:"food",       emoji:"🍱",rating:4.6,price:3,open:false},{id:"d4",name:"El Rancho Tacos",  addr:"321 Pine St, McKinney TX",  type:"food",       emoji:"🌮",rating:4.4,price:1,open:true},{id:"d5",name:"The Burger Lab",   addr:"654 Cedar Rd, McKinney TX", type:"food",       emoji:"🍔",rating:4.2,price:1,open:true},{id:"d6",name:"Spice Garden",     addr:"987 Walnut St, McKinney TX",type:"food",       emoji:"🍛",rating:4.5,price:2,open:true}],
-  beauty:      [{id:"b1",name:"Cuts & Co.",        addr:"321 Pine St",               type:"beauty",     emoji:"✂️",rating:4.4,price:2,open:true},{id:"b2",name:"Glow Studio",       addr:"100 Maple Ave",             type:"beauty",     emoji:"💅",rating:4.6,price:2,open:true},{id:"b3",name:"The Barber Shop",   addr:"55 Oak Blvd",               type:"beauty",     emoji:"💈",rating:4.3,price:1,open:true}],
-  health:      [{id:"h1",name:"Dr. Chen Family",   addr:"111 Oak Blvd",              type:"health",     emoji:"🏥",rating:4.7,price:2,open:true},{id:"h2",name:"McKinney Dental",   addr:"200 Health Way",            type:"health",     emoji:"🦷",rating:4.5,price:2,open:true},{id:"h3",name:"Vision Care",       addr:"300 Eye St",                type:"health",     emoji:"👁️",rating:4.4,price:2,open:false}],
-  fitness:     [{id:"f1",name:"QuickFit Gym",       addr:"654 Cedar Rd",              type:"fitness",    emoji:"💪",rating:4.2,price:1,open:true},{id:"f2",name:"Zen Yoga Studio",   addr:"77 Calm Blvd",              type:"fitness",    emoji:"🧘",rating:4.8,price:2,open:true},{id:"f3",name:"CrossFit McKinney", addr:"88 Strong St",              type:"fitness",    emoji:"🏋️",rating:4.5,price:2,open:true}],
-  automotive:  [{id:"a1",name:"Main St. Garage",    addr:"987 Walnut St",             type:"automotive", emoji:"🔧",rating:4.5,price:2,open:true},{id:"a2",name:"Speedy Lube",       addr:"400 Motor Ave",             type:"automotive", emoji:"🚗",rating:4.2,price:1,open:true},{id:"a3",name:"AutoShine",          addr:"500 Clean Dr",              type:"automotive", emoji:"✨",rating:4.6,price:2,open:false}],
-  homeservices:[{id:"hs1",name:"Handy Home Pros",   addr:"456 Maple Ave",             type:"homeservices",emoji:"🏠",rating:4.6,price:2,open:false},{id:"hs2",name:"CleanTeam",       addr:"100 Spotless Ln",           type:"homeservices",emoji:"🧹",rating:4.4,price:2,open:true},{id:"hs3",name:"Pro Plumbing",      addr:"200 Pipe St",               type:"homeservices",emoji:"🔩",rating:4.3,price:2,open:true}],
-  pets:        [{id:"p1",name:"Paws & Claws Vet",   addr:"789 Elm St",                type:"pets",       emoji:"🐾",rating:4.8,price:2,open:true},{id:"p2",name:"Happy Tails Grooming",addr:"50 Woof Way",             type:"pets",       emoji:"🐶",rating:4.6,price:2,open:true},{id:"p3",name:"Doggy Daycare",      addr:"99 Bark Blvd",              type:"pets",       emoji:"🦴",rating:4.5,price:2,open:true}],
-  childcare:   [{id:"c1",name:"Sunshine Daycare",   addr:"200 Oak St",                type:"childcare",  emoji:"☀️",rating:4.9,price:2,open:true},{id:"c2",name:"A+ Tutoring",        addr:"77 Learning Ln",            type:"childcare",  emoji:"📚",rating:4.7,price:2,open:true}],
-  hospitality: [{id:"ho1",name:"The McKinney Inn",  addr:"200 Main St",               type:"hospitality",emoji:"🏨",rating:4.3,price:3,open:true},{id:"ho2",name:"Comfort Suites",   addr:"300 Rest Blvd",             type:"hospitality",emoji:"🛏️",rating:4.0,price:2,open:true}],
-  retail:      [{id:"r1",name:"The Boutique",        addr:"333 Fashion Blvd",          type:"retail",     emoji:"🛍️",rating:4.1,price:2,open:true},{id:"r2",name:"Book Nook",          addr:"44 Read St",                type:"retail",     emoji:"📖",rating:4.7,price:1,open:true},{id:"r3",name:"Tech World",          addr:"500 Gadget Dr",             type:"retail",     emoji:"📱",rating:4.2,price:2,open:false}],
-  professional:[{id:"pr1",name:"Smith Law",          addr:"100 Business Park",         type:"professional",emoji:"💼",rating:4.5,price:3,open:true},{id:"pr2",name:"McKinney CPA",     addr:"200 Tax Blvd",              type:"professional",emoji:"💰",rating:4.4,price:2,open:true}],
-  events:      [{id:"e1",name:"Grand Event Hall",    addr:"500 Event Pkwy",            type:"events",     emoji:"🎉",rating:4.4,price:3,open:true},{id:"e2",name:"Lens & Light Photo", addr:"60 Camera Way",             type:"events",     emoji:"📸",rating:4.8,price:3,open:true}],
-  education:   [{id:"ed1",name:"A+ Tutoring",        addr:"77 Learning Ln",            type:"education",  emoji:"📚",rating:4.6,price:2,open:true},{id:"ed2",name:"Driving School",    addr:"400 Road St",               type:"education",  emoji:"🚗",rating:4.3,price:2,open:true}],
-  entertainment:[{id:"en1",name:"Fun Zone Arcade",   addr:"400 Play Blvd",             type:"entertainment",emoji:"🎮",rating:4.0,price:1,open:true},{id:"en2",name:"McKinney Bowling",addr:"300 Lane Ave",              type:"entertainment",emoji:"🎳",rating:4.2,price:2,open:true}],
-  moving:      [{id:"m1",name:"Two Men & A Truck",   addr:"600 Industrial Dr",         type:"moving",     emoji:"📦",rating:4.3,price:2,open:true},{id:"m2",name:"EasyMove Co.",       addr:"700 Haul Rd",               type:"moving",     emoji:"🚛",rating:4.1,price:2,open:true}],
-  techrepair:  [{id:"t1",name:"iFixIt Now",           addr:"222 Tech Row",              type:"techrepair", emoji:"💻",rating:4.4,price:1,open:true},{id:"t2",name:"Phone Doctor",        addr:"111 Screen St",             type:"techrepair", emoji:"📱",rating:4.3,price:1,open:true}],
-  laundry:     [{id:"l1",name:"Prestige Cleaners",   addr:"88 Clean St",               type:"laundry",    emoji:"🧺",rating:4.2,price:2,open:true},{id:"l2",name:"Spin Cycle",          addr:"99 Wash Ave",               type:"laundry",    emoji:"👕",rating:3.9,price:1,open:true}],
-  financial:   [{id:"fi1",name:"First National Bank",addr:"1 Bank Plaza",              type:"financial",  emoji:"🏦",rating:3.8,price:2,open:true},{id:"fi2",name:"McKinney Tax Pro",  addr:"200 Tax Blvd",              type:"financial",  emoji:"💳",rating:4.4,price:2,open:true}],
-  funeral:     [{id:"fu1",name:"Peaceful Rest",       addr:"999 Serenity Ln",           type:"funeral",    emoji:"🕊️",rating:4.9,price:3,open:true}],
-  government:  [{id:"g1",name:"McKinney City Hall",  addr:"222 Government Way",        type:"government", emoji:"🏛️",rating:3.5,price:1,open:true},{id:"g2",name:"McKinney DMV",      addr:"400 License Blvd",          type:"government", emoji:"🪪",rating:2.8,price:1,open:true}],
+  food:        [
+    {id:"d1",name:"Osteria Romana",    addr:"123 Main St, McKinney TX",  type:"food",subtype:"Italian",        emoji:"🍕",rating:4.3,price:2,open:true, hours:H.rest},
+    {id:"d2",name:"The Garden Bistro", addr:"456 Oak Ave, McKinney TX",  type:"food",subtype:"American",       emoji:"🥗",rating:4.1,price:2,open:true, hours:{...H.rest,Sun:"Closed"}},
+    {id:"d3",name:"Sakura House",      addr:"789 Elm St, McKinney TX",   type:"food",subtype:"Japanese",       emoji:"🍱",rating:4.6,price:3,open:false,hours:{...H.rest,Mon:"Closed",Tue:"Closed"}},
+    {id:"d4",name:"El Rancho Tacos",   addr:"321 Pine St, McKinney TX",  type:"food",subtype:"Mexican",        emoji:"🌮",rating:4.4,price:1,open:true, hours:{...H.rest,Mon:"11am–9pm"}},
+    {id:"d5",name:"The Burger Lab",    addr:"654 Cedar Rd, McKinney TX", type:"food",subtype:"Burgers",        emoji:"🍔",rating:4.2,price:1,open:true, hours:H.rest},
+    {id:"d6",name:"Spice Garden",      addr:"987 Walnut St, McKinney TX",type:"food",subtype:"Indian",         emoji:"🍛",rating:4.5,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
+  ],
+  beauty:      [
+    {id:"b1",name:"Cuts & Co.",         addr:"321 Pine St",  type:"beauty",subtype:"Hair Salon",   emoji:"✂️",rating:4.4,price:2,open:true, hours:H.std},
+    {id:"b2",name:"Glow Studio",        addr:"100 Maple Ave",type:"beauty",subtype:"Nail & Spa",   emoji:"💅",rating:4.6,price:2,open:true, hours:H.std},
+    {id:"b3",name:"The Barber Shop",    addr:"55 Oak Blvd",  type:"beauty",subtype:"Barbershop",   emoji:"💈",rating:4.3,price:1,open:true, hours:{...H.std,Sun:"Closed"}},
+  ],
+  health:      [
+    {id:"h1",name:"Dr. Chen Family",    addr:"111 Oak Blvd",   type:"health",subtype:"Family Practice",emoji:"🏥",rating:4.7,price:2,open:true, hours:H.med},
+    {id:"h2",name:"McKinney Dental",    addr:"200 Health Way", type:"health",subtype:"Dentistry",      emoji:"🦷",rating:4.5,price:2,open:true, hours:H.med},
+    {id:"h3",name:"Vision Care",        addr:"300 Eye St",     type:"health",subtype:"Optometry",      emoji:"👁️",rating:4.4,price:2,open:false,hours:{...H.med,Sat:"Closed",Sun:"Closed"}},
+  ],
+  fitness:     [
+    {id:"f1",name:"QuickFit Gym",       addr:"654 Cedar Rd",type:"fitness",subtype:"Gym",         emoji:"💪",rating:4.2,price:1,open:true, hours:H.gym},
+    {id:"f2",name:"Zen Yoga Studio",    addr:"77 Calm Blvd", type:"fitness",subtype:"Yoga",        emoji:"🧘",rating:4.8,price:2,open:true, hours:{...H.gym,Sun:"9am–6pm"}},
+    {id:"f3",name:"CrossFit McKinney",  addr:"88 Strong St", type:"fitness",subtype:"CrossFit",    emoji:"🏋️",rating:4.5,price:2,open:true, hours:H.gym},
+  ],
+  automotive:  [
+    {id:"a1",name:"Main St. Garage",    addr:"987 Walnut St",type:"automotive",subtype:"Auto Repair",  emoji:"🔧",rating:4.5,price:2,open:true, hours:H.auto},
+    {id:"a2",name:"Speedy Lube",        addr:"400 Motor Ave",type:"automotive",subtype:"Oil Change",   emoji:"🚗",rating:4.2,price:1,open:true, hours:H.auto},
+    {id:"a3",name:"AutoShine",          addr:"500 Clean Dr", type:"automotive",subtype:"Car Wash",     emoji:"✨",rating:4.6,price:2,open:false,hours:{...H.auto,Sat:"9am–5pm",Sun:"10am–4pm"}},
+  ],
+  homeservices:[
+    {id:"hs1",name:"Handy Home Pros",   addr:"456 Maple Ave",  type:"homeservices",subtype:"Handyman",   emoji:"🏠",rating:4.6,price:2,open:false,hours:{Mon:"7am–6pm",Tue:"7am–6pm",Wed:"7am–6pm",Thu:"7am–6pm",Fri:"7am–6pm",Sat:"8am–3pm",Sun:"Closed"}},
+    {id:"hs2",name:"CleanTeam",         addr:"100 Spotless Ln",type:"homeservices",subtype:"Cleaning",   emoji:"🧹",rating:4.4,price:2,open:true, hours:H.std},
+    {id:"hs3",name:"Pro Plumbing",      addr:"200 Pipe St",    type:"homeservices",subtype:"Plumbing",   emoji:"🔩",rating:4.3,price:2,open:true, hours:H.auto},
+  ],
+  pets:        [
+    {id:"p1",name:"Paws & Claws Vet",    addr:"789 Elm St",  type:"pets",subtype:"Veterinary",  emoji:"🐾",rating:4.8,price:2,open:true, hours:H.med},
+    {id:"p2",name:"Happy Tails Grooming",addr:"50 Woof Way", type:"pets",subtype:"Grooming",    emoji:"🐶",rating:4.6,price:2,open:true, hours:H.std},
+    {id:"p3",name:"Doggy Daycare",       addr:"99 Bark Blvd",type:"pets",subtype:"Daycare",     emoji:"🦴",rating:4.5,price:2,open:true, hours:H.gym},
+  ],
+  childcare:   [
+    {id:"c1",name:"Sunshine Daycare",   addr:"200 Oak St",     type:"childcare",subtype:"Daycare",   emoji:"☀️",rating:4.9,price:2,open:true, hours:{Mon:"6:30am–6pm",Tue:"6:30am–6pm",Wed:"6:30am–6pm",Thu:"6:30am–6pm",Fri:"6:30am–6pm",Sat:"Closed",Sun:"Closed"}},
+    {id:"c2",name:"A+ Tutoring",        addr:"77 Learning Ln", type:"childcare",subtype:"Tutoring",  emoji:"📚",rating:4.7,price:2,open:true, hours:{Mon:"3pm–8pm",Tue:"3pm–8pm",Wed:"3pm–8pm",Thu:"3pm–8pm",Fri:"3pm–7pm",Sat:"10am–4pm",Sun:"Closed"}},
+  ],
+  hospitality: [
+    {id:"ho1",name:"The McKinney Inn",  addr:"200 Main St",   type:"hospitality",subtype:"Boutique Hotel",emoji:"🏨",rating:4.3,price:3,open:true, hours:{Mon:"24hrs",Tue:"24hrs",Wed:"24hrs",Thu:"24hrs",Fri:"24hrs",Sat:"24hrs",Sun:"24hrs"}},
+    {id:"ho2",name:"Comfort Suites",   addr:"300 Rest Blvd", type:"hospitality",subtype:"Extended Stay", emoji:"🛏️",rating:4.0,price:2,open:true, hours:{Mon:"24hrs",Tue:"24hrs",Wed:"24hrs",Thu:"24hrs",Fri:"24hrs",Sat:"24hrs",Sun:"24hrs"}},
+  ],
+  retail:      [
+    {id:"r1",name:"The Boutique",       addr:"333 Fashion Blvd",type:"retail",subtype:"Women's Fashion",emoji:"🛍️",rating:4.1,price:2,open:true, hours:H.std},
+    {id:"r2",name:"Book Nook",          addr:"44 Read St",      type:"retail",subtype:"Books",          emoji:"📖",rating:4.7,price:1,open:true, hours:{...H.std,Sun:"12pm–6pm"}},
+    {id:"r3",name:"Tech World",         addr:"500 Gadget Dr",   type:"retail",subtype:"Electronics",    emoji:"📱",rating:4.2,price:2,open:false,hours:H.std},
+  ],
+  professional:[
+    {id:"pr1",name:"Smith Law",         addr:"100 Business Park",type:"professional",subtype:"Law Firm",    emoji:"💼",rating:4.5,price:3,open:true, hours:H.med},
+    {id:"pr2",name:"McKinney CPA",      addr:"200 Tax Blvd",     type:"professional",subtype:"Accounting",  emoji:"💰",rating:4.4,price:2,open:true, hours:H.med},
+  ],
+  events:      [
+    {id:"e1",name:"Grand Event Hall",   addr:"500 Event Pkwy",type:"events",subtype:"Venue",        emoji:"🎉",rating:4.4,price:3,open:true, hours:H.std},
+    {id:"e2",name:"Lens & Light Photo", addr:"60 Camera Way", type:"events",subtype:"Photography",  emoji:"📸",rating:4.8,price:3,open:true, hours:H.std},
+  ],
+  education:   [
+    {id:"ed1",name:"A+ Tutoring",       addr:"77 Learning Ln",type:"education",subtype:"Tutoring",       emoji:"📚",rating:4.6,price:2,open:true, hours:{Mon:"3pm–8pm",Tue:"3pm–8pm",Wed:"3pm–8pm",Thu:"3pm–8pm",Fri:"3pm–7pm",Sat:"10am–4pm",Sun:"Closed"}},
+    {id:"ed2",name:"Driving School",    addr:"400 Road St",   type:"education",subtype:"Driver's Ed",     emoji:"🚗",rating:4.3,price:2,open:true, hours:H.std},
+  ],
+  entertainment:[
+    {id:"en1",name:"Fun Zone Arcade",   addr:"400 Play Blvd",type:"entertainment",subtype:"Arcade",   emoji:"🎮",rating:4.0,price:1,open:true, hours:{...H.std,Mon:"12pm–9pm",Sun:"12pm–8pm"}},
+    {id:"en2",name:"McKinney Bowling",  addr:"300 Lane Ave", type:"entertainment",subtype:"Bowling",  emoji:"🎳",rating:4.2,price:2,open:true, hours:{...H.std,Mon:"12pm–10pm"}},
+  ],
+  moving:      [
+    {id:"m1",name:"Two Men & A Truck",  addr:"600 Industrial Dr",type:"moving",subtype:"Full Service",emoji:"📦",rating:4.3,price:2,open:true, hours:H.auto},
+    {id:"m2",name:"EasyMove Co.",       addr:"700 Haul Rd",      type:"moving",subtype:"Labor Only",  emoji:"🚛",rating:4.1,price:2,open:true, hours:H.auto},
+  ],
+  techrepair:  [
+    {id:"t1",name:"iFixIt Now",         addr:"222 Tech Row",  type:"techrepair",subtype:"Phone & Tablet",emoji:"💻",rating:4.4,price:1,open:true, hours:H.std},
+    {id:"t2",name:"Phone Doctor",       addr:"111 Screen St", type:"techrepair",subtype:"Screen Repair", emoji:"📱",rating:4.3,price:1,open:true, hours:H.std},
+  ],
+  laundry:     [
+    {id:"l1",name:"Prestige Cleaners",  addr:"88 Clean St",type:"laundry",subtype:"Dry Cleaning",emoji:"🧺",rating:4.2,price:2,open:true, hours:H.std},
+    {id:"l2",name:"Spin Cycle",         addr:"99 Wash Ave", type:"laundry",subtype:"Laundromat",  emoji:"👕",rating:3.9,price:1,open:true, hours:{Mon:"7am–10pm",Tue:"7am–10pm",Wed:"7am–10pm",Thu:"7am–10pm",Fri:"7am–10pm",Sat:"7am–10pm",Sun:"8am–9pm"}},
+  ],
+  financial:   [
+    {id:"fi1",name:"First National Bank",addr:"1 Bank Plaza",  type:"financial",subtype:"Bank",       emoji:"🏦",rating:3.8,price:2,open:true, hours:{Mon:"9am–5pm",Tue:"9am–5pm",Wed:"9am–5pm",Thu:"9am–5pm",Fri:"9am–6pm",Sat:"9am–1pm",Sun:"Closed"}},
+    {id:"fi2",name:"McKinney Tax Pro",   addr:"200 Tax Blvd",  type:"financial",subtype:"Tax Services",emoji:"💳",rating:4.4,price:2,open:true, hours:H.med},
+  ],
+  funeral:     [
+    {id:"fu1",name:"Peaceful Rest",     addr:"999 Serenity Ln",type:"funeral",subtype:"Funeral Home",emoji:"🕊️",rating:4.9,price:3,open:true, hours:{Mon:"9am–5pm",Tue:"9am–5pm",Wed:"9am–5pm",Thu:"9am–5pm",Fri:"9am–5pm",Sat:"10am–3pm",Sun:"Closed"}},
+  ],
+  government:  [
+    {id:"g1",name:"McKinney City Hall", addr:"222 Government Way",type:"government",subtype:"City Services",emoji:"🏛️",rating:3.5,price:1,open:true, hours:{Mon:"8am–5pm",Tue:"8am–5pm",Wed:"8am–5pm",Thu:"8am–5pm",Fri:"8am–5pm",Sat:"Closed",Sun:"Closed"}},
+    {id:"g2",name:"McKinney DMV",       addr:"400 License Blvd",  type:"government",subtype:"DMV",          emoji:"🪪",rating:2.8,price:1,open:true, hours:{Mon:"8am–4:30pm",Tue:"8am–4:30pm",Wed:"8am–4:30pm",Thu:"8am–4:30pm",Fri:"8am–4:30pm",Sat:"Closed",Sun:"Closed"}},
+  ],
 };
 
 const DEMO_REVIEWS = [
@@ -408,6 +494,81 @@ function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
 }
 
 // Category filter pill
+function BusinessCard({ b, onSelect }) {
+  const [hoursOpen, setHoursOpen] = useState(false);
+  const bt = BT[b.type||"food"];
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+  const closes = b.hours ? closeTime(b.hours) : null;
+
+  return (
+    <div style={{background:"#fff",border:"2px solid #eee",borderRadius:18,marginBottom:10,overflow:"hidden",
+      transition:"border-color 0.15s",cursor:"pointer"}}
+      onMouseEnter={e=>e.currentTarget.style.borderColor="#ddd"}
+      onMouseLeave={e=>e.currentTarget.style.borderColor="#eee"}>
+      {/* Main row */}
+      <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
+        onClick={()=>onSelect(b)}>
+        <IconBox type={b.type} size={52}/>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
+            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
+          <div style={{fontSize:12,color:"#555",marginBottom:4}}>
+            {b.subtype||bt.label}
+            {b.rating ? <span style={{color:"#999"}}> · ⭐ {b.rating}</span> : null}
+            {b.price ? <span style={{color:"#999"}}> · {"$".repeat(b.price)}</span> : null}
+          </div>
+          {/* Hours row */}
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?"#16a34a":"#dc2626"}}>
+              {b.open ? "Open" : "Closed"}
+            </span>
+            {closes && b.open && (
+              <span style={{fontSize:12,color:"#555"}}>· until {closes}</span>
+            )}
+            {b.hours && (
+              <button
+                onClick={e=>{e.stopPropagation();setHoursOpen(o=>!o);}}
+                style={{display:"inline-flex",alignItems:"center",gap:2,
+                  fontSize:11,color:"#888",background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                <span>Hours</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+        <span style={{fontSize:18,color:O,flexShrink:0}}>›</span>
+      </div>
+
+      {/* Hours dropdown */}
+      {hoursOpen && b.hours && (
+        <div style={{borderTop:"1.5px solid #f0f0f0",padding:"12px 16px 14px",
+          background:"#fafafa"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+            {days.map(day=>{
+              const isToday = day === todayKey;
+              const h = b.hours[day];
+              return (
+                <div key={day} style={{textAlign:"center"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:isToday?O:"#999",
+                    textTransform:"uppercase",marginBottom:3}}>{day}</div>
+                  <div style={{fontSize:10,color:isToday?N:"#666",fontWeight:isToday?700:400,
+                    lineHeight:1.4,background:isToday?"#FFF3EE":undefined,
+                    borderRadius:6,padding:"3px 2px"}}>
+                    {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CatPill({ typeKey, selected, onClick }) {
   const t = BT[typeKey];
   const on = selected === typeKey;
@@ -1045,33 +1206,9 @@ function Home({ onSelect }) {
         )}
 
         {/* Listings */}
-        {visible.map(b=>{
-          const bt = BT[b.type||"food"];
-          const [h,setH] = [false,()=>{}]; // handled inline
-          return (
-            <div key={b.id} onClick={()=>onSelect(b)}
-              style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",
-                background:"#fff",border:"2px solid #eee",
-                borderRadius:18,marginBottom:8,cursor:"pointer",transition:"all 0.15s"}}
-              onMouseEnter={e=>{e.currentTarget.style.background=HOV;e.currentTarget.style.borderColor="#ddd";}}
-              onMouseLeave={e=>{e.currentTarget.style.background="#fff";e.currentTarget.style.borderColor="#eee";}}>
-              <IconBox type={b.type} size={44}/>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:14,fontWeight:700,color:N,
-                  whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
-                <div style={{fontSize:11,color:"#111",marginTop:2}}>
-                  {bt.label}{b.rating?` · ⭐ ${b.rating}`:""}
-                  {(b.price||b.priceLevel)?` · ${"$".repeat(b.price||b.priceLevel)}`:""}
-                </div>
-                <div style={{fontSize:10,fontWeight:700,marginTop:2,
-                  color:(b.open||b.isOpen)?"#FF6B35":"#999"}}>
-                  {(b.open||b.isOpen)?"● Open":"● Closed"}
-                </div>
-              </div>
-              <span style={{fontSize:16,color:O,flexShrink:0}}>›</span>
-            </div>
-          );
-        })}
+        {visible.map(b=>(
+          <BusinessCard key={b.id} b={b} onSelect={onSelect}/>
+        ))}
 
         {/* Pagination */}
         {(hasPrev||hasMore)&&(
