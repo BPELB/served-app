@@ -1687,6 +1687,7 @@ function OwnerDashboard({ onBack }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
+  const [adOpen, setAdOpen] = useState(false);
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -1927,16 +1928,46 @@ function OwnerDashboard({ onBack }) {
 
           <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
             border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px"}}>
-            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:8}}>AI recommendations</div>
-            {["Respond to reviews within 24hrs to boost trust score",
-              "Friday 6–9pm is your busiest window — staff up",
-              "Customers who mention 'atmosphere' rate 0.4★ higher",
-              "3 reviews mention cold food — check delivery times"].map((tip,i)=>(
-              <div key={i} style={{display:"flex",gap:10,marginBottom:10}}>
-                <div style={{width:20,height:20,borderRadius:"50%",background:O,flexShrink:0,
-                  display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:10,fontWeight:800,color:"#fff"}}>{i+1}</div>
-                <p style={{fontSize:12,color:N,margin:0,lineHeight:1.5}}>{tip}</p>
+            <div style={{fontSize:13,fontWeight:900,color:N,marginBottom:4}}>AI Recommendations</div>
+            <div style={{fontSize:11,color:MUT,marginBottom:14}}>Powered by your review data · Updated weekly</div>
+
+            {/* Operations */}
+            <div style={{fontSize:10,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8}}>Operations</div>
+            {[
+              {tip:"3 reviews mention cold food — check delivery times and plate heat-up procedures.",icon:"🌡️"},
+              {tip:"Friday 6–9 pm is your busiest window. Staffing data suggests you're running 1–2 servers short.",icon:"⏱️"},
+              {tip:"Respond to every review within 24 hrs — businesses that do see a 0.6★ average lift.",icon:"💬"},
+            ].map((r,i)=>(
+              <div key={i} style={{display:"flex",gap:10,marginBottom:12,alignItems:"flex-start"}}>
+                <span style={{fontSize:16,lineHeight:1,flexShrink:0,marginTop:1}}>{r.icon}</span>
+                <p style={{fontSize:12,color:N,margin:0,lineHeight:1.55}}>{r.tip}</p>
+              </div>
+            ))}
+
+            {/* Employee Training */}
+            <div style={{fontSize:10,fontWeight:800,color:"#4ade80",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8,marginTop:6}}>Employee Training</div>
+            {[
+              {tip:"2 reviews this week describe staff as inattentive during busy periods. Run a 15-min daily huddle on table-check cadence.",icon:"👥"},
+              {tip:"4 customers mentioned long waits without communication. Train front-of-house to provide a time estimate within 2 min of seating.",icon:"🗣️"},
+              {tip:"'Friendly staff' appears in your top-rated reviews 78% of the time — reinforce greeting protocols in every pre-shift.",icon:"⭐"},
+              {tip:"Kitchen ticket times spiked Friday night. Consider cross-training 1 line cook as expo to reduce bottlenecks.",icon:"🍳"},
+            ].map((r,i)=>(
+              <div key={i} style={{display:"flex",gap:10,marginBottom:12,alignItems:"flex-start"}}>
+                <span style={{fontSize:16,lineHeight:1,flexShrink:0,marginTop:1}}>{r.icon}</span>
+                <p style={{fontSize:12,color:N,margin:0,lineHeight:1.55}}>{r.tip}</p>
+              </div>
+            ))}
+
+            {/* Customer Experience */}
+            <div style={{fontSize:10,fontWeight:800,color:"#60a5fa",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8,marginTop:6}}>Customer Experience</div>
+            {[
+              {tip:"Customers who mention 'atmosphere' rate 0.4★ higher on average — consider ambient lighting or music adjustments.",icon:"✨"},
+              {tip:"'Parking' mentioned negatively 6× this month. Add a note to your listing about nearby lots.",icon:"🅿️"},
+              {tip:"Dessert mentions correlate with 5★ reviews. Brief servers to suggest dessert proactively.",icon:"🍰"},
+            ].map((r,i)=>(
+              <div key={i} style={{display:"flex",gap:10,marginBottom:i===2?0:12,alignItems:"flex-start"}}>
+                <span style={{fontSize:16,lineHeight:1,flexShrink:0,marginTop:1}}>{r.icon}</span>
+                <p style={{fontSize:12,color:N,margin:0,lineHeight:1.55}}>{r.tip}</p>
               </div>
             ))}
           </div>
@@ -1972,9 +2003,9 @@ function OwnerDashboard({ onBack }) {
                 <span style={{fontSize:12,fontWeight:700,color:N}}>{v}</span>
               </div>
             ))}
-            <button style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
-              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
-              cursor:"pointer",fontFamily:"inherit"}}>Upgrade to Pro →</button>
+            <button onClick={()=>setAdOpen(true)} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
+              border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
+              cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on Served</button>
           </div>
         </>}
       </div>
@@ -2021,6 +2052,7 @@ function OwnerDashboard({ onBack }) {
           </div>
         </div>
       )}
+      {adOpen && <AdvertiseModal onClose={()=>setAdOpen(false)}/>}
     </div>
   );
 }
