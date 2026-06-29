@@ -1912,18 +1912,54 @@ function OwnerDashboard({ onBack }) {
           {/* AI Insight */}
           <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
             border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:16}}>
-            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+            {/* Header */}
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
               <div style={{width:28,height:28,borderRadius:8,background:O,
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="white" stroke="none"/></svg>
               </div>
-              <div style={{fontSize:12,fontWeight:800,color:N}}>AI Insight</div>
+              <div>
+                <div style={{fontSize:12,fontWeight:800,color:N}}>AI Insight</div>
+                <div style={{fontSize:10,color:MUT}}>Based on your last 30 days of reviews</div>
+              </div>
               <div style={{marginLeft:"auto",fontSize:9,fontWeight:700,color:O,
-                background:`${O}22`,padding:"2px 7px",borderRadius:10}}>NEW</div>
+                background:`${O}22`,padding:"2px 7px",borderRadius:10,flexShrink:0}}>NEW</div>
             </div>
-            <p style={{fontSize:12,color:N,lineHeight:1.6,margin:0}}>
-              Customers love your <strong>atmosphere</strong> and <strong>food quality</strong>, but mention wait times on Friday evenings. Consider adding staff for peak hours.
+
+            {/* Summary */}
+            <p style={{fontSize:13,color:N,lineHeight:1.65,margin:"0 0 14px 0"}}>
+              Customers love your <strong>atmosphere</strong> and <strong>food quality</strong>, but consistently mention <strong>wait times</strong> on Friday evenings. Your ratings spike when staff proactively checks in — and dip when tables feel ignored.
             </p>
+
+            {/* Insight pills */}
+            <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:14}}>
+              {[
+                {icon:"⭐",label:"Top strength","value":"Atmosphere & ambiance","color":"#4ade80"},
+                {icon:"⚡",label:"Top friction","value":"Wait times Fri 6–9 pm","color":"#f87171"},
+                {icon:"💬",label:"Keyword spike","value":'"cozy" mentioned 11× this week',"color":"#60a5fa"},
+                {icon:"📈",label:"Rating trend","value":"Up 0.2★ from last month","color":"#a78bfa"},
+              ].map(({icon,label,value,color})=>(
+                <div key={label} style={{display:"flex",alignItems:"center",gap:10,
+                  background:BG2,borderRadius:10,padding:"9px 12px"}}>
+                  <span style={{fontSize:15,flexShrink:0}}>{icon}</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:9,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>{label}</div>
+                    <div style={{fontSize:12,fontWeight:700,color:N}}>{value}</div>
+                  </div>
+                  <div style={{width:6,height:6,borderRadius:"50%",background:color,flexShrink:0}}/>
+                </div>
+              ))}
+            </div>
+
+            {/* Action callout */}
+            <div style={{background:`${O}18`,borderRadius:10,padding:"10px 12px",
+              borderLeft:`3px solid ${O}`}}>
+              <div style={{fontSize:10,fontWeight:800,color:O,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:4}}>Recommended action</div>
+              <p style={{fontSize:12,color:N,margin:0,lineHeight:1.6}}>
+                Add 1–2 servers to Friday evening shifts and brief them on proactive table check-ins. Even one extra check-in per visit correlates with a <strong>+0.3★ rating lift</strong> based on your data.
+              </p>
+            </div>
           </div>
 
           {/* Recent reviews preview */}
