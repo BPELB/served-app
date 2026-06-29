@@ -590,9 +590,9 @@ function CatPill({ typeKey, selected, onClick }) {
     <button onClick={onClick} style={{
       display:"flex",alignItems:"center",gap:5,
       padding:"7px 13px",borderRadius:20,flexShrink:0,
-      border:`2px solid ${on?"#1E2A4A":"#FFD4C2"}`,
-      background:on?"#1E2A4A":"#FFF3EE",
-      color:on?"#fff":"#FF6B35",
+      border:`2px solid ${on?O:"#FFD4C2"}`,
+      background:on?O:"transparent",
+      color:on?"#fff":O,
       fontSize:12,fontWeight:on?700:500,
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
       <svg width="13" height="13" viewBox="0 0 24 24" style={{color:"currentColor",flexShrink:0}}>
@@ -1207,8 +1207,9 @@ function Home({ onSelect, isDark, toggleTheme }) {
       </div>
 
       {/* Category pills */}
-      <div style={{background:BG2,borderBottom:"2px solid #eee",padding:"10px 1rem",
-        display:"flex",gap:6,overflowX:"auto",WebkitOverflowScrolling:"touch"}}>
+      <div style={{background:BG2,borderBottom:`1.5px solid ${BDR}`,padding:"10px 1rem",
+        display:"flex",gap:6,overflowX:"auto",WebkitOverflowScrolling:"touch",
+        msOverflowStyle:"none",scrollbarWidth:"none"}}>
         {TYPE_KEYS.map(k=>(
           <CatPill key={k} typeKey={k} selected={cat} onClick={()=>changeCat(k)}/>
         ))}
@@ -1219,10 +1220,10 @@ function Home({ onSelect, isDark, toggleTheme }) {
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
           <IconBox type={cat} size={30}/>
           <div>
-            <p style={{fontSize:12,fontWeight:700,color:"#fff",textTransform:"uppercase",letterSpacing:"0.08em"}}>
+            <p style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.08em"}}>
               {BT[cat].label}
             </p>
-            <p style={{fontSize:11,color:"#ddd"}}>{filtered.length} nearby</p>
+            <p style={{fontSize:11,color:MUT}}>{filtered.length} nearby</p>
           </div>
         </div>
 
