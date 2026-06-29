@@ -1140,7 +1140,7 @@ function RateView({ business, onBack, onDone }) {
 // ============================================================
 // CLAIM MODAL
 // ============================================================
-function ClaimModal({ onClose }) {
+function ClaimModal({ onClose, onDashboard }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name:"", email:"", biz:"", phone:"" });
   const set = k => e => setForm(f=>({...f,[k]:e.target.value}));
@@ -1176,10 +1176,17 @@ function ClaimModal({ onClose }) {
             <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
               We'll reach out to <strong style={{color:N}}>{form.email||"you"}</strong> within 24 hours to verify and set up your free dashboard.
             </p>
-            <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,border:"none",
-              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
-              Done
-            </button>
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <button onClick={onDashboard} style={{padding:"12px 32px",borderRadius:12,border:"none",
+                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+                Go to dashboard →
+              </button>
+              <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,
+                border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
+                fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+                Maybe later
+              </button>
+            </div>
           </div>
         </>}
       </div>
@@ -1188,68 +1195,218 @@ function ClaimModal({ onClose }) {
 }
 
 // ============================================================
-// ADVERTISE MODAL
+// ADVERTISE MODAL — self-serve ad builder
 // ============================================================
+const AD_BUDGETS = [
+  {label:"Starter",amount:50,reach:"1,200–2,000",impressions:"Featured in 1 category"},
+  {label:"Growth",amount:150,reach:"4,000–6,500",impressions:"Featured in 3 categories"},
+  {label:"Pro",amount:350,reach:"10,000–16,000",impressions:"Featured everywhere + priority"},
+];
+
 function AdvertiseModal({ onClose }) {
-  const [form, setForm] = useState({ email:"", biz:"", budget:"" });
-  const [sent, setSent] = useState(false);
-  const set = k => e => setForm(f=>({...f,[k]:e.target.value}));
-  const inp = { width:"100%", padding:"11px 14px", borderRadius:12, border:`1.5px solid ${BDR}`,
-    background:BG2, color:N, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
-  const perks = [
-    ["📍","Featured placement","Appear at the top of local searches"],
-    ["📊","Real analytics","See views, clicks, and conversions"],
-    ["🎯","Targeted reach","Show ads to people near your business"],
-    ["💬","Review boosts","Get more verified reviews, faster"],
-  ];
+  const [step, setStep] = useState(1);
+  const [budget, setBudget] = useState(1);
+  const [adForm, setAdForm] = useState({ headline:"", tagline:"", cta:"Book now" });
+  const [funds, setFunds] = useState("");
+  const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
+  const [launched, setLaunched] = useState(false);
+  const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
+  const inp = {width:"100%",padding:"11px 14px",borderRadius:12,border:`1.5px solid ${BDR}`,
+    background:BG2,color:N,fontSize:13,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
+  const sel = AD_BUDGETS[budget];
+
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",
       alignItems:"flex-end",justifyContent:"center",zIndex:1000}} onClick={onClose}>
       <div style={{width:"100%",maxWidth:430,background:BG,borderRadius:"24px 24px 0 0",
-        padding:"28px 24px 40px",maxHeight:"90vh",overflowY:"auto",
-        boxShadow:"0 -8px 40px rgba(0,0,0,0.4)"}}
+        padding:"24px 20px 44px",maxHeight:"92vh",overflowY:"auto",
+        boxShadow:"0 -8px 40px rgba(0,0,0,0.5)"}}
         onClick={e=>e.stopPropagation()}>
-        <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 24px"}}/>
-        {!sent ? <>
-          <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:6}}>Advertise on Served</div>
-          <p style={{fontSize:13,color:MUT,marginBottom:20,lineHeight:1.6}}>
-            Reach real local customers who are actively looking for businesses like yours.
-          </p>
-          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
-            {perks.map(([icon,title,desc])=>(
-              <div key={title} style={{display:"flex",alignItems:"center",gap:12,
-                padding:"12px 14px",background:BG2,borderRadius:14,border:`1.5px solid ${BDR}`}}>
-                <span style={{fontSize:20,flexShrink:0}}>{icon}</span>
-                <div>
-                  <div style={{fontSize:13,fontWeight:700,color:N}}>{title}</div>
-                  <div style={{fontSize:11,color:MUT}}>{desc}</div>
-                </div>
+        <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 20px"}}/>
+
+        {/* Step indicator */}
+        {!launched && (
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:20}}>
+            {["Plan","Creative","Funds"].map((s,i)=>(
+              <div key={s} style={{display:"flex",alignItems:"center",gap:6,flex:i<2?1:undefined}}>
+                <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,
+                  background:step>i+1?O:step===i+1?O:BG3,
+                  border:`2px solid ${step>=i+1?O:BDR}`,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:10,fontWeight:800,color:step>=i+1?"#fff":MUT}}>{i+1}</div>
+                <span style={{fontSize:10,fontWeight:700,color:step>=i+1?N:MUT}}>{s}</span>
+                {i<2&&<div style={{flex:1,height:1,background:step>i+1?O:BDR}}/>}
               </div>
             ))}
           </div>
-          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
-            {[["Business name","biz","text"],["Email","email","email"],["Monthly budget","budget","text"]].map(([ph,k,t])=>(
-              <input key={k} type={t} placeholder={ph} value={form[k]} onChange={set(k)} style={inp}/>
+        )}
+
+        {/* STEP 1 — Choose plan */}
+        {step===1 && !launched && <>
+          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Choose your plan</div>
+          <p style={{fontSize:12,color:MUT,marginBottom:18,lineHeight:1.6}}>
+            All plans are month-to-month. Cancel anytime.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+            {AD_BUDGETS.map((b,i)=>(
+              <div key={b.label} onClick={()=>setBudget(i)}
+                style={{padding:"14px 16px",borderRadius:16,cursor:"pointer",
+                  border:`2px solid ${budget===i?O:BDR}`,
+                  background:budget===i?`${O}12`:BG2,
+                  transition:"all 0.15s"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+                  <span style={{fontSize:14,fontWeight:800,color:N}}>{b.label}</span>
+                  <span style={{fontSize:16,fontWeight:900,color:O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:MUT}}>/mo</span></span>
+                </div>
+                <div style={{fontSize:11,color:MUT}}>{b.reach} estimated reach/mo</div>
+                <div style={{fontSize:11,color:MUT}}>{b.impressions}</div>
+              </div>
             ))}
           </div>
-          <button onClick={()=>setSent(true)} style={{width:"100%",padding:"14px",borderRadius:14,
+          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
             border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
-            Get started →
-          </button>
-        </> : <>
+            cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
+        </>}
+
+        {/* STEP 2 — Ad creative */}
+        {step===2 && !launched && <>
+          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Build your ad</div>
+          <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
+            This is what customers will see when your ad appears.
+          </p>
+          {/* Live preview */}
+          <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:16,
+            padding:"14px 16px",marginBottom:18}}>
+            <div style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",
+              letterSpacing:"0.1em",marginBottom:8}}>Ad preview</div>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <div style={{width:44,height:44,borderRadius:12,background:O,
+                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <span style={{fontSize:22}}>🍕</span>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:800,color:N}}>
+                  {adForm.headline||"Your headline here"}
+                </div>
+                <div style={{fontSize:11,color:MUT}}>
+                  {adForm.tagline||"Your tagline appears here"}
+                </div>
+              </div>
+              <div style={{padding:"6px 10px",borderRadius:8,background:O,
+                color:"#fff",fontSize:10,fontWeight:800,flexShrink:0}}>
+                {adForm.cta||"Book now"}
+              </div>
+            </div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:5}}>Headline</div>
+              <input placeholder="e.g. Best Italian in McKinney" value={adForm.headline}
+                onChange={set("headline")} style={inp} maxLength={40}/>
+            </div>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:5}}>Tagline</div>
+              <input placeholder="e.g. Authentic recipes since 1987" value={adForm.tagline}
+                onChange={set("tagline")} style={inp} maxLength={60}/>
+            </div>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:5}}>Call to action</div>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                {["Book now","Order online","Get directions","Call us","Learn more"].map(cta=>(
+                  <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
+                    style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
+                      border:`1.5px solid ${adForm.cta===cta?O:BDR}`,
+                      background:adForm.cta===cta?O:"transparent",
+                      color:adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{display:"flex",gap:10}}>
+            <button onClick={()=>setStep(1)} style={{flex:1,padding:"13px",borderRadius:14,
+              border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
+              fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
+            <button onClick={()=>setStep(3)} style={{flex:2,padding:"13px",borderRadius:14,
+              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+              cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
+          </div>
+        </>}
+
+        {/* STEP 3 — Add funds */}
+        {step===3 && !launched && <>
+          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Add funds</div>
+          <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
+            Your card will be charged <strong style={{color:N}}>${sel.amount}</strong> now, then monthly until you cancel.
+          </p>
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
+            padding:"12px 16px",marginBottom:18}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+              <span style={{fontSize:12,color:MUT}}>Plan</span>
+              <span style={{fontSize:12,fontWeight:700,color:N}}>{sel.label}</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+              <span style={{fontSize:12,color:MUT}}>Estimated reach</span>
+              <span style={{fontSize:12,fontWeight:700,color:N}}>{sel.reach}/mo</span>
+            </div>
+            <div style={{height:1,background:BDR,margin:"8px 0"}}/>
+            <div style={{display:"flex",justifyContent:"space-between"}}>
+              <span style={{fontSize:13,fontWeight:800,color:N}}>Total today</span>
+              <span style={{fontSize:15,fontWeight:900,color:O}}>${sel.amount}</span>
+            </div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:5}}>Card number</div>
+              <input placeholder="1234 5678 9012 3456" value={card.num} maxLength={19}
+                onChange={e=>setCard(c=>({...c,num:e.target.value}))} style={inp}/>
+            </div>
+            <div style={{display:"flex",gap:10}}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginBottom:5}}>Expiry</div>
+                <input placeholder="MM / YY" value={card.exp} maxLength={7}
+                  onChange={e=>setCard(c=>({...c,exp:e.target.value}))} style={inp}/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginBottom:5}}>CVV</div>
+                <input placeholder="•••" value={card.cvv} maxLength={4}
+                  onChange={e=>setCard(c=>({...c,cvv:e.target.value}))} style={inp}/>
+              </div>
+            </div>
+          </div>
+          <div style={{display:"flex",gap:10}}>
+            <button onClick={()=>setStep(2)} style={{flex:1,padding:"13px",borderRadius:14,
+              border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
+              fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
+            <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"13px",borderRadius:14,
+              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+              cursor:"pointer",fontFamily:"inherit",
+              boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>Launch campaign →</button>
+          </div>
+          <p style={{textAlign:"center",fontSize:10,color:MUT,marginTop:12}}>
+            Secured by Stripe · Cancel anytime in your dashboard
+          </p>
+        </>}
+
+        {/* SUCCESS */}
+        {launched && (
           <div style={{textAlign:"center",padding:"20px 0"}}>
-            <div style={{fontSize:48,marginBottom:16}}>📣</div>
-            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Request received!</div>
+            <div style={{fontSize:52,marginBottom:16}}>🚀</div>
+            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Campaign live!</div>
             <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
-              Our team will contact <strong style={{color:N}}>{form.email||"you"}</strong> within 1 business day to discuss your campaign.
+              Your <strong style={{color:N}}>{sel.label}</strong> plan is active. You'll start seeing impressions within the hour.
             </p>
             <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,border:"none",
               background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
               Done
             </button>
           </div>
-        </>}
+        )}
       </div>
     </div>
   );
@@ -1258,7 +1415,7 @@ function AdvertiseModal({ onClose }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [page,setPage]          = useState(0);
@@ -1299,7 +1456,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
 
   return (
     <div style={{width:"100%"}}>
-      {showClaim && <ClaimModal onClose={()=>setShowClaim(false)}/>}
+      {showClaim && <ClaimModal onClose={()=>setShowClaim(false)} onDashboard={()=>{setShowClaim(false);onDashboard();}}/>}
       {showAds   && <AdvertiseModal onClose={()=>setShowAds(false)}/>}
       {/* Navy header */}
       <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
@@ -1444,6 +1601,15 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",cursor:"pointer"}} onClick={()=>setShowAds(true)}>Learn more →</button>
           </div>
         </div>
+
+        {/* Owner login link */}
+        <div style={{textAlign:"center",marginTop:16,paddingBottom:8}}>
+          <button onClick={onDashboard} style={{background:"none",border:"none",
+            color:MUT,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+            textDecoration:"underline",textDecorationColor:BDR}}>
+            Business owner? Access dashboard →
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -1494,6 +1660,372 @@ function DoneScreen({ business, reviewData, onReset }) {
 }
 
 // ============================================================
+// OWNER DASHBOARD
+// ============================================================
+const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
+
+const WEEKLY = [
+  {day:"Mon",reviews:3,rating:4.2},{day:"Tue",reviews:5,rating:4.6},
+  {day:"Wed",reviews:2,rating:3.8},{day:"Thu",reviews:7,rating:4.5},
+  {day:"Fri",reviews:9,rating:4.7},{day:"Sat",reviews:11,rating:4.4},
+  {day:"Sun",reviews:6,rating:4.3},
+];
+const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
+
+function OwnerDashboard({ onBack }) {
+  const [tab, setTab] = useState("overview");
+  const [replyOpen, setReplyOpen] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [replies, setReplies] = useState({});
+  const [editOpen, setEditOpen] = useState(false);
+  const [profile, setProfile] = useState({
+    name: DEMO_BIZ.name,
+    address: DEMO_BIZ.addr,
+    phone: "(972) 555-0123",
+    website: "osteriaromana.com",
+    hours: "Mon–Sat 11am–10pm · Sun 12pm–9pm",
+    description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
+  });
+  const [editForm, setEditForm] = useState({...profile});
+
+  const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
+  const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
+  const overallStars = (overall/2).toFixed(1);
+
+  const bt = BT[DEMO_BIZ.type];
+  const catAvgs = bt.core.map(cat=>{
+    const vals = DEMO_REVIEWS.map(r=>r.scores?.[cat.id]).filter(Boolean);
+    const avg = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+    return {...cat, avg, pct: Math.round((avg/10)*100)};
+  });
+
+  const sendReply = (id) => {
+    if (!replyText.trim()) return;
+    setReplies(r=>({...r,[id]:replyText.trim()}));
+    setReplyText("");
+    setReplyOpen(null);
+  };
+
+  const tabs = [
+    {id:"overview", icon:<><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Overview"},
+    {id:"reviews",  icon:<><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Reviews"},
+    {id:"insights", icon:<><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>, label:"Insights"},
+    {id:"profile",  icon:<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Profile"},
+  ];
+
+  return (
+    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+      {/* Header */}
+      <div style={{background:BG2,padding:"16px 16px 0",borderBottom:`1.5px solid ${BDR}`}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+          <button onClick={onBack} style={{background:"none",border:"none",color:MUT,
+            cursor:"pointer",padding:"4px 0",fontFamily:"inherit",fontSize:12,fontWeight:700,
+            display:"flex",alignItems:"center",gap:4}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <div style={{flex:1}}/>
+          <div style={{width:8,height:8,borderRadius:"50%",background:"#16a34a"}}/>
+          <span style={{fontSize:11,color:"#16a34a",fontWeight:700}}>Live</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
+          <div>
+            <div style={{fontSize:16,fontWeight:900,color:N}}>{profile.name}</div>
+            <div style={{fontSize:11,color:MUT}}>{bt.label} · {profile.address}</div>
+          </div>
+        </div>
+        {/* Tab bar */}
+        <div style={{display:"flex",gap:0}}>
+          {tabs.map(t=>(
+            <button key={t.id} onClick={()=>setTab(t.id)} style={{
+              flex:1,padding:"10px 0",background:"none",border:"none",
+              borderBottom:`2.5px solid ${tab===t.id?O:"transparent"}`,
+              color:tab===t.id?O:MUT,fontSize:9,fontWeight:700,cursor:"pointer",
+              fontFamily:"inherit",display:"flex",flexDirection:"column",alignItems:"center",gap:4,
+              textTransform:"uppercase",letterSpacing:"0.05em",transition:"all 0.15s"}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">{t.icon}</svg>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{flex:1,overflowY:"auto",padding:"16px"}}>
+
+        {/* ── OVERVIEW ── */}
+        {tab==="overview" && <>
+          {/* KPI row */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
+            {[
+              {label:"Rating",value:overallStars,sub:"out of 5"},
+              {label:"Reviews",value:DEMO_REVIEWS.length,sub:"total"},
+              {label:"This week",value:"+"+WEEKLY.reduce((a,d)=>a+d.reviews,0),sub:"new reviews"},
+            ].map(k=>(
+              <div key={k.label} style={{background:BG2,border:`1.5px solid ${BDR}`,
+                borderRadius:16,padding:"14px 10px",textAlign:"center"}}>
+                <div style={{fontSize:22,fontWeight:900,color:O,lineHeight:1}}>{k.value}</div>
+                <div style={{fontSize:9,fontWeight:700,color:N,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginTop:4}}>{k.label}</div>
+                <div style={{fontSize:10,color:MUT,marginTop:2}}>{k.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Weekly bar chart */}
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:16}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Reviews this week</div>
+            <div style={{display:"flex",alignItems:"flex-end",gap:6,height:70}}>
+              {WEEKLY.map(d=>(
+                <div key={d.day} style={{flex:1,display:"flex",flexDirection:"column",
+                  alignItems:"center",gap:4}}>
+                  <div style={{width:"100%",background:O,borderRadius:"4px 4px 0 0",
+                    height:`${Math.round((d.reviews/maxR)*56)+8}px`,
+                    opacity:0.7+0.3*(d.reviews/maxR),transition:"height 0.3s"}}/>
+                  <div style={{fontSize:9,color:MUT,fontWeight:700}}>{d.day}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* AI Insight */}
+          <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
+            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:16}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+              <div style={{width:28,height:28,borderRadius:8,background:O,
+                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="white" stroke="none"/></svg>
+              </div>
+              <div style={{fontSize:12,fontWeight:800,color:N}}>AI Insight</div>
+              <div style={{marginLeft:"auto",fontSize:9,fontWeight:700,color:O,
+                background:`${O}22`,padding:"2px 7px",borderRadius:10}}>NEW</div>
+            </div>
+            <p style={{fontSize:12,color:N,lineHeight:1.6,margin:0}}>
+              Customers love your <strong>atmosphere</strong> and <strong>food quality</strong>, but mention wait times on Friday evenings. Consider adding staff for peak hours.
+            </p>
+          </div>
+
+          {/* Recent reviews preview */}
+          <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:10}}>Recent reviews</div>
+          {DEMO_REVIEWS.slice(0,2).map(r=>(
+            <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
+              borderRadius:14,padding:"12px 14px",marginBottom:8}}>
+              <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
+                <div style={{width:26,height:26,borderRadius:"50%",background:O,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:11,fontWeight:800,color:"#fff",flexShrink:0}}>
+                  {r.author?.[0]||"A"}
+                </div>
+                <span style={{fontSize:12,fontWeight:700,color:N}}>{r.author||"Anonymous"}</span>
+                <PartialStars value={r.avg/2} size={10}/>
+                <span style={{marginLeft:"auto",fontSize:10,color:MUT}}>{r.created_at?.slice(0,10)}</span>
+              </div>
+              {r.feedback&&<p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.5}}>{r.feedback}</p>}
+            </div>
+          ))}
+          <button onClick={()=>setTab("reviews")} style={{width:"100%",padding:"10px",
+            borderRadius:12,border:`1.5px solid ${BDR}`,background:"transparent",
+            color:O,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:4}}>
+            View all reviews →
+          </button>
+        </>}
+
+        {/* ── REVIEWS ── */}
+        {tab==="reviews" && <>
+          <div style={{fontSize:13,fontWeight:800,color:N,marginBottom:14}}>
+            {DEMO_REVIEWS.length} reviews
+          </div>
+          {DEMO_REVIEWS.map(r=>(
+            <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
+              borderRadius:16,padding:"14px",marginBottom:10}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                <div style={{width:30,height:30,borderRadius:"50%",background:O,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:13,fontWeight:800,color:"#fff",flexShrink:0}}>
+                  {r.author?.[0]||"A"}
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700,color:N}}>{r.author||"Anonymous"}</div>
+                  <div style={{fontSize:10,color:MUT}}>{r.created_at?.slice(0,10)}</div>
+                </div>
+                <PartialStars value={r.avg/2} size={12}/>
+              </div>
+              {r.feedback&&<p style={{fontSize:12,color:MUT,margin:"0 0 10px",lineHeight:1.5}}>{r.feedback}</p>}
+              {replies[r.id] ? (
+                <div style={{background:BG3,borderRadius:10,padding:"10px 12px",
+                  borderLeft:`3px solid ${O}`}}>
+                  <div style={{fontSize:10,fontWeight:700,color:O,marginBottom:4}}>Your reply</div>
+                  <p style={{fontSize:12,color:N,margin:0,lineHeight:1.5}}>{replies[r.id]}</p>
+                </div>
+              ) : replyOpen===r.id ? (
+                <div>
+                  <textarea value={replyText} onChange={e=>setReplyText(e.target.value)}
+                    placeholder="Write a reply…"
+                    style={{width:"100%",padding:"10px 12px",borderRadius:10,
+                      border:`1.5px solid ${BDR}`,background:BG3,color:N,
+                      fontSize:12,fontFamily:"inherit",resize:"none",height:72,
+                      outline:"none",boxSizing:"border-box"}}/>
+                  <div style={{display:"flex",gap:8,marginTop:8}}>
+                    <button onClick={()=>{setReplyOpen(null);setReplyText("");}}
+                      style={{flex:1,padding:"8px",borderRadius:10,border:`1.5px solid ${BDR}`,
+                        background:"transparent",color:MUT,fontSize:12,fontWeight:700,
+                        cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
+                    <button onClick={()=>sendReply(r.id)}
+                      style={{flex:2,padding:"8px",borderRadius:10,border:"none",
+                        background:O,color:"#fff",fontSize:12,fontWeight:700,
+                        cursor:"pointer",fontFamily:"inherit"}}>Post reply</button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={()=>{setReplyOpen(r.id);setReplyText("");}}
+                  style={{padding:"6px 12px",borderRadius:8,border:`1.5px solid ${BDR}`,
+                    background:"transparent",color:MUT,fontSize:11,fontWeight:700,
+                    cursor:"pointer",fontFamily:"inherit"}}>Reply →</button>
+              )}
+            </div>
+          ))}
+        </>}
+
+        {/* ── INSIGHTS ── */}
+        {tab==="insights" && <>
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Category breakdown</div>
+            {catAvgs.map(cat=>(
+              <div key={cat.id} style={{marginBottom:14}}>
+                <div style={{display:"flex",justifyContent:"space-between",
+                  alignItems:"center",marginBottom:6}}>
+                  <span style={{fontSize:12,fontWeight:700,color:N}}>{cat.label}</span>
+                  <span style={{fontSize:12,fontWeight:800,color:O}}>{(cat.avg/2).toFixed(1)}</span>
+                </div>
+                <div style={{height:8,borderRadius:4,background:BG3,overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:4,background:O,
+                    width:`${cat.pct}%`,transition:"width 0.5s"}}/>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:12}}>Top mentions</div>
+            {[["atmosphere","positive"],["food quality","positive"],["wait times","negative"],
+              ["friendly staff","positive"],["pricing","neutral"]].map(([tag,sentiment])=>(
+              <div key={tag} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
+                padding:"8px 0",borderBottom:`1px solid ${BDR}`}}>
+                <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
+                <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
+                  background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
+                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  {sentiment}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
+            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px"}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:8}}>AI recommendations</div>
+            {["Respond to reviews within 24hrs to boost trust score",
+              "Friday 6–9pm is your busiest window — staff up",
+              "Customers who mention 'atmosphere' rate 0.4★ higher",
+              "3 reviews mention cold food — check delivery times"].map((tip,i)=>(
+              <div key={i} style={{display:"flex",gap:10,marginBottom:10}}>
+                <div style={{width:20,height:20,borderRadius:"50%",background:O,flexShrink:0,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:10,fontWeight:800,color:"#fff"}}>{i+1}</div>
+                <p style={{fontSize:12,color:N,margin:0,lineHeight:1.5}}>{tip}</p>
+              </div>
+            ))}
+          </div>
+        </>}
+
+        {/* ── PROFILE ── */}
+        {tab==="profile" && <>
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+              <div style={{fontSize:12,fontWeight:800,color:N}}>Business info</div>
+              <button onClick={()=>{setEditOpen(true);setEditForm({...profile});}}
+                style={{padding:"6px 12px",borderRadius:8,border:`1.5px solid ${O}`,
+                  background:"transparent",color:O,fontSize:11,fontWeight:700,
+                  cursor:"pointer",fontFamily:"inherit"}}>Edit</button>
+            </div>
+            {[["Business","name"],["Address","address"],["Phone","phone"],
+              ["Website","website"],["Hours","hours"],["About","description"]].map(([label,key])=>(
+              <div key={key} style={{marginBottom:12}}>
+                <div style={{fontSize:10,fontWeight:700,color:MUT,
+                  textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:3}}>{label}</div>
+                <div style={{fontSize:13,color:N,lineHeight:1.5}}>{profile[key]}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,padding:"16px"}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:12}}>Account</div>
+            {[["Plan","Free"],["Status","Verified"],["Member since","Jun 2025"]].map(([k,v])=>(
+              <div key={k} style={{display:"flex",justifyContent:"space-between",
+                padding:"10px 0",borderBottom:`1px solid ${BDR}`}}>
+                <span style={{fontSize:12,color:MUT}}>{k}</span>
+                <span style={{fontSize:12,fontWeight:700,color:N}}>{v}</span>
+              </div>
+            ))}
+            <button style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
+              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+              cursor:"pointer",fontFamily:"inherit"}}>Upgrade to Pro →</button>
+          </div>
+        </>}
+      </div>
+
+      {/* Edit profile modal */}
+      {editOpen && (
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",
+          display:"flex",alignItems:"flex-end",justifyContent:"center",zIndex:1000}}
+          onClick={()=>setEditOpen(false)}>
+          <div style={{width:"100%",maxWidth:430,background:BG,borderRadius:"24px 24px 0 0",
+            padding:"28px 24px 40px",maxHeight:"85vh",overflowY:"auto"}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 20px"}}/>
+            <div style={{fontSize:18,fontWeight:900,color:N,marginBottom:20}}>Edit profile</div>
+            {[["Business name","name","text"],["Address","address","text"],
+              ["Phone","phone","tel"],["Website","website","text"],
+              ["Hours","hours","text"],["About","description","text"]].map(([ph,k])=>(
+              <div key={k} style={{marginBottom:12}}>
+                <div style={{fontSize:10,fontWeight:700,color:MUT,
+                  textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:5}}>{ph}</div>
+                {k==="description"
+                  ? <textarea value={editForm[k]} onChange={e=>setEditForm(f=>({...f,[k]:e.target.value}))}
+                      style={{width:"100%",padding:"11px 14px",borderRadius:12,
+                        border:`1.5px solid ${BDR}`,background:BG2,color:N,
+                        fontSize:13,fontFamily:"inherit",resize:"none",height:80,
+                        outline:"none",boxSizing:"border-box"}}/>
+                  : <input type="text" value={editForm[k]} onChange={e=>setEditForm(f=>({...f,[k]:e.target.value}))}
+                      style={{width:"100%",padding:"11px 14px",borderRadius:12,
+                        border:`1.5px solid ${BDR}`,background:BG2,color:N,
+                        fontSize:13,fontFamily:"inherit",outline:"none",boxSizing:"border-box"}}/>
+                }
+              </div>
+            ))}
+            <div style={{display:"flex",gap:10,marginTop:8}}>
+              <button onClick={()=>setEditOpen(false)}
+                style={{flex:1,padding:"12px",borderRadius:12,border:`1.5px solid ${BDR}`,
+                  background:"transparent",color:MUT,fontSize:13,fontWeight:700,
+                  cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
+              <button onClick={()=>{setProfile({...editForm});setEditOpen(false);}}
+                style={{flex:2,padding:"12px",borderRadius:12,border:"none",
+                  background:O,color:"#fff",fontSize:13,fontWeight:800,
+                  cursor:"pointer",fontFamily:"inherit"}}>Save changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
 // APP ROOT
 // ============================================================
 export default function ServedApp() {
@@ -1520,10 +2052,11 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"     && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme}/>}
-        {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
-        {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
-        {view==="done"     && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")}/>}
+        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
+        {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")}/>}
       </div>
     </div>
   );
