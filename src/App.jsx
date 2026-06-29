@@ -470,8 +470,8 @@ function ScoreBadge({ score, size=50 }) {
     <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
       background:C?C.bg:"#f5f5f5",border:`2px solid ${C?C.bd:"#eee"}`,
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <svg width={starSize+2} height={starSize+2} viewBox="0 0 12 12">
-        <polyline points="2,6.5 4.5,9 10,3" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg width={starSize+4} height={starSize+4} viewBox="0 0 16 16" fill="none">
+        <polyline points="3,8.5 6.5,12 13,4" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       <span style={{fontSize:size>40?16:12,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
         {dec||"—"}
@@ -655,37 +655,28 @@ function StarCard({ cat, value, onChange, box }) {
   const sv   = value ? value/2 : 0;
   const show = hov || sv;
   const SC   = sv ? scC(sv) : null;
-  const col  = stC(show||1);
-
-  // Card uses brand navy, scores shift to functional color
-  const cardBg = SC ? "#B8C8F0" : "#FFF3EE";
-  const cardBd = SC ? "#8AA4DC" : "#FFD4C2";
-  const labelCol = SC ? "#fff" : N;
-  const subCol = SC ? "rgba(255,255,255,0.75)" : "#666";
 
   return (
     <div style={{padding:"14px 16px",borderRadius:16,marginBottom:10,
-      background:cardBg,border:`2px solid ${cardBd}`,
-      transition:"background 0.2s,border-color 0.2s"}}
->
+      background:BG2,border:`1.5px solid ${SC?SC.bd:BDR}`,
+      transition:"border-color 0.2s"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
         <div style={{width:38,height:38,borderRadius:11,flexShrink:0,
-          background:SC?"rgba(255,255,255,0.2)":"rgba(22,163,74,0.15)",
-          border:`1.5px solid ${SC?"rgba(255,255,255,0.3)":"#FFD4C2"}`,
+          background:BG3,border:`1.5px solid ${BDR}`,
           display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <svg width="18" height="18" viewBox="0 0 24 24" style={{color:SC?"#fff":O}}>
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke={O} fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             {CAT_ICONS[cat.id]||CAT_ICONS.food}
           </svg>
         </div>
         <div style={{flex:1}}>
-          <div style={{fontSize:14,fontWeight:700,color:labelCol}}>{cat.label}</div>
-          <div style={{fontSize:11,color:subCol,marginTop:1}}>{cat.q}</div>
+          <div style={{fontSize:14,fontWeight:700,color:N}}>{cat.label}</div>
+          <div style={{fontSize:11,color:MUT,marginTop:1}}>{cat.q}</div>
         </div>
         {sv>0&&(
-          <div style={{fontSize:12,fontWeight:800,color:SC?SC.tx:"rgba(255,255,255,0.9)",
-            background:SC?"#B8C8F0":"rgba(22,163,74,0.15)",padding:"3px 10px",borderRadius:20,
-            border:`1.5px solid ${SC?"#8AA4DC":O}`,whiteSpace:"nowrap"}}>
+          <div style={{fontSize:12,fontWeight:800,color:SC?SC.tx:MUT,
+            background:SC?SC.bg:BG3,padding:"3px 10px",borderRadius:20,
+            border:`1.5px solid ${SC?SC.bd:BDR}`,whiteSpace:"nowrap"}}>
             {sv}/5
           </div>
         )}
@@ -695,17 +686,14 @@ function StarCard({ cat, value, onChange, box }) {
            onMouseLeave={()=>setHov(0)}>
         {[1,2,3,4,5].map(n=>{
           const filled = n<=show;
-          const boxBg  = filled ? O : SC?"rgba(255,255,255,0.15)":"rgba(22,163,74,0.12)";
-          const boxBd  = filled ? O : SC?"rgba(255,255,255,0.25)":"#FFD4C2";
-          const starCol= filled ? "#fff" : O;
           return (
             <button key={n} onMouseEnter={()=>setHov(n)} onClick={()=>onChange(sv===n?null:n*2)}
               style={{width:44,height:44,borderRadius:12,
-                background:boxBg,border:`2px solid ${boxBd}`,
+                background:filled?O:BG3,border:`1.5px solid ${filled?O:BDR}`,
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:22,cursor:"pointer",fontFamily:"inherit",
                 transition:"background 0.12s,border-color 0.12s"}}>
-              <span style={{color:starCol,lineHeight:1}}>★</span>
+              <span style={{color:filled?"#fff":MUT,lineHeight:1}}>★</span>
             </button>
           );
         })}
