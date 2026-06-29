@@ -1210,10 +1210,10 @@ function Home({ onSelect, isDark, toggleTheme }) {
           <input value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}
             placeholder="Search by name…"
             style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
-              fontSize:13,border:"2px solid rgba(255,255,255,0.3)",background:"rgba(255,255,255,0.18)",
+              fontSize:13,border:`1.5px solid ${BDR}`,background:BG2,
               color:N,fontFamily:"inherit",outline:"none"}}/>
           {searching&&<span style={{position:"absolute",right:12,top:"50%",
-            transform:"translateY(-50%)",fontSize:11,color:"rgba(255,255,255,0.4)"}}>
+            transform:"translateY(-50%)",fontSize:11,color:MUT}}>
             searching…
           </span>}
         </div>
