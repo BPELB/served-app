@@ -456,7 +456,7 @@ function IconBox({ type, size=44, emoji }) {
   const s = size * 0.55;
   return (
     <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
-      background:box.bg,border:`2px solid ${box.bd}`,
+      background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {emoji
         ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
