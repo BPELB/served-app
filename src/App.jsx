@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 // ============================================================
 // CONFIG — paste your keys here
@@ -14,14 +14,24 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#FF6B35";  // orange — accent
-const N   = "#ffffff";  // white — primary text
-const BG  = "#26373f";  // dark — background
-const BG2 = "#1c2b31";  // darker — cards/sections
-const BG3 = "#1a2830";  // darkest — inputs
-const BDR = "#4a6270";  // light gray border
+const O   = "#FF6B35";
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
-const HOV = "#243840";  // hover state
+
+// CSS variable references — all theme colors live on :root
+const BG  = "var(--bg)";
+const BG2 = "var(--bg2)";
+const BG3 = "var(--bg3)";
+const BDR = "var(--bdr)";
+const N   = "var(--text)";
+const HOV = "var(--hover)";
+const MUT = "var(--muted)";
+
+const DARK_VARS  = { "--bg":"#26373f","--bg2":"#1c2b31","--bg3":"#1a2830","--bdr":"#4a6270","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#243840" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#1a2830","--muted":"rgba(26,40,48,0.55)",  "--hover":"#f0f3f2" };
+
+function applyTheme(vars) {
+  Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
+}
 
 // Functional score colors
 const SH = { bg:"rgba(255,107,53,0.08)", bd:"rgba(255,107,53,0.3)", tx:"#FF6B35" };
@@ -1123,7 +1133,7 @@ function RateView({ business, onBack, onDone }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect }) {
+function Home({ onSelect, isDark, toggleTheme }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [page,setPage]          = useState(0);
@@ -1164,8 +1174,21 @@ function Home({ onSelect }) {
     <div style={{maxWidth:480,margin:"0 auto"}}>
       {/* Navy header */}
       <div style={{background:BG,padding:"1.5rem 1rem 1.25rem",borderRadius:"0 0 24px 24px"}}>
-        <Logo light/>
-        <p style={{fontSize:12,color:"rgba(255,255,255,0.8)",marginTop:5}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+          <Logo light/>
+          {/* Dark / Light toggle */}
+          <button onClick={toggleTheme} style={{
+            display:"flex",alignItems:"center",gap:7,
+            padding:"6px 12px",borderRadius:20,
+            border:`1.5px solid ${BDR}`,background:BG2,
+            color:N,fontSize:11,fontWeight:700,cursor:"pointer",
+            transition:"all 0.2s"
+          }}>
+            <span>{isDark ? "☀️" : "🌙"}</span>
+            <span>{isDark ? "Light" : "Dark"}</span>
+          </button>
+        </div>
+        <p style={{fontSize:12,color:MUT,marginTop:5}}>
           Honest feedback for every business. Free. Always.
         </p>
         <div style={{position:"relative",marginTop:14}}>
@@ -1337,17 +1360,29 @@ function DoneScreen({ business, reviewData, onReset }) {
 // APP ROOT
 // ============================================================
 export default function ServedApp() {
-  const [view,setView]         = useState("home");
-  const [business,setBiz]      = useState(null);
+  const [view,setView]       = useState("home");
+  const [business,setBiz]    = useState(null);
   const [reviewData,setReview] = useState(null);
+  const [isDark,setIsDark]   = useState(true);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark(d => {
+      const next = !d;
+      applyTheme(next ? DARK_VARS : LIGHT_VARS);
+      return next;
+    });
+  }, []);
 
   const select = b => { setBiz(b); setView("business"); };
   const done   = d => { setReview(d); setView("done"); };
   const reset  = () => { setBiz(null); setReview(null); setView("home"); };
 
-  if (view==="home")     return <Home onSelect={select}/>;
-  if (view==="business") return <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>;
-  if (view==="rate")     return <RateView business={business} onBack={()=>setView("business")} onDone={done}/>;
-  if (view==="done")     return <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>;
-  return null;
+  return (
+    <div style={{background:BG,minHeight:"100vh",color:N}}>
+      {view==="home"     && <Home onSelect={select} isDark={isDark} toggleTheme={toggleTheme}/>}
+      {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+      {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
+      {view==="done"     && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
+    </div>
+  );
 }
