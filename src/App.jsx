@@ -387,7 +387,7 @@ const gPlaces = {
 // SHARED COMPONENTS
 // ============================================================
 function Logo({ light=false }) {
-  const c = light ? "#fff" : N;
+  const c = N;
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="36" height="36" viewBox="0 0 40 40">
