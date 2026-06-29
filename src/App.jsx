@@ -455,7 +455,7 @@ function IconBox({ type, size=44 }) {
   const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
   const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
       background:box.bg,border:`2px solid ${box.bd}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       <svg width={s} height={s} viewBox="0 0 24 24" style={{color:box.ic}}>
@@ -553,10 +553,10 @@ function BusinessCard({ b, onSelect }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onSelect(b);}}
-          style={{flexShrink:0,padding:"8px 12px",borderRadius:12,border:"none",
+          style={{flexShrink:0,padding:"10px 14px",borderRadius:999,border:"none",
             background:O,color:"#fff",fontSize:11,fontWeight:800,
             cursor:"pointer",lineHeight:1.3,textAlign:"center",fontFamily:"inherit",
-            boxShadow:"0 2px 8px rgba(255,107,53,0.35)"}}>
+            boxShadow:"0 2px 10px rgba(255,107,53,0.4)"}}>
           Rate<br/>Now
         </button>
       </div>
