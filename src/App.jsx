@@ -559,7 +559,7 @@ function BusinessCard({ b, onSelect }) {
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             display:"flex",alignItems:"center",gap:5}}>
           Rate Now
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
         </button>
       </div>
 
@@ -1196,7 +1196,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
                 position:"absolute",top:2,
                 left:isDark?20:2,
                 width:16,height:16,borderRadius:"50%",
-                background:"#fff",
+                background:O,
                 transition:"left 0.25s",
               }}/>
             </div>
