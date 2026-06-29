@@ -1138,6 +1138,124 @@ function RateView({ business, onBack, onDone }) {
 }
 
 // ============================================================
+// CLAIM MODAL
+// ============================================================
+function ClaimModal({ onClose }) {
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({ name:"", email:"", biz:"", phone:"" });
+  const set = k => e => setForm(f=>({...f,[k]:e.target.value}));
+  const inp = { width:"100%", padding:"11px 14px", borderRadius:12, border:`1.5px solid ${BDR}`,
+    background:BG2, color:N, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",
+      alignItems:"flex-end",justifyContent:"center",zIndex:1000}} onClick={onClose}>
+      <div style={{width:"100%",maxWidth:430,background:BG,borderRadius:"24px 24px 0 0",
+        padding:"28px 24px 40px",boxShadow:"0 -8px 40px rgba(0,0,0,0.4)"}}
+        onClick={e=>e.stopPropagation()}>
+        <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 24px"}}/>
+        {step===1 && <>
+          <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:6}}>Claim your business</div>
+          <p style={{fontSize:13,color:MUT,marginBottom:24,lineHeight:1.6}}>
+            Get a free dashboard, respond to reviews, and unlock AI-powered insights about your customers.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>
+            {[["Business name","biz","text"],["Your name","name","text"],["Email","email","email"],["Phone","phone","tel"]].map(([ph,k,t])=>(
+              <input key={k} type={t} placeholder={ph} value={form[k]} onChange={set(k)} style={inp}/>
+            ))}
+          </div>
+          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
+            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
+            Claim for free →
+          </button>
+        </>}
+        {step===2 && <>
+          <div style={{textAlign:"center",padding:"20px 0"}}>
+            <div style={{fontSize:48,marginBottom:16}}>🎉</div>
+            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>You're on the list!</div>
+            <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
+              We'll reach out to <strong style={{color:N}}>{form.email||"you"}</strong> within 24 hours to verify and set up your free dashboard.
+            </p>
+            <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,border:"none",
+              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+              Done
+            </button>
+          </div>
+        </>}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ADVERTISE MODAL
+// ============================================================
+function AdvertiseModal({ onClose }) {
+  const [form, setForm] = useState({ email:"", biz:"", budget:"" });
+  const [sent, setSent] = useState(false);
+  const set = k => e => setForm(f=>({...f,[k]:e.target.value}));
+  const inp = { width:"100%", padding:"11px 14px", borderRadius:12, border:`1.5px solid ${BDR}`,
+    background:BG2, color:N, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
+  const perks = [
+    ["📍","Featured placement","Appear at the top of local searches"],
+    ["📊","Real analytics","See views, clicks, and conversions"],
+    ["🎯","Targeted reach","Show ads to people near your business"],
+    ["💬","Review boosts","Get more verified reviews, faster"],
+  ];
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",
+      alignItems:"flex-end",justifyContent:"center",zIndex:1000}} onClick={onClose}>
+      <div style={{width:"100%",maxWidth:430,background:BG,borderRadius:"24px 24px 0 0",
+        padding:"28px 24px 40px",maxHeight:"90vh",overflowY:"auto",
+        boxShadow:"0 -8px 40px rgba(0,0,0,0.4)"}}
+        onClick={e=>e.stopPropagation()}>
+        <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 24px"}}/>
+        {!sent ? <>
+          <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:6}}>Advertise on Served</div>
+          <p style={{fontSize:13,color:MUT,marginBottom:20,lineHeight:1.6}}>
+            Reach real local customers who are actively looking for businesses like yours.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+            {perks.map(([icon,title,desc])=>(
+              <div key={title} style={{display:"flex",alignItems:"center",gap:12,
+                padding:"12px 14px",background:BG2,borderRadius:14,border:`1.5px solid ${BDR}`}}>
+                <span style={{fontSize:20,flexShrink:0}}>{icon}</span>
+                <div>
+                  <div style={{fontSize:13,fontWeight:700,color:N}}>{title}</div>
+                  <div style={{fontSize:11,color:MUT}}>{desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
+            {[["Business name","biz","text"],["Email","email","email"],["Monthly budget","budget","text"]].map(([ph,k,t])=>(
+              <input key={k} type={t} placeholder={ph} value={form[k]} onChange={set(k)} style={inp}/>
+            ))}
+          </div>
+          <button onClick={()=>setSent(true)} style={{width:"100%",padding:"14px",borderRadius:14,
+            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
+            Get started →
+          </button>
+        </> : <>
+          <div style={{textAlign:"center",padding:"20px 0"}}>
+            <div style={{fontSize:48,marginBottom:16}}>📣</div>
+            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Request received!</div>
+            <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
+              Our team will contact <strong style={{color:N}}>{form.email||"you"}</strong> within 1 business day to discuss your campaign.
+            </p>
+            <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,border:"none",
+              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+              Done
+            </button>
+          </div>
+        </>}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
 // HOME
 // ============================================================
 function Home({ onSelect, onRate, isDark, toggleTheme }) {
@@ -1147,6 +1265,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
   const [loc,setLoc]            = useState(null);
   const [results,setResults]    = useState(DEMOS.food);
   const [searching,setSearching]= useState(false);
+  const [showClaim,setShowClaim]= useState(false);
+  const [showAds,setShowAds]    = useState(false);
   const timer                   = useRef(null);
   const PAGE = 5;
 
@@ -1179,6 +1299,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
 
   return (
     <div style={{width:"100%"}}>
+      {showClaim && <ClaimModal onClose={()=>setShowClaim(false)}/>}
+      {showAds   && <AdvertiseModal onClose={()=>setShowAds(false)}/>}
       {/* Navy header */}
       <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
@@ -1282,8 +1404,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
         {/* CTAs */}
         <div style={{display:"flex",flexDirection:"column",gap:10}}>
           {/* Own a business */}
-          <div style={{padding:"16px 18px",background:BG2,
-            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14}}>
+          <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:BG2,
+            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:"linear-gradient(135deg,#FF6B35,#FF8C5A)",
               boxShadow:"0 4px 12px rgba(255,107,53,0.35)",
@@ -1300,11 +1422,11 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
               background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(255,107,53,0.3)"}}>Claim free →</button>
+              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim free →</button>
           </div>
           {/* Advertise */}
-          <div style={{padding:"16px 18px",background:BG2,
-            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14}}>
+          <div onClick={()=>setShowAds(true)} style={{padding:"16px 18px",background:BG2,
+            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:O,
               boxShadow:"0 4px 12px rgba(255,107,53,0.3)",
@@ -1319,7 +1441,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme }) {
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
               border:`2px solid ${O}`,background:"transparent",color:O,
-              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit"}}>Learn more →</button>
+              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",cursor:"pointer"}} onClick={()=>setShowAds(true)}>Learn more →</button>
           </div>
         </div>
       </div>
