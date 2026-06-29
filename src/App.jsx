@@ -465,15 +465,15 @@ function IconBox({ type, size=44, emoji }) {
 function ScoreBadge({ score, size=50 }) {
   const C   = score ? (score>=8?SH:score>=5?SM:SL) : null;
   const dec = score ? (score/2).toFixed(1) : null;
+  const starSize = size > 40 ? 11 : 8;
   return (
     <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
       background:C?C.bg:"#f5f5f5",border:`2px solid ${C?C.bd:"#eee"}`,
-      display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:1}}>
-      <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-        <span style={{fontSize:size>40?18:14,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
-          {dec||"—"}
-        </span>
-      </div>
+      display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
+      <span style={{fontSize:starSize,lineHeight:1,color:"#FF6B35"}}>★</span>
+      <span style={{fontSize:size>40?16:12,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
+        {dec||"—"}
+      </span>
     </div>
   );
 }
