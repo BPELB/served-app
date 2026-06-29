@@ -14,7 +14,7 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#84cc16";
+const O   = "#16a34a";
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
@@ -388,7 +388,7 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
-  const G2 = "#84cc16";
+  const G2 = "#16a34a";
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="36" height="36" viewBox="0 0 40 40">
