@@ -14,7 +14,7 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#FF6B35";
+const O   = "#84cc16";
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
@@ -388,19 +388,15 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
+  const G2 = "#84cc16";
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="36" height="36" viewBox="0 0 40 40">
-        <rect width="40" height="40" rx="11" fill={O}/>
-        <line x1="12" y1="8" x2="12" y2="17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="16" y1="8" x2="16" y2="17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="20" y1="8" x2="20" y2="17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M14 17 Q14 20 14 22 L14 32" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M27 8 L27 18 Q27 21 25 22 L25 32" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
-        <path d="M27 8 Q31 10 31 16 L27 18 Z" fill="rgba(255,255,255,0.8)"/>
+        <rect width="40" height="40" rx="11" fill={G2}/>
+        <polyline points="10,21 17,28 30,13" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
-        served<span style={{color:O}}>.</span>
+        green<span style={{color:G2}}>chek</span>
       </span>
     </div>
   );
@@ -800,7 +796,7 @@ function ShareCard({ business, scores, onClose }) {
   const avg   = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
   const stars = avg ? Math.round(avg/2) : null;
   const bt    = BT[business?.type||"food"];
-  const text  = `Just rated ${business?.name} on Served — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at getserved.app`;
+  const text  = `Just rated ${business?.name} on GreenChek — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at greenchek.co`;
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,0.7)",display:"flex",
       alignItems:"center",justifyContent:"center",zIndex:999,padding:"1rem"}}>
@@ -815,7 +811,7 @@ function ShareCard({ business, scores, onClose }) {
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
           </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>getserved.app · free for everyone</div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>greenchek.co · free for everyone</div>
         </div>
         <div style={{fontSize:13,color:MUT,marginBottom:14,lineHeight:1.5}}>{text}</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
@@ -1212,7 +1208,7 @@ function ClaimModal({ onClose, onDashboard }) {
             <div style={{fontSize:48,marginBottom:16}}>🎉</div>
             <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>You're in!</div>
             <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:8}}>
-              Welcome to Served, <strong style={{color:N}}>{form.name}</strong>.
+              Welcome to GreenChek, <strong style={{color:N}}>{form.name}</strong>.
             </p>
             <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
               padding:"14px 16px",marginBottom:24,textAlign:"left"}}>
@@ -1229,7 +1225,7 @@ function ClaimModal({ onClose, onDashboard }) {
               <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
                 <span style={{fontSize:18}}>✅</span>
                 <div style={{fontSize:12,color:MUT,lineHeight:1.5}}>
-                  Your listing for <strong style={{color:N}}>{form.biz}</strong> is now claimed. Everything on Served is free for business owners.
+                  Your listing for <strong style={{color:N}}>{form.biz}</strong> is now claimed. Everything on GreenChek is free for business owners.
                 </div>
               </div>
             </div>
@@ -1363,7 +1359,7 @@ function AdvertiseModal({ onClose }) {
             padding:"10px 14px",marginBottom:20,display:"flex",gap:8,alignItems:"flex-start"}}>
             <span style={{fontSize:14}}>ℹ️</span>
             <p style={{fontSize:11,color:MUT,margin:0,lineHeight:1.6}}>
-              Ad spend goes directly toward impressions on Served. There are no setup fees or hidden charges. You can pause or cancel from your dashboard at any time.
+              Ad spend goes directly toward impressions on GreenChek. There are no setup fees or hidden charges. You can pause or cancel from your dashboard at any time.
             </p>
           </div>
           <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
@@ -1454,7 +1450,7 @@ function AdvertiseModal({ onClose }) {
                   </div>
                 )}
                 <div style={{fontSize:10,color:MUT,marginTop:6,paddingLeft:2}}>
-                  The CTA button appears on the right of your sponsored card. When tapped, it links to your Served listing where customers can call, get directions, or leave a review.
+                  The CTA button appears on the right of your sponsored card. When tapped, it links to your GreenChek listing where customers can call, get directions, or leave a review.
                 </div>
               </div>
             </div>
@@ -1727,7 +1723,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on Served</div>
+              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on GreenChek</div>
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
@@ -1765,7 +1761,7 @@ function DoneScreen({ business, reviewData, onReset }) {
         </svg>
       </div>
       <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8,letterSpacing:"-0.5px"}}>
-        You've been Served!
+        greenchek approved!
       </div>
       <p style={{fontSize:14,color:MUT,lineHeight:1.8,marginBottom:32,textAlign:"center"}}>
         Your feedback is heading to {business?.name}.<br/>
@@ -2159,7 +2155,7 @@ function OwnerDashboard({ onBack }) {
             ))}
             <button onClick={()=>setAdOpen(true)} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
               border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
-              cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on Served</button>
+              cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on GreenChek</button>
           </div>
         </>}
       </div>
