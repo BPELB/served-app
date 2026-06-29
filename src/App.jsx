@@ -1843,8 +1843,8 @@ function OwnerDashboard({ onBack }) {
 
   const tabs = [
     {id:"overview", icon:<><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Overview"},
+    {id:"insights", icon:<><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>, label:"AI Insights"},
     {id:"reviews",  icon:<><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Reviews"},
-    {id:"insights", icon:<><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>, label:"Insights"},
     {id:"profile",  icon:<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Profile"},
   ];
 
@@ -1919,7 +1919,7 @@ function OwnerDashboard({ onBack }) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="white" stroke="none"/></svg>
               </div>
               <div>
-                <div style={{fontSize:12,fontWeight:800,color:N}}>AI Insight</div>
+                <div style={{fontSize:12,fontWeight:800,color:N}}>AI Insights</div>
                 <div style={{fontSize:10,color:MUT}}>Based on your last 30 days of reviews</div>
               </div>
               <div style={{marginLeft:"auto",fontSize:9,fontWeight:700,color:O,
