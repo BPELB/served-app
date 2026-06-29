@@ -1381,7 +1381,7 @@ export default function ServedApp() {
 
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
-      <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative"}}>
+      <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
         {view==="home"     && <Home onSelect={select} isDark={isDark} toggleTheme={toggleTheme}/>}
         {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
         {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
