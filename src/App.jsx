@@ -27,7 +27,7 @@ const HOV = "var(--hover)";
 const MUT = "var(--muted)";
 
 const DARK_VARS  = { "--bg":"#26373f","--bg2":"#1c2b31","--bg3":"#1a2830","--bdr":"#4a6270","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#243840" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#1a2830","--muted":"rgba(26,40,48,0.55)",  "--hover":"#f0f3f2" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.5)","--hover":"#f0f3f2" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
@@ -767,7 +767,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
-          <span style={{fontSize:10,color:helped?O:"#111",fontWeight:helped?700:400}}>
+          <span style={{fontSize:10,color:helped?O:MUT,fontWeight:helped?700:400}}>
             {(review.helpful||0)+(helped?1:0)}
           </span>
         </button>
@@ -928,7 +928,7 @@ function BusinessPage({ business, onBack, onRate }) {
             <button key={s} onClick={()=>setSort(s)}
               style={{padding:"4px 9px",borderRadius:10,fontSize:11,fontWeight:sort===s?700:400,
                 border:`2px solid ${sort===s?N:"#ddd"}`,
-                background:sort===s?N:"#fff",color:sort===s?"#fff":"#111",
+                background:sort===s?N:"#fff",color:sort===s?BG:N,
                 transition:"all 0.15s",fontFamily:"inherit"}}>{l}</button>
           ))}
         </div>
