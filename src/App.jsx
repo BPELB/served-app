@@ -34,11 +34,11 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(22,163,74,0.08)", bd:"rgba(22,163,74,0.3)", tx:"#16a34a" };
-const SM = { bg:"rgba(202,138,4,0.08)", bd:"rgba(202,138,4,0.3)", tx:"#ca8a04" };
-const SL = { bg:"rgba(239,68,68,0.08)",  bd:"rgba(239,68,68,0.25)", tx:"#EF4444" };
+const SH = { bg:"rgba(22,163,74,0.10)",  bd:"rgba(22,163,74,0.3)",  tx:"#16a34a" };
+const SM = { bg:"rgba(202,138,4,0.10)",  bd:"rgba(202,138,4,0.3)",  tx:"#ca8a04" };
+const SL = { bg:"rgba(202,138,4,0.08)",  bd:"rgba(202,138,4,0.22)", tx:"#ca8a04" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=4?"#16a34a":s>=3?"#ca8a04":"#EF4444";
+const stC = s => s>=4?"#16a34a":s>=3?"#ca8a04":"#ca8a04";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -473,7 +473,7 @@ function ScoreBadge({ score, size=50 }) {
         <span style={{fontSize:size>40?18:14,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
           {dec||"—"}
         </span>
-        {score&&<div style={{marginTop:2,paddingLeft:4,paddingRight:4}}><PartialStars value={score/2} size={size>40?9:7} color={C?C.tx:"#999"}/></div>}
+        {score&&<div style={{marginTop:2,paddingLeft:4,paddingRight:4}}><PartialStars value={score/2} size={size>40?9:7} color="#FBBF24"/></div>}
       </div>
     </div>
   );
@@ -773,12 +773,12 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
         <div style={{display:"flex",gap:4,flexWrap:"wrap",marginTop:4}}>
           {rated.map(cat=>{
             const s  = review.scores[cat.id];
-            const C  = s>=8?SH:s>=5?SM:SL;
             return (
               <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:4,
-                padding:"3px 10px",background:C.bg,border:`1.5px solid ${C.bd}`,borderRadius:10}}>
-                <span style={{fontSize:10,fontWeight:600,color:C.tx}}>{cat.label}</span>
-                <PartialStars value={s/2} size={10} color={C.tx}/>
+                padding:"3px 10px",background:"rgba(255,255,255,0.06)",
+                border:`1.5px solid ${BDR}`,borderRadius:10}}>
+                <span style={{fontSize:10,fontWeight:700,color:O}}>{cat.label}</span>
+                <PartialStars value={s/2} size={10} color="#FBBF24"/>
               </div>
             );
           })}
