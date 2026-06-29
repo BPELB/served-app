@@ -743,9 +743,9 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:rated.length>0?10:0}}>
         <ScoreBadge score={avg} size={50}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:11,color:"#ccc",marginBottom:4}}>{ago}</div>
+          <div style={{fontSize:11,color:MUT,marginBottom:4}}>{ago}</div>
           {review.feedback&&(
-            <div style={{fontSize:13,color:"#ccc",lineHeight:1.5,fontStyle:"italic"}}>
+            <div style={{fontSize:13,color:MUT,lineHeight:1.5,fontStyle:"italic"}}>
               "{review.feedback}"
             </div>
           )}
@@ -802,7 +802,7 @@ function ShareCard({ business, scores, onClose }) {
         <div style={{background:G,borderRadius:18,padding:22,marginBottom:18,textAlign:"center"}}>
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
-            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:8}}>{business?.name}</div>
+            <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
             <div style={{fontSize:32,color:"#F59E0B",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
@@ -810,7 +810,7 @@ function ShareCard({ business, scores, onClose }) {
           </div>
           <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>getserved.app · free for everyone</div>
         </div>
-        <div style={{fontSize:13,color:"#ddd",marginBottom:14,lineHeight:1.5}}>{text}</div>
+        <div style={{fontSize:13,color:MUT,marginBottom:14,lineHeight:1.5}}>{text}</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
           {[["📋 Copy",()=>navigator.clipboard?.writeText(text)],
             ["🐦 Tweet",()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`)],
@@ -818,7 +818,7 @@ function ShareCard({ business, scores, onClose }) {
           ].map(([l,fn])=>(
             <button key={l} onClick={fn}
               style={{padding:"10px 6px",borderRadius:12,border:`2px solid ${BDR}`,
-                background:BG3,fontSize:12,fontWeight:700,color:"#fff",fontFamily:"inherit"}}>{l}</button>
+                background:BG3,fontSize:12,fontWeight:700,color:N,fontFamily:"inherit"}}>{l}</button>
           ))}
         </div>
         <PrimaryBtn full onClick={onClose}>Done ✓</PrimaryBtn>
@@ -864,7 +864,7 @@ function BusinessPage({ business, onBack, onRate }) {
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
-            <div style={{fontSize:17,fontWeight:900,color:"#fff",marginBottom:2}}>{business.name}</div>
+            <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
             <div style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>{business.addr||business.address}</div>
             <div style={{display:"flex",gap:8,marginTop:4}}>
               {business.rating&&<span style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>★ {business.rating}</span>}
@@ -878,7 +878,7 @@ function BusinessPage({ business, onBack, onRate }) {
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
               background:"#FF6B35",borderRadius:12,padding:"8px 12px"}}>
-              <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
+              <div style={{fontSize:20,fontWeight:900,color:N,lineHeight:1}}>{(overall/2).toFixed(1)}</div>
               <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="rgba(255,255,255,0.9)"/></div>
             </div>
           )}
@@ -898,11 +898,11 @@ function BusinessPage({ business, onBack, onRate }) {
                     {CAT_ICONS[cat.id]||CAT_ICONS.food}
                   </svg>
                 </div>
-                <div style={{fontSize:14,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
+                <div style={{fontSize:14,fontWeight:800,color:N,lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
                 <div style={{display:"flex",justifyContent:"center"}}>
                   <PartialStars value={cat.avg/2} size={13} color="#FF6B35"/>
                 </div>
-                <div style={{fontSize:10,fontWeight:600,color:"#999",marginTop:4}}>{cat.label}</div>
+                <div style={{fontSize:10,fontWeight:600,color:MUT,marginTop:4}}>{cat.label}</div>
               </div>
             );
           })}
@@ -915,7 +915,7 @@ function BusinessPage({ business, onBack, onRate }) {
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
-        <span style={{fontSize:14,fontWeight:700,color:"#fff"}}>{DEMO_REVIEWS.length} reviews</span>
+        <span style={{fontSize:14,fontWeight:700,color:N}}>{DEMO_REVIEWS.length} reviews</span>
         <div style={{display:"flex",gap:5}}>
           {[["recent","Recent"],["highest","Best"],["lowest","Worst"],["helpful","Helpful"]].map(([s,l])=>(
             <button key={s} onClick={()=>setSort(s)}
@@ -998,11 +998,11 @@ function RateView({ business, onBack, onDone }) {
         <div style={{flex:1,minWidth:0,position:"relative"}}>
           <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
             letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
-          <div style={{fontSize:15,fontWeight:800,color:"#fff",
+          <div style={{fontSize:15,fontWeight:800,color:N,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{business.name}</div>
           <div style={{fontSize:11,color:"rgba(255,255,255,0.5)",marginTop:1}}>any one field is enough</div>
         </div>
-        {avgSt>0&&<div style={{fontSize:20,fontWeight:900,color:"#fff",flexShrink:0,
+        {avgSt>0&&<div style={{fontSize:20,fontWeight:900,color:N,flexShrink:0,
           position:"relative"}}>{avgSt}<span style={{fontSize:12,color:"rgba(255,255,255,0.5)"}}>/5</span></div>}
       </div>
 
@@ -1028,18 +1028,18 @@ function RateView({ business, onBack, onDone }) {
       )}
 
       <div style={{marginBottom:14}}>
-        <p style={{fontSize:12,fontWeight:600,color:"#fff",marginBottom:7}}>
-          {bt.itemLabel} <span style={{fontWeight:400,color:"#ccc"}}>(optional)</span>
+        <p style={{fontSize:12,fontWeight:600,color:N,marginBottom:7}}>
+          {bt.itemLabel} <span style={{fontWeight:400,color:MUT}}>(optional)</span>
         </p>
         <div style={{display:"flex",gap:8,marginBottom:items.length?8:0}}>
           <input value={newItem} onChange={e=>setNewItem(e.target.value)}
             onKeyDown={e=>e.key==="Enter"&&addItem()}
             placeholder="Type and press Enter…"
             style={{flex:1,borderRadius:12,border:`1.5px solid ${BDR}`,
-              padding:"9px 13px",fontSize:13,background:BG2,color:"#fff"}}/>
+              padding:"9px 13px",fontSize:13,background:BG2,color:N}}/>
           <button onClick={addItem} disabled={!newItem.trim()}
             style={{padding:"9px 14px",borderRadius:12,border:`2px solid ${O}`,
-              background:O,color:"#fff",fontSize:12,fontWeight:700,
+              background:O,color:N,fontSize:12,fontWeight:700,
               opacity:newItem.trim()?1:0.4,fontFamily:"inherit"}}>Add</button>
         </div>
         {items.length>0&&(
@@ -1047,9 +1047,9 @@ function RateView({ business, onBack, onDone }) {
             {items.map((item,i)=>(
               <div key={i} style={{display:"inline-flex",alignItems:"center",gap:4,
                 padding:"3px 10px",background:BG3,border:`1.5px solid ${BDR}`,borderRadius:10}}>
-                <span style={{fontSize:11,fontWeight:600,color:"#fff"}}>{item}</span>
+                <span style={{fontSize:11,fontWeight:600,color:N}}>{item}</span>
                 <button onClick={()=>setItems(it=>it.filter((_,j)=>j!==i))}
-                  style={{background:"none",border:"none",color:"#aaa",fontSize:13,lineHeight:1,
+                  style={{background:"none",border:"none",color:MUT,fontSize:13,lineHeight:1,
                     padding:0,fontFamily:"inherit"}}>×</button>
               </div>
             ))}
@@ -1059,8 +1059,8 @@ function RateView({ business, onBack, onDone }) {
 
       {/* Photo upload */}
       <div style={{marginBottom:14}}>
-        <p style={{fontSize:12,fontWeight:600,color:"#fff",marginBottom:7}}>
-          Add photos <span style={{fontWeight:400,color:"#aaa"}}>(optional · up to 3)</span>
+        <p style={{fontSize:12,fontWeight:600,color:N,marginBottom:7}}>
+          Add photos <span style={{fontWeight:400,color:MUT}}>(optional · up to 3)</span>
         </p>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {photos.map((src,i)=>(
@@ -1068,7 +1068,7 @@ function RateView({ business, onBack, onDone }) {
               <img src={src} alt="" style={{width:80,height:80,borderRadius:12,objectFit:"cover",border:`2px solid ${BDR}`}}/>
               <button onClick={()=>setPhotos(p=>p.filter((_,j)=>j!==i))}
                 style={{position:"absolute",top:-6,right:-6,width:20,height:20,borderRadius:"50%",
-                  background:"#111",color:"#fff",border:"none",fontSize:12,lineHeight:1,
+                  background:"#111",color:N,border:"none",fontSize:12,lineHeight:1,
                   display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontFamily:"inherit"}}>×</button>
             </div>
           ))}
@@ -1089,23 +1089,23 @@ function RateView({ business, onBack, onDone }) {
       </div>
 
       <div style={{marginBottom:16}}>
-        <p style={{fontSize:12,fontWeight:600,color:"#fff",marginBottom:7}}>
-          {bt.placeholder} <span style={{fontWeight:400,color:"#ccc"}}>(optional)</span>
+        <p style={{fontSize:12,fontWeight:600,color:N,marginBottom:7}}>
+          {bt.placeholder} <span style={{fontWeight:400,color:MUT}}>(optional)</span>
         </p>
         <textarea value={feedback} onChange={e=>setFeedback(e.target.value)}
           placeholder="Say as much or as little as you want…"
           style={{width:"100%",minHeight:72,borderRadius:14,border:`1.5px solid ${BDR}`,
             padding:"11px 13px",fontSize:13,lineHeight:1.6,
-            background:BG2,color:"#fff",boxSizing:"border-box"}}/>
+            background:BG2,color:N,boxSizing:"border-box"}}/>
         <div style={{display:"flex",flexWrap:"wrap",gap:5,marginTop:6}}>
           {bt.chips.map(c=>(
             <button key={c}
               onClick={()=>setFeedback(f=>f?(f.endsWith(".")?f+" "+c:f+". "+c):c)}
               style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:`2px solid ${BDR}`,
-                background:BG2,color:"#ddd",fontWeight:500,
+                background:BG2,color:MUT,fontWeight:500,
                 transition:"all 0.12s",fontFamily:"inherit"}}
               onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor="#555";}}
-              onMouseLeave={e=>{e.target.style.background="#fff";e.target.style.borderColor=BDR;}}>
+              onMouseLeave={e=>{e.target.style.background=BG2;e.target.style.borderColor=BDR;}}>
               {c}
             </button>
           ))}
@@ -1121,7 +1121,7 @@ function RateView({ business, onBack, onDone }) {
           {submitting?"Submitting…":hasAny?"Submit feedback — free":"Fill out anything above to submit"}
         </button>
         {!hasAny&&(
-          <p style={{textAlign:"center",fontSize:11,color:"#ccc",marginTop:5}}>
+          <p style={{textAlign:"center",fontSize:11,color:MUT,marginTop:5}}>
             Stars · add an item · or write one line — any one is enough
           </p>
         )}
@@ -1198,7 +1198,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
             placeholder="Search by name…"
             style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
               fontSize:13,border:"2px solid rgba(255,255,255,0.3)",background:"rgba(255,255,255,0.18)",
-              color:"#fff",fontFamily:"inherit",outline:"none"}}/>
+              color:N,fontFamily:"inherit",outline:"none"}}/>
           {searching&&<span style={{position:"absolute",right:12,top:"50%",
             transform:"translateY(-50%)",fontSize:11,color:"rgba(255,255,255,0.4)"}}>
             searching…
@@ -1228,7 +1228,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
         </div>
 
         {filtered.length===0&&!searching&&(
-          <p style={{textAlign:"center",color:"#ccc",padding:"2rem 0",fontSize:14}}>
+          <p style={{textAlign:"center",color:MUT,padding:"2rem 0",fontSize:14}}>
             No results in this category.
           </p>
         )}
@@ -1244,17 +1244,17 @@ function Home({ onSelect, isDark, toggleTheme }) {
             {hasPrev&&(
               <button onClick={()=>setPage(p=>p-1)}
                 style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${BDR}`,background:BG2,color:"#fff",
+                  border:`2px solid ${BDR}`,background:BG2,color:N,
                   fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
                 onMouseEnter={e=>{e.currentTarget.style.background=HOV;}}
-                onMouseLeave={e=>{e.currentTarget.style.background="#fff";}}>
+                onMouseLeave={e=>{e.currentTarget.style.background=BG2;}}>
                 ‹ Previous 5
               </button>
             )}
             {hasMore&&(
               <button onClick={()=>setPage(p=>p+1)}
                 style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${O}`,background:O,color:"#fff",
+                  border:`2px solid ${O}`,background:O,color:N,
                   fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
                 onMouseEnter={e=>{e.currentTarget.style.background=N;e.currentTarget.style.borderColor=N;}}
                 onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.borderColor=O;}}>
@@ -1266,8 +1266,8 @@ function Home({ onSelect, isDark, toggleTheme }) {
 
         {/* CTAs */}
         <div style={{display:"flex",flexDirection:"column",gap:10}}>
-          {/* Own a business — warm orange tinted card */}
-          <div style={{padding:"16px 18px",background:"linear-gradient(135deg,#FFF3EE,#FFE8D6)",
+          {/* Own a business */}
+          <div style={{padding:"16px 18px",background:BG2,
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:"linear-gradient(135deg,#FF6B35,#FF8C5A)",
@@ -1279,33 +1279,32 @@ function Home({ onSelect, isDark, toggleTheme }) {
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:"#7A2E0A"}}>Own a business?</div>
-              <div style={{fontSize:11,color:"#A84020",marginTop:2}}>Free dashboard + AI training</div>
+              <div style={{fontSize:13,fontWeight:800,color:N}}>Own a business?</div>
+              <div style={{fontSize:11,color:MUT,marginTop:2}}>Free dashboard + AI training</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
-              background:"#1E2A4A",color:"#fff",fontSize:11,fontWeight:700,
+              background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(30,42,74,0.3)"}}>Claim free →</button>
+              boxShadow:"0 2px 8px rgba(255,107,53,0.3)"}}>Claim free →</button>
           </div>
-          {/* Advertise — cool navy tinted card */}
-          <div style={{padding:"16px 18px",background:"linear-gradient(135deg,#D8E0F5,#C8D4F0)",
-            border:"2px solid #A8BCE8",borderRadius:18,display:"flex",alignItems:"center",gap:14}}>
+          {/* Advertise */}
+          <div style={{padding:"16px 18px",background:BG2,
+            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#1E2A4A,#2E4080)",
-              boxShadow:"0 4px 12px rgba(30,42,74,0.3)",
+              background:O,
+              boxShadow:"0 4px 12px rgba(255,107,53,0.3)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:"#1E2A4A"}}>Advertise on Served</div>
-              <div style={{fontSize:11,color:"#3A4F80",marginTop:2}}>Reach local customers now</div>
+              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on Served</div>
+              <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
-              border:"2px solid #FF6B35",background:"#FF6B35",color:"#fff",
-              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(255,107,53,0.4)"}}>Learn more →</button>
+              border:`2px solid ${O}`,background:"transparent",color:O,
+              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit"}}>Learn more →</button>
           </div>
         </div>
       </div>
@@ -1328,10 +1327,10 @@ function DoneScreen({ business, reviewData, onReset }) {
           <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
         </svg>
       </div>
-      <div style={{fontSize:26,fontWeight:900,color:"#fff",marginBottom:8,letterSpacing:"-0.5px"}}>
+      <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8,letterSpacing:"-0.5px"}}>
         You've been Served!
       </div>
-      <p style={{fontSize:14,color:"#ddd",lineHeight:1.8,marginBottom:32}}>
+      <p style={{fontSize:14,color:MUT,lineHeight:1.8,marginBottom:32,textAlign:"center"}}>
         Your feedback is heading to {business?.name}.<br/>
         Honest reviews make every business better.
       </p>
@@ -1348,7 +1347,7 @@ function DoneScreen({ business, reviewData, onReset }) {
         </PrimaryBtn>
         <button onClick={onReset}
           style={{width:"100%",padding:"13px",borderRadius:14,
-            border:`2px solid ${BDR}`,background:BG2,color:"#fff",
+            border:`2px solid ${BDR}`,background:"transparent",color:N,
             fontSize:14,fontWeight:700,fontFamily:"inherit"}}>
           Rate another business
         </button>
