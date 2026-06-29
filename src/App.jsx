@@ -525,12 +525,12 @@ function BusinessCard({ b, onSelect }) {
         onClick={()=>onSelect(b)}>
         <IconBox type={b.type} size={52}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,
+          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
-          <div style={{fontSize:12,color:"#aaa",marginBottom:4}}>
+          <div style={{fontSize:12,color:MUT,marginBottom:4}}>
             {b.subtype||bt.label}
-            {b.rating ? <span style={{color:"#999"}}> · ⭐ {b.rating}</span> : null}
-            {b.price ? <span style={{color:"#999"}}> · {"$".repeat(b.price)}</span> : null}
+            {b.rating ? <span style={{color:MUT}}> · ⭐ {b.rating}</span> : null}
+            {b.price ? <span style={{color:MUT}}> · {"$".repeat(b.price)}</span> : null}
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -538,13 +538,13 @@ function BusinessCard({ b, onSelect }) {
               {b.open ? "Open" : "Closed"}
             </span>
             {closes && b.open && (
-              <span style={{fontSize:12,color:"#aaa"}}>· until {closes}</span>
+              <span style={{fontSize:12,color:MUT}}>· until {closes}</span>
             )}
             {b.hours && (
               <button
                 onClick={e=>{e.stopPropagation();setHoursOpen(o=>!o);}}
                 style={{display:"inline-flex",alignItems:"center",gap:2,
-                  fontSize:11,color:"#888",background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                  fontSize:11,color:MUT,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
                 <span>Hours</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
@@ -558,7 +558,7 @@ function BusinessCard({ b, onSelect }) {
 
       {/* Hours dropdown */}
       {hoursOpen && b.hours && (
-        <div style={{borderTop:"1.5px solid #f0f0f0",padding:"12px 16px 14px",
+        <div style={{borderTop:`1.5px solid ${BDR}`,padding:"12px 16px 14px",
           background:BG3}}>
           <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
             {days.map(day=>{
@@ -566,9 +566,9 @@ function BusinessCard({ b, onSelect }) {
               const h = b.hours[day];
               return (
                 <div key={day} style={{textAlign:"center"}}>
-                  <div style={{fontSize:9,fontWeight:700,color:isToday?O:"#999",
+                  <div style={{fontSize:9,fontWeight:700,color:isToday?O:MUT,
                     textTransform:"uppercase",marginBottom:3}}>{day}</div>
-                  <div style={{fontSize:10,color:isToday?N:"#666",fontWeight:isToday?700:400,
+                  <div style={{fontSize:10,color:isToday?N:MUT,fontWeight:isToday?700:400,
                     lineHeight:1.4,background:isToday?"#FFF3EE":undefined,
                     borderRadius:6,padding:"3px 2px"}}>
                     {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
@@ -1173,7 +1173,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
   return (
     <div style={{width:"100%"}}>
       {/* Navy header */}
-      <div style={{background:BG,padding:"1.5rem 1rem 1.25rem",borderRadius:"0 0 24px 24px"}}>
+      <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
