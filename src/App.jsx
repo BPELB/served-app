@@ -14,17 +14,17 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#39FF14";  // neon green — accent
+const O   = "#FF6B35";  // orange — accent
 const N   = "#ffffff";  // white — primary text
 const BG  = "#26373f";  // dark — background
 const BG2 = "#1c2b31";  // darker — cards/sections
 const BG3 = "#1a2830";  // darkest — inputs
-const BDR = "#334d57";  // border color
-const G   = `linear-gradient(135deg,${O},#1c7a0a)`;
+const BDR = "#4a6270";  // light gray border
+const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 const HOV = "#243840";  // hover state
 
 // Functional score colors
-const SH = { bg:"rgba(57,255,20,0.08)",  bd:"rgba(57,255,20,0.3)",  tx:"#39FF14" };
+const SH = { bg:"rgba(255,107,53,0.08)", bd:"rgba(255,107,53,0.3)", tx:"#FF6B35" };
 const SM = { bg:"rgba(251,191,36,0.08)", bd:"rgba(251,191,36,0.3)", tx:"#F59E0B" };
 const SL = { bg:"rgba(239,68,68,0.08)",  bd:"rgba(239,68,68,0.25)", tx:"#EF4444" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
@@ -508,7 +508,7 @@ function BusinessCard({ b, onSelect }) {
   return (
     <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
       transition:"border-color 0.15s",cursor:"pointer"}}
-      onMouseEnter={e=>e.currentTarget.style.borderColor="#ddd"}
+      onMouseEnter={e=>e.currentTarget.style.borderColor=BDR}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
@@ -1036,7 +1036,7 @@ function RateView({ business, onBack, onDone }) {
           <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
             {items.map((item,i)=>(
               <div key={i} style={{display:"inline-flex",alignItems:"center",gap:4,
-                padding:"3px 10px",background:BG3,border:"1.5px solid #ddd",borderRadius:10}}>
+                padding:"3px 10px",background:BG3,border:`1.5px solid ${BDR}`,borderRadius:10}}>
                 <span style={{fontSize:11,fontWeight:600,color:"#fff"}}>{item}</span>
                 <button onClick={()=>setItems(it=>it.filter((_,j)=>j!==i))}
                   style={{background:"none",border:"none",color:"#aaa",fontSize:13,lineHeight:1,
@@ -1091,11 +1091,11 @@ function RateView({ business, onBack, onDone }) {
           {bt.chips.map(c=>(
             <button key={c}
               onClick={()=>setFeedback(f=>f?(f.endsWith(".")?f+" "+c:f+". "+c):c)}
-              style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:"2px solid #ddd",
+              style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:`2px solid ${BDR}`,
                 background:BG2,color:"#ddd",fontWeight:500,
                 transition:"all 0.12s",fontFamily:"inherit"}}
               onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor="#555";}}
-              onMouseLeave={e=>{e.target.style.background="#fff";e.target.style.borderColor="#ddd";}}>
+              onMouseLeave={e=>{e.target.style.background="#fff";e.target.style.borderColor=BDR;}}>
               {c}
             </button>
           ))}
@@ -1220,7 +1220,7 @@ function Home({ onSelect }) {
             {hasPrev&&(
               <button onClick={()=>setPage(p=>p-1)}
                 style={{flex:1,padding:"10px",borderRadius:12,
-                  border:"2px solid #ddd",background:BG2,color:"#fff",
+                  border:`2px solid ${BDR}`,background:BG2,color:"#fff",
                   fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
                 onMouseEnter={e=>{e.currentTarget.style.background=HOV;}}
                 onMouseLeave={e=>{e.currentTarget.style.background="#fff";}}>
@@ -1324,7 +1324,7 @@ function DoneScreen({ business, reviewData, onReset }) {
         </PrimaryBtn>
         <button onClick={onReset}
           style={{width:"100%",padding:"13px",borderRadius:14,
-            border:"2px solid #ddd",background:BG2,color:"#fff",
+            border:`2px solid ${BDR}`,background:BG2,color:"#fff",
             fontSize:14,fontWeight:700,fontFamily:"inherit"}}>
           Rate another business
         </button>
