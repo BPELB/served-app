@@ -553,11 +553,11 @@ function BusinessCard({ b, onSelect }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onSelect(b);}}
-          style={{flexShrink:0,padding:"10px 14px",borderRadius:999,border:"none",
+          style={{flexShrink:0,padding:"9px 18px",borderRadius:999,border:"none",
             background:O,color:"#fff",fontSize:11,fontWeight:800,
-            cursor:"pointer",lineHeight:1.3,textAlign:"center",fontFamily:"inherit",
+            cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             boxShadow:"0 2px 10px rgba(255,107,53,0.4)"}}>
-          Rate<br/>Now
+          Rate Now
         </button>
       </div>
 
