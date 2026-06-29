@@ -1143,9 +1143,36 @@ function RateView({ business, onBack, onDone }) {
 function ClaimModal({ onClose, onDashboard }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name:"", email:"", biz:"", phone:"" });
-  const set = k => e => setForm(f=>({...f,[k]:e.target.value}));
-  const inp = { width:"100%", padding:"11px 14px", borderRadius:12, border:`1.5px solid ${BDR}`,
-    background:BG2, color:N, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
+  const [errors, setErrors] = useState({});
+  const set = k => e => {
+    setForm(f=>({...f,[k]:e.target.value}));
+    setErrors(er=>({...er,[k]:false}));
+  };
+
+  const FIELDS = [
+    {ph:"Business name *", k:"biz",   t:"text",  req:true},
+    {ph:"Your name *",     k:"name",  t:"text",  req:true},
+    {ph:"Email address *", k:"email", t:"email", req:true},
+    {ph:"Phone number",    k:"phone", t:"tel",   req:false},
+  ];
+
+  const validate = () => {
+    const errs = {};
+    FIELDS.filter(f=>f.req).forEach(f=>{ if(!form[f.k].trim()) errs[f.k]=true; });
+    if(form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email=true;
+    setErrors(errs);
+    return Object.keys(errs).length===0;
+  };
+
+  const submit = () => { if(validate()) setStep(2); };
+
+  const inp = k => ({
+    width:"100%", padding:"11px 14px", borderRadius:12,
+    border:`1.5px solid ${errors[k]?"#ef4444":BDR}`,
+    background:BG2, color:N, fontSize:13, fontFamily:"inherit",
+    outline:"none", boxSizing:"border-box",
+  });
+
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",
       alignItems:"flex-end",justifyContent:"center",zIndex:1000}} onClick={onClose}>
@@ -1153,38 +1180,69 @@ function ClaimModal({ onClose, onDashboard }) {
         padding:"28px 24px 40px",boxShadow:"0 -8px 40px rgba(0,0,0,0.4)"}}
         onClick={e=>e.stopPropagation()}>
         <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 24px"}}/>
+
         {step===1 && <>
           <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:6}}>Claim your business</div>
           <p style={{fontSize:13,color:MUT,marginBottom:24,lineHeight:1.6}}>
             Get a free dashboard, respond to reviews, and unlock AI-powered insights about your customers.
           </p>
-          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>
-            {[["Business name","biz","text"],["Your name","name","text"],["Email","email","email"],["Phone","phone","tel"]].map(([ph,k,t])=>(
-              <input key={k} type={t} placeholder={ph} value={form[k]} onChange={set(k)} style={inp}/>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:6}}>
+            {FIELDS.map(({ph,k,t})=>(
+              <div key={k}>
+                <input type={t} placeholder={ph} value={form[k]} onChange={set(k)}
+                  style={inp(k)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
+                {errors[k] && (
+                  <div style={{fontSize:11,color:"#ef4444",marginTop:4,paddingLeft:4}}>
+                    {k==="email"?"Enter a valid email address":"This field is required"}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
-          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
+          <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
+          <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
             border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
             Claim for free →
           </button>
         </>}
+
         {step===2 && <>
           <div style={{textAlign:"center",padding:"20px 0"}}>
             <div style={{fontSize:48,marginBottom:16}}>🎉</div>
-            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>You're on the list!</div>
-            <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
-              We'll reach out to <strong style={{color:N}}>{form.email||"you"}</strong> within 24 hours to verify and set up your free dashboard.
+            <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>You're in!</div>
+            <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:8}}>
+              Welcome to Served, <strong style={{color:N}}>{form.name}</strong>.
             </p>
+            <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
+              padding:"14px 16px",marginBottom:24,textAlign:"left"}}>
+              <div style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:8}}>
+                <span style={{fontSize:18}}>📧</span>
+                <div>
+                  <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:2}}>Dashboard link sent</div>
+                  <div style={{fontSize:12,color:MUT,lineHeight:1.5}}>
+                    A welcome email with your dashboard access link has been sent to{" "}
+                    <strong style={{color:N}}>{form.email}</strong>.
+                  </div>
+                </div>
+              </div>
+              <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+                <span style={{fontSize:18}}>✅</span>
+                <div style={{fontSize:12,color:MUT,lineHeight:1.5}}>
+                  Your listing for <strong style={{color:N}}>{form.biz}</strong> is now claimed. Everything on Served is free for business owners.
+                </div>
+              </div>
+            </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <button onClick={onDashboard} style={{padding:"12px 32px",borderRadius:12,border:"none",
-                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
-                Go to dashboard →
+              <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
+                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+                boxShadow:"0 4px 16px rgba(255,107,53,0.35)"}}>
+                View my dashboard →
               </button>
               <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,
                 border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
                 fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
-                Maybe later
+                I'll explore later
               </button>
             </div>
           </div>
