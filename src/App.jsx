@@ -1187,17 +1187,18 @@ function Home({ onSelect, isDark, toggleTheme }) {
           <div onClick={toggleTheme} style={{display:"flex",alignItems:"center",gap:7,cursor:"pointer",flexShrink:0}}>
             <span style={{fontSize:11,fontWeight:700,color:MUT}}>{isDark?"Dark Mode":"Light Mode"}</span>
             <div style={{
-              width:44,height:24,borderRadius:12,
-              background:"transparent",
-              border:`2px solid ${BDR}`,position:"relative",
-              transition:"background 0.25s"
+              width:42,height:22,borderRadius:11,
+              background:isDark?O:BDR,
+              position:"relative",flexShrink:0,
+              transition:"background 0.3s"
             }}>
               <div style={{
-                position:"absolute",top:2,
-                left:isDark?20:2,
+                position:"absolute",top:3,
+                left:isDark?21:3,
                 width:16,height:16,borderRadius:"50%",
-                background:O,
-                transition:"left 0.25s",
+                background:"#fff",
+                boxShadow:"0 1px 3px rgba(0,0,0,0.3)",
+                transition:"left 0.3s",
               }}/>
             </div>
           </div>
