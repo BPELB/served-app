@@ -600,7 +600,7 @@ function CatPill({ typeKey, selected, onClick }) {
       border:`2px solid ${on?O:"#FFD4C2"}`,
       background:on?O:"transparent",
       color:on?"#fff":O,
-      fontSize:12,fontWeight:on?700:500,
+      fontSize:12,fontWeight:on?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
       <svg width="13" height="13" viewBox="0 0 24 24" style={{color:"currentColor",flexShrink:0}}>
         {CAT_ICONS[typeKey]||CAT_ICONS.food}
