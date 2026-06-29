@@ -538,9 +538,6 @@ function BusinessCard({ b, onSelect }) {
             <span style={{fontSize:12,fontWeight:700,color:b.open?"#16a34a":"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
-            {closes && b.open && (
-              <span style={{fontSize:12,color:MUT}}>· until {closes}</span>
-            )}
             {b.hours && (
               <button
                 onClick={e=>{e.stopPropagation();setHoursOpen(o=>!o);}}
