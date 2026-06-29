@@ -473,7 +473,6 @@ function ScoreBadge({ score, size=50 }) {
         <span style={{fontSize:size>40?18:14,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
           {dec||"—"}
         </span>
-        {score&&<div style={{marginTop:2,paddingLeft:4,paddingRight:4}}><PartialStars value={score/2} size={size>40?9:7} color="#FBBF24"/></div>}
       </div>
     </div>
   );
