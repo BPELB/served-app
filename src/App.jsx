@@ -470,7 +470,9 @@ function ScoreBadge({ score, size=50 }) {
     <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
       background:C?C.bg:"#f5f5f5",border:`2px solid ${C?C.bd:"#eee"}`,
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <span style={{fontSize:starSize,lineHeight:1,color:"#FF6B35"}}>★</span>
+      <svg width={starSize+2} height={starSize+2} viewBox="0 0 12 12">
+        <polyline points="2,6.5 4.5,9 10,3" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
       <span style={{fontSize:size>40?16:12,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
         {dec||"—"}
       </span>
