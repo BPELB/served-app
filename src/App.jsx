@@ -452,12 +452,13 @@ const CAT_ICONS = {
 
 function IconBox({ type, size=44 }) {
   const icon = CAT_ICONS[type] || CAT_ICONS.food;
+  const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
   const s = size * 0.55;
   return (
     <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
-      background:BG2,border:`1.5px solid ${BDR}`,
+      background:box.bg,border:`2px solid ${box.bd}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>
+      <svg width={s} height={s} viewBox="0 0 24 24" style={{color:box.ic}}>
         {icon}
       </svg>
     </div>
