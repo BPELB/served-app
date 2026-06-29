@@ -558,8 +558,8 @@ function BusinessCard({ b, onSelect }) {
             border:`2px solid ${O}`,background:"transparent",color:O,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             display:"flex",alignItems:"center",gap:5}}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
           Rate Now
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
       </div>
 
@@ -1184,21 +1184,22 @@ function Home({ onSelect, isDark, toggleTheme }) {
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
-          <div onClick={toggleTheme} style={{
-            width:44,height:24,borderRadius:12,cursor:"pointer",
-            background:isDark?"#4a6270":"#d0d8db",
-            border:`1.5px solid ${BDR}`,position:"relative",
-            transition:"background 0.25s",flexShrink:0
-          }}>
+          <div onClick={toggleTheme} style={{display:"flex",alignItems:"center",gap:7,cursor:"pointer",flexShrink:0}}>
+            <span style={{fontSize:11,fontWeight:700,color:MUT}}>{isDark?"Dark":"Light"}</span>
             <div style={{
-              position:"absolute",top:2,
-              left:isDark?20:2,
-              width:16,height:16,borderRadius:"50%",
-              background:isDark?O:"#fff",
-              transition:"left 0.25s, background 0.25s",
-              display:"flex",alignItems:"center",justifyContent:"center",
-              fontSize:9,lineHeight:1
-            }}>{isDark?"🌙":"☀️"}</div>
+              width:44,height:24,borderRadius:12,
+              background:isDark?O:"#d0d8db",
+              border:`1.5px solid ${BDR}`,position:"relative",
+              transition:"background 0.25s"
+            }}>
+              <div style={{
+                position:"absolute",top:2,
+                left:isDark?20:2,
+                width:16,height:16,borderRadius:"50%",
+                background:"#fff",
+                transition:"left 0.25s",
+              }}/>
+            </div>
           </div>
         </div>
         <p style={{fontSize:12,color:MUT,marginTop:5}}>
