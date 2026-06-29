@@ -551,7 +551,14 @@ function BusinessCard({ b, onSelect }) {
             )}
           </div>
         </div>
-        <span style={{fontSize:18,color:O,flexShrink:0}}>›</span>
+        <button
+          onClick={e=>{e.stopPropagation();onSelect(b);}}
+          style={{flexShrink:0,padding:"8px 12px",borderRadius:12,border:"none",
+            background:O,color:"#fff",fontSize:11,fontWeight:800,
+            cursor:"pointer",lineHeight:1.3,textAlign:"center",fontFamily:"inherit",
+            boxShadow:"0 2px 8px rgba(255,107,53,0.35)"}}>
+          Rate<br/>Now
+        </button>
       </div>
 
       {/* Hours dropdown */}
