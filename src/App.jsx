@@ -1908,22 +1908,6 @@ function OwnerDashboard({ onBack }) {
             ))}
           </div>
 
-          {/* Weekly bar chart */}
-          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
-            padding:"16px",marginBottom:16}}>
-            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Reviews this week</div>
-            <div style={{display:"flex",alignItems:"flex-end",gap:6,height:70}}>
-              {WEEKLY.map(d=>(
-                <div key={d.day} style={{flex:1,display:"flex",flexDirection:"column",
-                  alignItems:"center",gap:4}}>
-                  <div style={{width:"100%",background:O,borderRadius:"4px 4px 0 0",
-                    height:`${Math.round((d.reviews/maxR)*56)+8}px`,
-                    opacity:0.7+0.3*(d.reviews/maxR),transition:"height 0.3s"}}/>
-                  <div style={{fontSize:9,color:MUT,fontWeight:700}}>{d.day}</div>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* AI Insight */}
           <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
