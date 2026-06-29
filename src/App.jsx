@@ -450,7 +450,7 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-function IconBox({ type, size=44 }) {
+function IconBox({ type, size=44, emoji }) {
   const icon = CAT_ICONS[type] || CAT_ICONS.food;
   const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
   const s = size * 0.55;
@@ -458,9 +458,10 @@ function IconBox({ type, size=44 }) {
     <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
       background:box.bg,border:`2px solid ${box.bd}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <svg width={s} height={s} viewBox="0 0 24 24" style={{color:box.ic}}>
-        {icon}
-      </svg>
+      {emoji
+        ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
+        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:box.ic}}>{icon}</svg>
+      }
     </div>
   );
 }
@@ -524,7 +525,7 @@ function BusinessCard({ b, onSelect }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox type={b.type} size={52}/>
+        <IconBox type={b.type} size={52} emoji={b.emoji}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
@@ -864,7 +865,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
         <div style={{display:"flex",alignItems:"flex-start",gap:12,position:"relative"}}>
-          <IconBox type={business.type} size={50}/>
+          <IconBox type={business.type} size={50} emoji={business.emoji}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
