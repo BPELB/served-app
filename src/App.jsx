@@ -554,9 +554,11 @@ function BusinessCard({ b, onSelect }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onSelect(b);}}
-          style={{flexShrink:0,padding:"9px 18px",borderRadius:10,
+          style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
             border:`2px solid ${O}`,background:"transparent",color:O,fontSize:11,fontWeight:800,
-            cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit"}}>
+            cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
+            display:"flex",alignItems:"center",gap:5}}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
           Rate Now
         </button>
       </div>
@@ -1182,16 +1184,22 @@ function Home({ onSelect, isDark, toggleTheme }) {
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
-          <button onClick={toggleTheme} style={{
-            display:"flex",alignItems:"center",gap:7,
-            padding:"6px 12px",borderRadius:20,
-            border:`1.5px solid ${BDR}`,background:BG2,
-            color:N,fontSize:11,fontWeight:700,cursor:"pointer",
-            transition:"all 0.2s"
+          <div onClick={toggleTheme} style={{
+            width:44,height:24,borderRadius:12,cursor:"pointer",
+            background:isDark?"#4a6270":"#d0d8db",
+            border:`1.5px solid ${BDR}`,position:"relative",
+            transition:"background 0.25s",flexShrink:0
           }}>
-            <span>{isDark ? "☀️" : "🌙"}</span>
-            <span>{isDark ? "Light" : "Dark"}</span>
-          </button>
+            <div style={{
+              position:"absolute",top:2,
+              left:isDark?20:2,
+              width:16,height:16,borderRadius:"50%",
+              background:isDark?O:"#fff",
+              transition:"left 0.25s, background 0.25s",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              fontSize:9,lineHeight:1
+            }}>{isDark?"🌙":"☀️"}</div>
+          </div>
         </div>
         <p style={{fontSize:12,color:MUT,marginTop:5}}>
           Honest feedback for every business. Free. Always.
