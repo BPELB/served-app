@@ -510,7 +510,7 @@ function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect }) {
+function BusinessCard({ b, onSelect, onRate }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const bt = BT[b.type||"food"];
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -553,7 +553,7 @@ function BusinessCard({ b, onSelect }) {
           </div>
         </div>
         <button
-          onClick={e=>{e.stopPropagation();onSelect(b);}}
+          onClick={e=>{e.stopPropagation();onRate(b);}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
             border:`2px solid ${O}`,background:"transparent",color:O,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
@@ -1140,7 +1140,7 @@ function RateView({ business, onBack, onDone }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, isDark, toggleTheme }) {
+function Home({ onSelect, onRate, isDark, toggleTheme }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [page,setPage]          = useState(0);
@@ -1250,7 +1250,7 @@ function Home({ onSelect, isDark, toggleTheme }) {
 
         {/* Listings */}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
         ))}
 
         {/* Pagination */}
@@ -1390,14 +1390,15 @@ export default function ServedApp() {
     });
   }, []);
 
-  const select = b => { setBiz(b); setView("business"); };
+  const select  = b => { setBiz(b); setView("business"); };
+  const rate    = b => { setBiz(b); setView("rate"); };
   const done   = d => { setReview(d); setView("done"); };
   const reset  = () => { setBiz(null); setReview(null); setView("home"); };
 
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"     && <Home onSelect={select} isDark={isDark} toggleTheme={toggleTheme}/>}
+        {view==="home"     && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme}/>}
         {view==="business" && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
         {view==="rate"     && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"     && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
