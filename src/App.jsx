@@ -2204,6 +2204,7 @@ export default function ServedApp() {
   const [isDark,setIsDark]   = useState(true);
 
   useEffect(() => { applyTheme(DARK_VARS); }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, [view]);
 
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
