@@ -2046,25 +2046,8 @@ function OwnerDashboard({ onBack }) {
             ))}
           </div>
 
-          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
-            padding:"16px",marginBottom:14}}>
-            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:12}}>Top mentions</div>
-            {[["atmosphere","positive"],["food quality","positive"],["wait times","negative"],
-              ["friendly staff","positive"],["pricing","neutral"]].map(([tag,sentiment])=>(
-              <div key={tag} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
-                padding:"8px 0",borderBottom:`1px solid ${BDR}`}}>
-                <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
-                <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
-                  background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
-                  {sentiment}
-                </span>
-              </div>
-            ))}
-          </div>
-
           <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
-            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px"}}>
+            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:14}}>
             <div style={{fontSize:13,fontWeight:900,color:N,marginBottom:4}}>AI Recommendations</div>
             <div style={{fontSize:11,color:MUT,marginBottom:14}}>Powered by your review data · Updated weekly</div>
 
@@ -2105,6 +2088,23 @@ function OwnerDashboard({ onBack }) {
               <div key={i} style={{display:"flex",gap:10,marginBottom:i===2?0:12,alignItems:"flex-start"}}>
                 <span style={{fontSize:16,lineHeight:1,flexShrink:0,marginTop:1}}>{r.icon}</span>
                 <p style={{fontSize:12,color:N,margin:0,lineHeight:1.55}}>{r.tip}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:12}}>Top mentions</div>
+            {[["atmosphere","positive"],["food quality","positive"],["wait times","negative"],
+              ["friendly staff","positive"],["pricing","neutral"]].map(([tag,sentiment])=>(
+              <div key={tag} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
+                padding:"8px 0",borderBottom:`1px solid ${BDR}`}}>
+                <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
+                <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
+                  background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
+                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  {sentiment}
+                </span>
               </div>
             ))}
           </div>
