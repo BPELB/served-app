@@ -1789,6 +1789,8 @@ const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
 function OwnerDashboard({ onBack }) {
   const [tab, setTab] = useState("overview");
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, [tab]);
   const [replyOpen, setReplyOpen] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [replies, setReplies] = useState({});
