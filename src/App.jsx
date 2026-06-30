@@ -2028,24 +2028,6 @@ function OwnerDashboard({ onBack }) {
 
         {/* ── INSIGHTS ── */}
         {tab==="insights" && <>
-          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
-            padding:"16px",marginBottom:14}}>
-            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Category breakdown</div>
-            {catAvgs.map(cat=>(
-              <div key={cat.id} style={{marginBottom:14}}>
-                <div style={{display:"flex",justifyContent:"space-between",
-                  alignItems:"center",marginBottom:6}}>
-                  <span style={{fontSize:12,fontWeight:700,color:N}}>{cat.label}</span>
-                  <span style={{fontSize:12,fontWeight:800,color:O}}>{(cat.avg/2).toFixed(1)}</span>
-                </div>
-                <div style={{height:8,borderRadius:4,background:BG3,overflow:"hidden"}}>
-                  <div style={{height:"100%",borderRadius:4,background:O,
-                    width:`${cat.pct}%`,transition:"width 0.5s"}}/>
-                </div>
-              </div>
-            ))}
-          </div>
-
           <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
             border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:14}}>
             <div style={{fontSize:13,fontWeight:900,color:N,marginBottom:4}}>AI Recommendations</div>
@@ -2088,6 +2070,24 @@ function OwnerDashboard({ onBack }) {
               <div key={i} style={{display:"flex",gap:10,marginBottom:i===2?0:12,alignItems:"flex-start"}}>
                 <span style={{fontSize:16,lineHeight:1,flexShrink:0,marginTop:1}}>{r.icon}</span>
                 <p style={{fontSize:12,color:N,margin:0,lineHeight:1.55}}>{r.tip}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Category breakdown</div>
+            {catAvgs.map(cat=>(
+              <div key={cat.id} style={{marginBottom:14}}>
+                <div style={{display:"flex",justifyContent:"space-between",
+                  alignItems:"center",marginBottom:6}}>
+                  <span style={{fontSize:12,fontWeight:700,color:N}}>{cat.label}</span>
+                  <span style={{fontSize:12,fontWeight:800,color:O}}>{(cat.avg/2).toFixed(1)}</span>
+                </div>
+                <div style={{height:8,borderRadius:4,background:BG3,overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:4,background:O,
+                    width:`${cat.pct}%`,transition:"width 0.5s"}}/>
+                </div>
               </div>
             ))}
           </div>
