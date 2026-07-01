@@ -38,7 +38,7 @@ const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#16a34a",  tx:"#16a34a" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=4?"#16a34a":s>=3?"#FF6B35":"#dc2626";
+const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -463,7 +463,7 @@ function IconBox({ type, size=44, emoji }) {
 }
 
 function ScoreBadge({ score, size=50 }) {
-  const C   = score ? (score>=8?SH:score>=5?SM:SL) : null;
+  const C   = score ? (score>=8?SH:score>=6?SM:SL) : null;
   const dec = score ? (score/2).toFixed(1) : null;
   const starSize = size > 40 ? 13 : 10;
   return (
@@ -552,7 +552,7 @@ function BusinessCard({ b, onSelect, onRate }) {
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-            border:"2px solid #FF6B35",background:"transparent",color:"#FF6B35",fontSize:11,fontWeight:800,
+            border:`2px solid ${O}`,background:"transparent",color:O,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             display:"flex",alignItems:"center",gap:5}}>
           Rate Now
