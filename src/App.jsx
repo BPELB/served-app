@@ -908,8 +908,8 @@ function BusinessPage({ business, onBack, onRate }) {
           {[["recent","Recent"],["highest","Best"],["lowest","Worst"],["helpful","Helpful"]].map(([s,l])=>(
             <button key={s} onClick={()=>setSort(s)}
               style={{padding:"4px 9px",borderRadius:10,fontSize:11,fontWeight:sort===s?700:400,
-                border:`2px solid ${sort===s?N:"#ddd"}`,
-                background:sort===s?N:"#fff",color:sort===s?BG:N,
+                border:`2px solid ${sort===s?N:BDR}`,
+                background:sort===s?N:BG2,color:sort===s?BG:N,
                 transition:"all 0.15s",fontFamily:"inherit"}}>{l}</button>
           ))}
         </div>
