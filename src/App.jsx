@@ -473,7 +473,7 @@ function ScoreBadge({ score, size=50 }) {
       <svg width={starSize} height={starSize} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
       </svg>
-      <span style={{fontSize:size>40?16:12,fontWeight:900,color:"#fff",lineHeight:1}}>
+      <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>
         {dec||"—"}
       </span>
     </div>
