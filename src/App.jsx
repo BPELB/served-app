@@ -905,7 +905,7 @@ function BusinessPage({ business, onBack, onRate }) {
         marginBottom:12,flexWrap:"wrap",gap:6}}>
         <span style={{fontSize:14,fontWeight:700,color:N}}>{DEMO_REVIEWS.length} reviews</span>
         <div style={{display:"flex",gap:5}}>
-          {[["recent","Recent"],["highest","Best"],["lowest","Worst"],["helpful","Helpful"]].map(([s,l])=>(
+          {[["recent","Recent"],["highest","Best"],["lowest","Worst"]].map(([s,l])=>(
             <button key={s} onClick={()=>setSort(s)}
               style={{padding:"4px 9px",borderRadius:10,fontSize:11,fontWeight:sort===s?700:400,
                 border:`2px solid ${sort===s?N:BDR}`,
