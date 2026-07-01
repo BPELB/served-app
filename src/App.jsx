@@ -573,7 +573,7 @@ function BusinessCard({ b, onSelect, onRate }) {
                   <div style={{fontSize:9,fontWeight:700,color:isToday?O:MUT,
                     textTransform:"uppercase",marginBottom:3}}>{day}</div>
                   <div style={{fontSize:10,color:isToday?N:MUT,fontWeight:isToday?700:400,
-                    lineHeight:1.4,background:isToday?"#FFF3EE":undefined,
+                    lineHeight:1.4,background:isToday?`${O}22`:undefined,
                     borderRadius:6,padding:"3px 2px"}}>
                     {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
                   </div>
@@ -857,10 +857,10 @@ function BusinessPage({ business, onBack, onRate }) {
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
             <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
-            <div style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>{business.addr||business.address}</div>
+            <div style={{fontSize:11,color:MUT}}>{business.addr||business.address}</div>
             <div style={{display:"flex",gap:8,marginTop:4}}>
-              {business.rating&&<span style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>★ {business.rating}</span>}
-              {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>{"$".repeat(business.price||business.priceLevel)}</span>}
+              {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
+              {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
                 color:(business.open||business.isOpen)?"#16a34a":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
@@ -870,7 +870,7 @@ function BusinessPage({ business, onBack, onRate }) {
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
               background:"#16a34a",borderRadius:12,padding:"8px 12px"}}>
-              <div style={{fontSize:20,fontWeight:900,color:N,lineHeight:1}}>{(overall/2).toFixed(1)}</div>
+              <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
               <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
             </div>
           )}
