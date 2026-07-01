@@ -465,15 +465,15 @@ function IconBox({ type, size=44, emoji }) {
 function ScoreBadge({ score, size=50 }) {
   const C   = score ? (score>=8?SH:score>=5?SM:SL) : null;
   const dec = score ? (score/2).toFixed(1) : null;
-  const starSize = size > 40 ? 11 : 8;
+  const starSize = size > 40 ? 13 : 10;
   return (
     <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
-      background:C?C.bg:"#f5f5f5",border:`2px solid ${C?C.bd:"#eee"}`,
+      background:BG2,border:`2px solid ${BDR}`,
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <svg width={starSize+4} height={starSize+4} viewBox="0 0 16 16" fill="none">
-        <polyline points="3,8.5 6.5,12 13,4" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg width={starSize} height={starSize} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
       </svg>
-      <span style={{fontSize:size>40?16:12,fontWeight:900,color:C?C.tx:"#555",lineHeight:1}}>
+      <span style={{fontSize:size>40?16:12,fontWeight:900,color:C?C.tx:MUT,lineHeight:1}}>
         {dec||"—"}
       </span>
     </div>
