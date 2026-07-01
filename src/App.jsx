@@ -487,7 +487,7 @@ function Back({ onClick, label }) {
       style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:14,
         border:`2px solid ${O}`,background:h?BG2:O,color:h?O:"#fff",
         fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,
-        transition:"all 0.15s",fontFamily:"inherit"}}>
+        transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
       ‹ {label}
     </button>
   );
