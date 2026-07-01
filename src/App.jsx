@@ -14,7 +14,7 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#16a34a";
+const O   = "#FF6B35";
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
