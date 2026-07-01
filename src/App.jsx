@@ -823,7 +823,7 @@ function ShareCard({ business, scores, onClose }) {
 // BUSINESS PAGE
 // ============================================================
 function BusinessPage({ business, onBack, onRate }) {
-  const [sort,setSort]       = useState("recent");
+  const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const bt = BT[business.type||"food"];
 
