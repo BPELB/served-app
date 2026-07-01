@@ -35,10 +35,10 @@ function applyTheme(vars) {
 
 // Functional score colors
 const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#16a34a",  tx:"#16a34a" };
-const SM = { bg:"rgba(249,115,22,0.10)",  bd:"#f97316",  tx:"#f97316" };
+const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=4?"#16a34a":s>=3?"#f97316":"#dc2626";
+const stC = s => s>=4?"#16a34a":s>=3?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
