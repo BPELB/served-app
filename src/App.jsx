@@ -485,7 +485,7 @@ function Back({ onClick, label }) {
   return (
     <button onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
       style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:14,
-        border:`2px solid ${h?N:O}`,background:h?N:"#fff",color:h?"#fff":O,
+        border:`2px solid ${O}`,background:h?O:BG2,color:h?"#fff":O,
         fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,
         transition:"all 0.15s",fontFamily:"inherit"}}>
       ‹ {label}
