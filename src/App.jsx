@@ -1663,7 +1663,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
             {hasMore&&(
               <button onClick={()=>setPage(p=>p+1)}
                 style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${O}`,background:O,color:N,
+                  border:`2px solid ${O}`,background:O,color:"#fff",
                   fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
                 onMouseEnter={e=>{e.currentTarget.style.background=N;e.currentTarget.style.borderColor=N;}}
                 onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.borderColor=O;}}>
