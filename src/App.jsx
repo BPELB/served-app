@@ -910,7 +910,7 @@ function BusinessPage({ business, onBack, onRate }) {
               style={{padding:"4px 9px",borderRadius:10,fontSize:11,fontWeight:sort===s?700:400,
                 border:`2px solid ${sort===s?N:BDR}`,
                 background:sort===s?N:BG2,color:sort===s?BG:N,
-                transition:"all 0.15s",fontFamily:"inherit"}}>{l}</button>
+                transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>{l}</button>
           ))}
         </div>
       </div>
@@ -1091,7 +1091,7 @@ function RateView({ business, onBack, onDone }) {
               onClick={()=>setFeedback(f=>f?(f.endsWith(".")?f+" "+c:f+". "+c):c)}
               style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:`2px solid ${BDR}`,
                 background:BG2,color:MUT,fontWeight:500,
-                transition:"all 0.12s",fontFamily:"inherit"}}
+                transition:"all 0.12s",fontFamily:"inherit",cursor:"pointer"}}
               onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor="#555";}}
               onMouseLeave={e=>{e.target.style.background=BG2;e.target.style.borderColor=BDR;}}>
               {c}
