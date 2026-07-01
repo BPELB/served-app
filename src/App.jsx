@@ -594,7 +594,7 @@ function CatPill({ typeKey, selected, onClick }) {
     <button onClick={onClick} style={{
       display:"flex",alignItems:"center",gap:5,
       padding:"7px 13px",borderRadius:20,flexShrink:0,
-      border:`2px solid ${on?O:"#FFD4C2"}`,
+      border:`2px solid ${on?O:BDR}`,
       background:on?O:"transparent",
       color:on?"#fff":O,
       fontSize:12,fontWeight:on?700:500,cursor:"pointer",
@@ -1676,15 +1676,15 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
         {/* CTAs */}
         <div style={{display:"flex",flexDirection:"column",gap:10}}>
           {/* Own a business */}
-          <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:BG2,
+          <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:"linear-gradient(135deg,#16a34a,#15803d)",
               boxShadow:"0 4px 12px rgba(22,163,74,0.35)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
               </svg>
             </div>
             <div style={{flex:1}}>
@@ -1694,7 +1694,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
               background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim free →</button>
+              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
           <div onClick={()=>setShowAds(true)} style={{padding:"16px 18px",background:BG2,
