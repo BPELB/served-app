@@ -34,11 +34,11 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#16a34a",  tx:"#16a34a" };
+const SH = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
+const stC = s => s>=8?"#FF6B35":s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -499,7 +499,7 @@ function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
       style={{width:full?"100%":"auto",padding:"13px 22px",borderRadius:14,border:"none",
         background:disabled?"#eee":G,color:disabled?"#555":"#fff",
         fontSize:14,fontWeight:700,cursor:disabled?"default":"pointer",
-        boxShadow:disabled?"none":"0 4px 16px rgba(22,163,74,0.3)",
+        boxShadow:disabled?"none":"0 4px 16px rgba(255,107,53,0.3)",
         transition:"all 0.2s",fontFamily:"inherit",...style}}>
       {children}
     </button>
@@ -533,7 +533,7 @@ function BusinessCard({ b, onSelect, onRate }) {
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:b.open?"#16a34a":"#dc2626"}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?"#FF6B35":"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
             {b.hours && (
@@ -783,7 +783,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#16a34a":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#FF6B35":"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -830,7 +830,7 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#16a34a",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:"#FF6B35",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
@@ -885,7 +885,7 @@ function BusinessPage({ business, onBack, onRate }) {
       <div style={{background:BG,borderRadius:20,padding:"18px",marginBottom:12,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
-          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
         <div style={{display:"flex",alignItems:"flex-start",gap:12,position:"relative"}}>
           <IconBox type={business.type} size={50} emoji={business.emoji}/>
           <div style={{flex:1,minWidth:0}}>
@@ -897,14 +897,14 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#16a34a":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?"#FF6B35":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
           </div>
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
-              background:"#16a34a",borderRadius:12,padding:"8px 12px"}}>
+              background:"#FF6B35",borderRadius:12,padding:"8px 12px"}}>
               <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
               <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
             </div>
@@ -1010,7 +1010,7 @@ function RateView({ business, onBack, onDone }) {
         background:BG,border:`2px solid #2A3A6A`,borderRadius:16,marginBottom:14,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-15,right:-15,width:60,height:60,
-          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
         <div style={{width:40,height:40,borderRadius:12,flexShrink:0,
           background:BG2,border:`1.5px solid ${BDR}`,
           display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
@@ -1218,7 +1218,7 @@ function ClaimModal({ onClose, onDashboard }) {
           <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
           <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
             border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
             Claim for free →
           </button>
         </>}
@@ -1252,7 +1252,7 @@ function ClaimModal({ onClose, onDashboard }) {
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
                 background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
-                boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
+                boxShadow:"0 4px 16px rgba(255,107,53,0.35)"}}>
                 View my dashboard →
               </button>
               <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,
@@ -1421,7 +1421,7 @@ function AdvertisePage({ onBack }) {
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
             border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
-            boxShadow:budget!==null?"0 4px 16px rgba(22,163,74,0.35)":"none"}}>
+            boxShadow:budget!==null?"0 4px 16px rgba(255,107,53,0.35)":"none"}}>
             Continue →
           </button>
         </>}
@@ -1594,7 +1594,7 @@ function AdvertisePage({ onBack }) {
             <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"12px",borderRadius:12,
               border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
-              boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
+              boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>Launch campaign →</button>
           </div>
           <p style={{textAlign:"center",fontSize:10,color:MUT,margin:0}}>
             Secured by Stripe · Cancel anytime in your dashboard
@@ -1606,7 +1606,7 @@ function AdvertisePage({ onBack }) {
           <div style={{textAlign:"center",padding:"40px 0"}}>
             <div style={{width:72,height:72,borderRadius:20,background:O,
               display:"flex",alignItems:"center",justifyContent:"center",
-              margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
+              margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(255,107,53,0.3)"}}>
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Campaign live!</div>
@@ -1793,8 +1793,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#16a34a,#15803d)",
-              boxShadow:"0 4px 12px rgba(22,163,74,0.35)",
+              background:"linear-gradient(135deg,#FF6B35,#e05a1e)",
+              boxShadow:"0 4px 12px rgba(255,107,53,0.35)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -1808,14 +1808,14 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
               background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
+              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
           <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:BG2,
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:O,
-              boxShadow:"0 4px 12px rgba(22,163,74,0.3)",
+              boxShadow:"0 4px 12px rgba(255,107,53,0.3)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke="white" fill="none"/>
@@ -1830,7 +1830,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             <button style={{padding:"8px 13px",borderRadius:10,
               border:"none",background:O,color:"#fff",
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>onAdvertise()}>Learn more →</button>
+              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>onAdvertise()}>Learn more →</button>
           </div>
         </div>
 
@@ -1857,7 +1857,7 @@ function DoneScreen({ business, reviewData, onReset }) {
       {shareOpen&&<ShareCard business={business} scores={reviewData?.scores||{}} onClose={()=>setShare(false)}/>}
       <div style={{width:72,height:72,borderRadius:20,background:G,
         display:"flex",alignItems:"center",justifyContent:"center",
-        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
+        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(255,107,53,0.3)"}}>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
         </svg>
@@ -1970,8 +1970,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:"#16a34a"}}/>
-          <span style={{fontSize:11,color:"#16a34a",fontWeight:700}}>Live</span>
+          <div style={{width:8,height:8,borderRadius:"50%",background:"#FF6B35"}}/>
+          <span style={{fontSize:11,color:"#FF6B35",fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
@@ -2006,7 +2006,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             border:`1.5px solid ${O}`,background:"transparent",color:O,fontSize:14,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",marginBottom:14,
             display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-            boxShadow:`0 0 12px rgba(22,163,74,0.3), inset 0 0 12px rgba(22,163,74,0.05)`}}>
+            boxShadow:`0 0 12px rgba(255,107,53,0.3), inset 0 0 12px rgba(255,107,53,0.05)`}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
             Start Advertising
           </button>
@@ -2238,7 +2238,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
                 <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
                   background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  color:sentiment==="positive"?"#FF6B35":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
                   {sentiment}
                 </span>
               </div>
