@@ -596,7 +596,7 @@ function SponsoredCard({ ad, onSelect }) {
     <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
       {/* Sponsored label */}
-      <div style={{borderBottom:`1px solid ${O}33`,
+      <div style={{background:`${O}18`,borderBottom:`1px solid ${O}33`,
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <span style={{fontSize:13,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Sponsored</span>
