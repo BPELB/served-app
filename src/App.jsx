@@ -466,19 +466,28 @@ function IconBox({ type, size=44, emoji }) {
 }
 
 function ScoreBadge({ score, size=50 }) {
-  const C   = score ? (score>=8?SH:score>=6?SM:SL) : null;
-  const dec = score ? (score/2).toFixed(1) : null;
-  const starSize = size > 40 ? 13 : 10;
+  const C      = score ? (score>=8?SH:score>=6?SM:SL) : null;
+  const dec    = score ? (score/2).toFixed(1) : null;
+  const starSz = size > 40 ? 13 : 10;
+  const tail   = 10;
+  const r      = 11;
+  const w = size, h = size;
+  const bd = C ? C.bd : BDR;
+  const bg = C ? C.bg : BG2;
+  // speech bubble path: rounded rect body + downward center tail
+  const path = `M${r},0 H${w-r} Q${w},0 ${w},${r} V${h-r} Q${w},${h} ${w-r},${h} H${w/2+8} L${w/2},${h+tail} L${w/2-8},${h} H${r} Q0,${h} 0,${h-r} V${r} Q0,0 ${r},0 Z`;
   return (
-    <div style={{width:size,height:size,borderRadius:12,flexShrink:0,
-      background:BG2,border:`2px solid ${C?C.bd:BDR}`,
-      display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <svg width={starSize} height={starSize} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
-        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+    <div style={{position:"relative",width:w,height:h+tail,flexShrink:0}}>
+      <svg width={w} height={h+tail} viewBox={`0 0 ${w} ${h+tail}`} style={{position:"absolute",top:0,left:0}}>
+        <path d={path} fill={bg} stroke={bd} strokeWidth="2"/>
       </svg>
-      <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>
-        {dec||"—"}
-      </span>
+      <div style={{position:"absolute",top:0,left:0,width:w,height:h,
+        display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
+        <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+        </svg>
+        <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>{dec||"—"}</span>
+      </div>
     </div>
   );
 }
