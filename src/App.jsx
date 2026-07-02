@@ -393,10 +393,10 @@ function Logo({ light=false }) {
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="34" height="34" viewBox="0 0 40 40">
         <rect width="40" height="40" rx="11" fill={G2}/>
-        {/* Spotlight beam */}
-        <circle cx="20" cy="9" r="3.5" fill="white"/>
-        <polygon points="11,34 20,13 29,34" fill="rgba(255,255,255,0.25)"/>
-        <ellipse cx="20" cy="34" rx="9" ry="3" fill="rgba(255,255,255,0.6)"/>
+        {/* Horizontal spotlight pointing right */}
+        <circle cx="8" cy="20" r="4.5" fill="white"/>
+        <polygon points="13,20 38,10 38,30" fill="rgba(255,255,255,0.28)"/>
+        <ellipse cx="38" cy="20" rx="2" ry="10" fill="rgba(255,255,255,0.55)"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
         tru<span style={{color:G2}}>faro</span>
