@@ -524,9 +524,9 @@ function BusinessCard({ b, onSelect, onRate }) {
   const closes = b.hours ? closeTime(b.hours) : null;
 
   return (
-    <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",
+    <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
       transition:"border-color 0.15s",cursor:"pointer"}}
-      onMouseEnter={e=>e.currentTarget.style.borderColor=BDR}
+      onMouseEnter={e=>e.currentTarget.style.borderColor=O}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
