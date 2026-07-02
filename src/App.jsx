@@ -1826,13 +1826,13 @@ function OwnerDashboard({ onBack }) {
 
   const tabs = [
     {id:"overview", icon:<><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Overview"},
-    {id:"insights", icon:<><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>, label:"AI Insights"},
+    {id:"insights", icon:<><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>, label:"Insights"},
     {id:"reviews",  icon:<><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Reviews"},
     {id:"profile",  icon:<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" fill="none"/></>, label:"Profile"},
   ];
 
   return (
-    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column",overflowX:"hidden"}}>
       {/* Header */}
       <div style={{background:BG2,padding:"16px 16px 0",borderBottom:`1.5px solid ${BDR}`}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
@@ -1848,9 +1848,9 @@ function OwnerDashboard({ onBack }) {
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
-          <div>
-            <div style={{fontSize:16,fontWeight:900,color:N}}>{profile.name}</div>
-            <div style={{fontSize:11,color:MUT}}>{bt.label} · {profile.address}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
+            <div style={{fontSize:11,color:MUT,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{bt.label} · {profile.address}</div>
           </div>
         </div>
         {/* Tab bar */}
@@ -1870,7 +1870,7 @@ function OwnerDashboard({ onBack }) {
       </div>
 
       {/* Content */}
-      <div style={{flex:1,overflowY:"auto",padding:"16px"}}>
+      <div style={{flex:1,overflowY:"auto",padding:"16px",boxSizing:"border-box",width:"100%"}}>
 
         {/* ── OVERVIEW ── */}
         {tab==="overview" && <>
