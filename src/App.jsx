@@ -523,9 +523,9 @@ function BusinessCard({ b, onSelect, onRate }) {
   const closes = b.hours ? closeTime(b.hours) : null;
 
   return (
-    <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",
+    <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
       transition:"border-color 0.15s",cursor:"pointer"}}
-      onMouseEnter={e=>e.currentTarget.style.borderColor=BDR}
+      onMouseEnter={e=>e.currentTarget.style.borderColor=O}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
@@ -609,7 +609,7 @@ function SponsoredCard({ ad, onSelect }) {
       {/* Ad row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}>
         <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:O,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
             : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
@@ -621,7 +621,8 @@ function SponsoredCard({ ad, onSelect }) {
           <div style={{fontSize:12,color:MUT,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.tagline}</div>
         </div>
         <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-          background:O,color:"#fff",fontSize:11,fontWeight:800,
+          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.5)",
+          color:"#fff",fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           {ad.cta}
         </div>
