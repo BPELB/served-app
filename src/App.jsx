@@ -456,7 +456,7 @@ function IconBox({ type, size=44, emoji }) {
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {emoji
         ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:box.ic}}>{icon}</svg>
+        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
       }
     </div>
   );
