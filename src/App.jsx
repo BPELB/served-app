@@ -1072,7 +1072,7 @@ function RateView({ business, onBack, onDone }) {
 
       {/* Business header — category colored */}
       <div style={{display:"flex",alignItems:"center",gap:12,padding:"14px 16px",
-        background:BG,border:`2px solid #2A3A6A`,borderRadius:16,marginBottom:14,
+        background:BG,border:`2px solid ${BDR}`,borderRadius:16,marginBottom:14,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-15,right:-15,width:60,height:60,
           borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
