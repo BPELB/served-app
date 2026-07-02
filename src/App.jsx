@@ -1683,7 +1683,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     <div style={{width:"100%"}}>
       {showClaim && <ClaimModal onClose={()=>setShowClaim(false)} onDashboard={()=>{setShowClaim(false);onDashboard();}}/>}
       {/* Navy header */}
-      <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
+      <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
