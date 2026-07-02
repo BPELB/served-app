@@ -1269,6 +1269,7 @@ function AdvertisePage({ onBack }) {
   const [adForm, setAdForm] = useState({ headline:"", tagline:"", cta:"Book now" });
   const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
   const [launched, setLaunched] = useState(false);
+  const [hoveredPlan, setHoveredPlan] = useState(null);
   const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
   const inp = {width:"100%",padding:"11px 14px",borderRadius:10,border:`1.5px solid ${BDR}`,
     background:BG,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
@@ -1339,9 +1340,10 @@ function AdvertisePage({ onBack }) {
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:14}}>
             {AD_BUDGETS.map((b,i)=>(
               <div key={b.label} onClick={()=>setBudget(i)}
-                onMouseEnter={e=>{if(budget!==i){e.currentTarget.style.borderColor=O;}}}
-                onMouseLeave={e=>{if(budget!==i){e.currentTarget.style.borderColor=BDR;}}}
-                style={{background:BG2,border:`1.5px solid ${budget===i?O:BDR}`,
+                onMouseEnter={()=>setHoveredPlan(i)}
+                onMouseLeave={()=>setHoveredPlan(null)}
+                style={{background:BG2,
+                  border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"border-color 0.15s",
                   boxShadow:budget===i?`0 0 0 3px ${O}22`:"none"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
