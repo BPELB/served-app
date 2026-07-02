@@ -623,15 +623,18 @@ function SponsoredCard({ ad, onSelect }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.bizName}</div>
-          <div style={{fontSize:12,color:WM,marginBottom:4}}>
-            {ad.bizSubtype||ad.bizType}
-            {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
-            {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
-          </div>
+          <div style={{fontSize:15,fontWeight:800,color:"#fff",marginBottom:2,
+            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
+          <div style={{fontSize:11,color:WM,marginBottom:5,
+            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.tagline}</div>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
+            <span style={{fontSize:11,color:WM}}>
+              {ad.bizSubtype||ad.bizType}
+              {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
+              {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
+            </span>
+            <span style={{color:WM}}>·</span>
+            <span style={{fontSize:11,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
               {ad.bizOpen ? "Open" : "Closed"}
             </span>
             {ad.bizHours && (
