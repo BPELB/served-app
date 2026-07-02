@@ -34,11 +34,11 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
+const SH = { bg:"rgba(22,163,74,0.10)",   bd:"#16a34a",  tx:"#16a34a" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#FF6B35":s>=6?"#FF6B35":"#dc2626";
+const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -396,7 +396,7 @@ function Logo({ light=false }) {
         <polyline points="10,21 17,28 30,13" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
-        tru<span style={{color:G2}}>filo</span>
+        tru<span style={{color:G2}}>filo</span><span style={{color:G2}}>.</span>
       </span>
     </div>
   );
