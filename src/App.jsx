@@ -1270,6 +1270,7 @@ function AdvertisePage({ onBack }) {
   const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
   const [launched, setLaunched] = useState(false);
   const [hoveredPlan, setHoveredPlan] = useState(null);
+  const [customCta, setCustomCta] = useState(false);
   const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
   const inp = {width:"100%",padding:"11px 14px",borderRadius:10,border:`1.5px solid ${BDR}`,
     background:BG,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
@@ -1391,7 +1392,6 @@ function AdvertisePage({ onBack }) {
         {/* STEP 2 — Ad creative */}
         {step===2 && !launched && (()=>{
           const CTA_PRESETS = ["Book now","Order online","Get directions","Call us","See menu","Learn more"];
-          const isCustom = !CTA_PRESETS.includes(adForm.cta);
           return <>
             <div style={{fontSize:14,fontWeight:800,color:N,textTransform:"uppercase",
               letterSpacing:"0.06em",marginBottom:12}}>Build your ad</div>
@@ -1452,23 +1452,29 @@ function AdvertisePage({ onBack }) {
                 <div style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
                   {CTA_PRESETS.map(cta=>(
-                    <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
+                    <button key={cta} onClick={()=>{setAdForm(f=>({...f,cta}));setCustomCta(false);}}
                       style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
-                        border:`1.5px solid ${adForm.cta===cta?O:BDR}`,
-                        background:adForm.cta===cta?O:"transparent",
-                        color:adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
+                        border:`1.5px solid ${!customCta&&adForm.cta===cta?O:BDR}`,
+                        background:!customCta&&adForm.cta===cta?O:"transparent",
+                        color:!customCta&&adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
                   ))}
-                  <button onClick={()=>setAdForm(f=>({...f,cta:""}))}
+                  <button onClick={()=>{setCustomCta(true);setAdForm(f=>({...f,cta:""}));}}
                     style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
-                      border:`1.5px solid ${isCustom?O:BDR}`,
-                      background:isCustom?O:"transparent",
-                      color:isCustom?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
+                      border:`1.5px solid ${customCta?O:BDR}`,
+                      background:customCta?O:"transparent",
+                      color:customCta?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
                 </div>
-                {isCustom && <>
-                  <input placeholder="e.g. Claim offer, Reserve a table…" value={adForm.cta}
-                    onChange={set("cta")} style={inp} maxLength={20}/>
-                  <div style={{fontSize:11,color:MUT,marginTop:5}}>Max 20 characters. Keep it action-first.</div>
-                </>}
+                {customCta && (
+                  <div>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
+                      <span style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Custom text</span>
+                      <span style={{fontSize:11,color:MUT}}>{adForm.cta.length}/20</span>
+                    </div>
+                    <input autoFocus placeholder="e.g. Claim offer, Reserve a table…" value={adForm.cta}
+                      onChange={set("cta")} style={inp} maxLength={20}/>
+                    <div style={{fontSize:11,color:MUT,marginTop:5}}>Max 20 characters. Keep it action-first.</div>
+                  </div>
+                )}
               </div>
             </div>
 
