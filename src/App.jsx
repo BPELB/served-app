@@ -587,6 +587,53 @@ function BusinessCard({ b, onSelect, onRate }) {
   );
 }
 
+// Mock active sponsored ad — in production this comes from the DB
+const MOCK_AD = {
+  bizId: DEMO_BIZ.id,
+  bizName: DEMO_BIZ.name,
+  bizType: DEMO_BIZ.type,
+  bizEmoji: DEMO_BIZ.emoji,
+  headline: "Best Italian in McKinney",
+  tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
+  cta: "Book now",
+  image: null,
+  categories: ["food"], // show in these category feeds
+};
+
+function SponsoredCard({ ad, onSelect }) {
+  return (
+    <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+      onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
+      {/* Sponsored label */}
+      <div style={{background:`${O}18`,borderBottom:`1px solid ${O}33`,
+        padding:"5px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <span style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Sponsored</span>
+        <span style={{fontSize:9,color:MUT}}>{ad.bizName}</span>
+      </div>
+      {/* Ad row */}
+      <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}>
+        <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
+          background:O,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          {ad.image
+            ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+            : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
+          }
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:15,fontWeight:800,color:N,marginBottom:3,
+            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
+          <div style={{fontSize:12,color:MUT,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.tagline}</div>
+        </div>
+        <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
+          background:O,color:"#fff",fontSize:11,fontWeight:800,
+          whiteSpace:"nowrap",fontFamily:"inherit"}}>
+          {ad.cta}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CatPill({ typeKey, selected, onClick }) {
   const t = BT[typeKey];
   const on = selected === typeKey;
@@ -1711,9 +1758,14 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           </p>
         )}
 
-        {/* Listings */}
-        {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
+        {/* Listings — sponsored card injected after position 1 */}
+        {visible.map((b,i)=>(
+          <React.Fragment key={b.id}>
+            <BusinessCard b={b} onSelect={onSelect} onRate={onRate}/>
+            {i===0 && MOCK_AD.categories.includes(cat) && (
+              <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
+            )}
+          </React.Fragment>
         ))}
 
         {/* Pagination */}
