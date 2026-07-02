@@ -14,8 +14,8 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#e05535";
-const G   = `linear-gradient(135deg,${O},#8b2a14)`;
+const O   = "#2563EB";
+const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -35,10 +35,10 @@ function applyTheme(vars) {
 
 // Functional score colors
 const SH = { bg:"rgba(22,163,74,0.10)",   bd:"#16a34a",  tx:"#16a34a" };
-const SM = { bg:"rgba(224,85,53,0.10)",   bd:"#e05535",  tx:"#e05535" };
+const SM = { bg:"rgba(224,85,53,0.10)",   bd:"#2563EB",  tx:"#2563EB" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?"#e05535":"#dc2626";
+const stC = s => s>=8?"#16a34a":s>=6?"#2563EB":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -388,16 +388,18 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
-  const G2 = "#e05535";
+  const G2 = "#2563EB";
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
-      <svg width="32" height="32" viewBox="0 0 40 40">
+      <svg width="34" height="34" viewBox="0 0 40 40">
         <rect width="40" height="40" rx="11" fill={G2}/>
-        <polygon points="10,15 10,25 17,25 26,32 26,8 17,15" fill="white"/>
-        <path d="M29,15 Q34,20 29,25" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        {/* Spotlight beam */}
+        <circle cx="20" cy="9" r="3.5" fill="white"/>
+        <polygon points="11,34 20,13 29,34" fill="rgba(255,255,255,0.25)"/>
+        <ellipse cx="20" cy="34" rx="9" ry="3" fill="rgba(255,255,255,0.6)"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
-        tru<span style={{color:G2}}>filo</span><span style={{color:G2}}>.</span>
+        tru<span style={{color:G2}}>faro</span>
       </span>
     </div>
   );
@@ -534,7 +536,7 @@ function BusinessCard({ b, onSelect, onRate }) {
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:b.open?"#e05535":"#dc2626"}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?"#2563EB":"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
             {b.hours && (
@@ -784,7 +786,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#e05535":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#2563EB":"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -821,7 +823,7 @@ function ShareCard({ business, scores, onClose }) {
   const avg   = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
   const stars = avg ? Math.round(avg/2) : null;
   const bt    = BT[business?.type||"food"];
-  const text  = `Just rated ${business?.name} on Trufilo — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at trufilo.com`;
+  const text  = `Just rated ${business?.name} on Trufaro — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at trufaro.com`;
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,0.7)",display:"flex",
       alignItems:"center",justifyContent:"center",zIndex:999,padding:"1rem"}}>
@@ -831,12 +833,12 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#e05535",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:"#2563EB",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
           </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>trufilo.com · free for everyone</div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>trufaro.com · free for everyone</div>
         </div>
         <div style={{fontSize:13,color:MUT,marginBottom:14,lineHeight:1.5}}>{text}</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
@@ -898,14 +900,14 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#e05535":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?"#2563EB":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
           </div>
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
-              background:"#e05535",borderRadius:12,padding:"8px 12px"}}>
+              background:"#2563EB",borderRadius:12,padding:"8px 12px"}}>
               <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
               <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
             </div>
@@ -1229,7 +1231,7 @@ function ClaimModal({ onClose, onDashboard }) {
             <div style={{fontSize:48,marginBottom:16}}>🎉</div>
             <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>You're in!</div>
             <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:8}}>
-              Welcome to Trufilo, <strong style={{color:N}}>{form.name}</strong>.
+              Welcome to Trufaro, <strong style={{color:N}}>{form.name}</strong>.
             </p>
             <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
               padding:"14px 16px",marginBottom:24,textAlign:"left"}}>
@@ -1246,7 +1248,7 @@ function ClaimModal({ onClose, onDashboard }) {
               <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
                 <span style={{fontSize:18}}>✅</span>
                 <div style={{fontSize:12,color:MUT,lineHeight:1.5}}>
-                  Your listing for <strong style={{color:N}}>{form.biz}</strong> is now claimed. Everything on Trufilo is free for business owners.
+                  Your listing for <strong style={{color:N}}>{form.biz}</strong> is now claimed. Everything on Trufaro is free for business owners.
                 </div>
               </div>
             </div>
@@ -1339,7 +1341,7 @@ function AdvertisePage({ onBack }) {
             </svg>
           </div>
           <div>
-            <div style={{fontSize:16,fontWeight:900,color:N}}>Advertise on Trufilo</div>
+            <div style={{fontSize:16,fontWeight:900,color:N}}>Advertise on Trufaro</div>
             <div style={{fontSize:11,color:MUT}}>Self-serve · No contracts · Cancel anytime</div>
           </div>
         </div>
@@ -1792,7 +1794,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#e05535,#e05a1e)",
+              background:"linear-gradient(135deg,#2563EB,#e05a1e)",
               boxShadow:"0 4px 12px rgba(255,107,53,0.35)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1823,7 +1825,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on Trufilo</div>
+              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on Trufaro</div>
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
@@ -1862,7 +1864,7 @@ function DoneScreen({ business, reviewData, onReset }) {
         </svg>
       </div>
       <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8,letterSpacing:"-0.5px"}}>
-        trufilo approved!
+        trufaro approved!
       </div>
       <p style={{fontSize:14,color:MUT,lineHeight:1.8,marginBottom:32,textAlign:"center"}}>
         Your feedback is heading to {business?.name}.<br/>
@@ -1969,8 +1971,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:"#e05535"}}/>
-          <span style={{fontSize:11,color:"#e05535",fontWeight:700}}>Live</span>
+          <div style={{width:8,height:8,borderRadius:"50%",background:"#2563EB"}}/>
+          <span style={{fontSize:11,color:"#2563EB",fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
@@ -2244,7 +2246,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
                 <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
                   background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#e05535":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  color:sentiment==="positive"?"#2563EB":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
                   {sentiment}
                 </span>
               </div>
@@ -2284,7 +2286,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             ))}
             <button onClick={onAdvertise} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
               border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
-              cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on Trufilo</button>
+              cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on Trufaro</button>
           </div>
         </>}
       </div>
