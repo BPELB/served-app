@@ -1310,6 +1310,8 @@ function AdvertiseModal({ onClose }) {
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
             {AD_BUDGETS.map((b,i)=>(
               <div key={b.label} onClick={()=>setBudget(i)}
+                onMouseEnter={e=>{if(budget!==i){e.currentTarget.style.borderColor=O;e.currentTarget.style.background=`${O}10`;}}}
+                onMouseLeave={e=>{if(budget!==i){e.currentTarget.style.borderColor=BDR;e.currentTarget.style.background=BG2;}}}
                 style={{padding:"14px 16px",borderRadius:16,cursor:"pointer",
                   border:`2px solid ${budget===i?O:BDR}`,
                   background:budget===i?O:BG2,
