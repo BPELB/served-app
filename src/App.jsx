@@ -15,7 +15,7 @@ const CONFIG = {
 // BRAND
 // ============================================================
 const O   = "#DC2626";
-const G   = `linear-gradient(135deg,${O},#7f1d1d)`;
+const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -34,7 +34,7 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(224,85,53,0.10)",  bd:"#DC2626",  tx:"#DC2626" };
+const SH = { bg:"rgba(220,38,38,0.10)",  bd:"#DC2626",  tx:"#DC2626" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
