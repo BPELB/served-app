@@ -1263,39 +1263,51 @@ const AD_BUDGETS = [
   },
 ];
 
-function AdvertiseModal({ onClose }) {
+function AdvertisePage({ onBack }) {
   const [step, setStep] = useState(1);
   const [budget, setBudget] = useState(1);
   const [adForm, setAdForm] = useState({ headline:"", tagline:"", cta:"Book now" });
-  const [funds, setFunds] = useState("");
   const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
   const [launched, setLaunched] = useState(false);
   const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
-  const inp = {width:"100%",padding:"11px 14px",borderRadius:12,border:`1.5px solid ${BDR}`,
-    background:BG2,color:N,fontSize:13,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
+  const inp = {width:"100%",padding:"13px 16px",borderRadius:12,border:`1.5px solid ${BDR}`,
+    background:BG2,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
   const sel = AD_BUDGETS[budget];
 
+  useEffect(()=>{ window.scrollTo(0,0); },[step]);
+
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",
-      alignItems:"flex-end",justifyContent:"center",zIndex:1000}} onClick={onClose}>
-      <div style={{width:"100%",maxWidth:430,background:BG,borderRadius:"24px 24px 0 0",
-        padding:"24px 20px 44px",maxHeight:"92vh",overflowY:"auto",
-        boxShadow:"0 -8px 40px rgba(0,0,0,0.5)"}}
-        onClick={e=>e.stopPropagation()}>
-        <div style={{width:40,height:4,borderRadius:2,background:BDR,margin:"0 auto 20px"}}/>
+    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+      {/* Header */}
+      <div style={{background:BG2,borderBottom:`1.5px solid ${BDR}`,padding:"16px 20px",
+        display:"flex",alignItems:"center",gap:12}}>
+        <button onClick={onBack} style={{background:"none",border:"none",color:MUT,
+          cursor:"pointer",padding:"4px 0",fontFamily:"inherit",fontSize:13,fontWeight:700,
+          display:"flex",alignItems:"center",gap:4}}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <div style={{flex:1,textAlign:"center"}}>
+          <span style={{fontSize:15,fontWeight:800,color:N}}>Advertise on GreenChek</span>
+        </div>
+        <div style={{width:48}}/>
+      </div>
+
+      <div style={{flex:1,padding:"24px 20px 48px",overflowY:"auto"}}>
+
 
         {/* Step indicator */}
         {!launched && (
-          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:20}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:28}}>
             {["Plan","Creative","Funds"].map((s,i)=>(
-              <div key={s} style={{display:"flex",alignItems:"center",gap:6,flex:i<2?1:undefined}}>
-                <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,
-                  background:step>i+1?O:step===i+1?O:BG3,
+              <div key={s} style={{display:"flex",alignItems:"center",gap:8,flex:i<2?1:undefined}}>
+                <div style={{width:28,height:28,borderRadius:"50%",flexShrink:0,
+                  background:step>=i+1?O:BG3,
                   border:`2px solid ${step>=i+1?O:BDR}`,
                   display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:10,fontWeight:800,color:step>=i+1?"#fff":MUT}}>{i+1}</div>
-                <span style={{fontSize:10,fontWeight:700,color:step>=i+1?N:MUT}}>{s}</span>
-                {i<2&&<div style={{flex:1,height:1,background:step>i+1?O:BDR}}/>}
+                  fontSize:12,fontWeight:800,color:step>=i+1?"#fff":MUT}}>{i+1}</div>
+                <span style={{fontSize:12,fontWeight:700,color:step>=i+1?N:MUT}}>{s}</span>
+                {i<2&&<div style={{flex:1,height:2,borderRadius:1,background:step>i+1?O:BDR}}/>}
               </div>
             ))}
           </div>
@@ -1303,8 +1315,8 @@ function AdvertiseModal({ onClose }) {
 
         {/* STEP 1 — Choose plan */}
         {step===1 && !launched && <>
-          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Choose your ad plan</div>
-          <p style={{fontSize:12,color:MUT,marginBottom:18,lineHeight:1.6}}>
+          <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Choose your ad plan</div>
+          <p style={{fontSize:15,color:N,marginBottom:24,lineHeight:1.7}}>
             All plans are month-to-month with no contracts. Your ad goes live within 24 hours of approval.
           </p>
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
@@ -1318,41 +1330,41 @@ function AdvertiseModal({ onClose }) {
                   transition:"all 0.15s"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
                   <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:800,color:budget===i?"#fff":N}}>{b.label}</span>
-                    <span style={{fontSize:9,fontWeight:700,
+                    <span style={{fontSize:17,fontWeight:800,color:budget===i?"#fff":N}}>{b.label}</span>
+                    <span style={{fontSize:10,fontWeight:700,
                       color:budget===i?"#fff":MUT,
                       background:budget===i?"rgba(255,255,255,0.25)":BG3,
-                      borderRadius:6,padding:"2px 6px",
+                      borderRadius:6,padding:"3px 8px",
                       textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
                   </div>
-                  <span style={{fontSize:16,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:10,fontWeight:600,color:budget===i?"rgba(255,255,255,0.75)":MUT}}>/mo</span></span>
+                  <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:12,fontWeight:600,color:budget===i?"rgba(255,255,255,0.75)":MUT}}>/mo</span></span>
                 </div>
-                <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
-                    <span style={{fontSize:12}}>👥</span>
-                    <span style={{fontSize:11,color:budget===i?"#fff":N}}><strong>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
+                <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <span style={{fontSize:14}}>👥</span>
+                    <span style={{fontSize:13,color:budget===i?"#fff":N}}><strong>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
                   </div>
-                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
-                    <span style={{fontSize:12}}>📍</span>
-                    <span style={{fontSize:11,color:budget===i?"#fff":N}}>{b.placements}</span>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <span style={{fontSize:14}}>📍</span>
+                    <span style={{fontSize:13,color:budget===i?"#fff":N}}>{b.placements}</span>
                   </div>
-                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
-                    <span style={{fontSize:12}}>🎯</span>
-                    <span style={{fontSize:11,color:budget===i?"#fff":N}}>{b.audience}</span>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <span style={{fontSize:14}}>🎯</span>
+                    <span style={{fontSize:13,color:budget===i?"#fff":N}}>{b.audience}</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:12,
-            padding:"10px 14px",marginBottom:20,display:"flex",gap:8,alignItems:"flex-start"}}>
-            <span style={{fontSize:14}}>ℹ️</span>
-            <p style={{fontSize:11,color:MUT,margin:0,lineHeight:1.6}}>
+            padding:"14px 16px",marginBottom:24,display:"flex",gap:10,alignItems:"flex-start"}}>
+            <span style={{fontSize:16}}>ℹ️</span>
+            <p style={{fontSize:13,color:N,margin:0,lineHeight:1.7}}>
               Ad spend goes directly toward impressions on GreenChek. There are no setup fees or hidden charges. You can pause or cancel from your dashboard at any time.
             </p>
           </div>
-          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:14,
-            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
+          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"16px",borderRadius:14,
+            border:"none",background:O,color:"#fff",fontSize:16,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
         </>}
 
@@ -1361,8 +1373,8 @@ function AdvertiseModal({ onClose }) {
           const CTA_PRESETS = ["Book now","Order online","Get directions","Call us","See menu","Learn more"];
           const isCustom = !CTA_PRESETS.includes(adForm.cta);
           return <>
-            <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Build your ad</div>
-            <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
+            <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Build your ad</div>
+            <p style={{fontSize:15,color:N,marginBottom:20,lineHeight:1.7}}>
               Your ad appears as a sponsored card in category feeds and search results. Keep your headline punchy and your CTA action-oriented — shorter text performs better on mobile.
             </p>
 
@@ -1399,24 +1411,24 @@ function AdvertiseModal({ onClose }) {
             <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:20}}>
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
-                  <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>Headline <span style={{color:"#ef4444"}}>*</span></div>
-                  <div style={{fontSize:10,color:MUT}}>{adForm.headline.length}/40</div>
+                  <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Headline <span style={{color:"#ef4444"}}>*</span></div>
+                  <div style={{fontSize:12,color:MUT}}>{adForm.headline.length}/40</div>
                 </div>
                 <input placeholder="e.g. Best Italian in McKinney" value={adForm.headline}
                   onChange={set("headline")} style={inp} maxLength={40}/>
-                <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>This is the first thing customers read — make it specific and local.</div>
+                <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>This is the first thing customers read — make it specific and local.</div>
               </div>
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
-                  <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>Tagline</div>
-                  <div style={{fontSize:10,color:MUT}}>{adForm.tagline.length}/60</div>
+                  <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Tagline</div>
+                  <div style={{fontSize:12,color:MUT}}>{adForm.tagline.length}/60</div>
                 </div>
                 <input placeholder="e.g. Authentic recipes since 1987 · Dine-in & takeout" value={adForm.tagline}
                   onChange={set("tagline")} style={inp} maxLength={60}/>
-                <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>Use this for a hook, offer, or differentiator. Emojis are welcome.</div>
+                <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>Use this for a hook, offer, or differentiator. Emojis are welcome.</div>
               </div>
               <div>
-                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:8}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
+                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
                   {CTA_PRESETS.map(cta=>(
                     <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
@@ -1435,10 +1447,10 @@ function AdvertiseModal({ onClose }) {
                   <div>
                     <input placeholder="e.g. Claim offer, Shop now, Reserve a table…" value={adForm.cta}
                       onChange={set("cta")} style={inp} maxLength={20}/>
-                    <div style={{fontSize:10,color:MUT,marginTop:4,paddingLeft:2}}>Max 20 characters. Keep it action-first.</div>
+                    <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>Max 20 characters. Keep it action-first.</div>
                   </div>
                 )}
-                <div style={{fontSize:10,color:MUT,marginTop:6,paddingLeft:2}}>
+                <div style={{fontSize:12,color:MUT,marginTop:8,paddingLeft:2}}>
                   The CTA button appears on the right of your sponsored card. When tapped, it links to your GreenChek listing where customers can call, get directions, or leave a review.
                 </div>
               </div>
@@ -1456,9 +1468,9 @@ function AdvertiseModal({ onClose }) {
 
         {/* STEP 3 — Add funds */}
         {step===3 && !launched && <>
-          <div style={{fontSize:20,fontWeight:900,color:N,marginBottom:4}}>Add funds</div>
-          <p style={{fontSize:12,color:MUT,marginBottom:16,lineHeight:1.6}}>
-            Your card will be charged <strong style={{color:N}}>${sel.amount}</strong> now, then monthly until you cancel.
+          <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Add funds</div>
+          <p style={{fontSize:15,color:N,marginBottom:20,lineHeight:1.7}}>
+            Your card will be charged <strong>${sel.amount}</strong> now, then monthly until you cancel.
           </p>
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
             padding:"12px 16px",marginBottom:18}}>
@@ -1478,21 +1490,21 @@ function AdvertiseModal({ onClose }) {
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
             <div>
-              <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                letterSpacing:"0.06em",marginBottom:5}}>Card number</div>
+              <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+                letterSpacing:"0.06em",marginBottom:6}}>Card number</div>
               <input placeholder="1234 5678 9012 3456" value={card.num} maxLength={19}
                 onChange={e=>setCard(c=>({...c,num:e.target.value}))} style={inp}/>
             </div>
             <div style={{display:"flex",gap:10}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                  letterSpacing:"0.06em",marginBottom:5}}>Expiry</div>
+                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginBottom:6}}>Expiry</div>
                 <input placeholder="MM / YY" value={card.exp} maxLength={7}
                   onChange={e=>setCard(c=>({...c,exp:e.target.value}))} style={inp}/>
               </div>
               <div style={{flex:1}}>
-                <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
-                  letterSpacing:"0.06em",marginBottom:5}}>CVV</div>
+                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+                  letterSpacing:"0.06em",marginBottom:6}}>CVV</div>
                 <input placeholder="•••" value={card.cvv} maxLength={4}
                   onChange={e=>setCard(c=>({...c,cvv:e.target.value}))} style={inp}/>
               </div>
@@ -1520,7 +1532,7 @@ function AdvertiseModal({ onClose }) {
             <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
               Your <strong style={{color:N}}>{sel.label}</strong> plan is active. You'll start seeing impressions within the hour.
             </p>
-            <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,border:"none",
+            <button onClick={onBack} style={{padding:"12px 32px",borderRadius:12,border:"none",
               background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
               Done
             </button>
@@ -1534,7 +1546,7 @@ function AdvertiseModal({ onClose }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [page,setPage]          = useState(0);
@@ -1542,7 +1554,6 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
   const [results,setResults]    = useState(DEMOS.food);
   const [searching,setSearching]= useState(false);
   const [showClaim,setShowClaim]= useState(false);
-  const [showAds,setShowAds]    = useState(false);
   const timer                   = useRef(null);
   const PAGE = 5;
 
@@ -1576,7 +1587,6 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
   return (
     <div style={{width:"100%"}}>
       {showClaim && <ClaimModal onClose={()=>setShowClaim(false)} onDashboard={()=>{setShowClaim(false);onDashboard();}}/>}
-      {showAds   && <AdvertiseModal onClose={()=>setShowAds(false)}/>}
       {/* Navy header */}
       <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
@@ -1701,7 +1711,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
               boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>setShowAds(true)} style={{padding:"16px 18px",background:BG2,
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:BG2,
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:O,
@@ -1718,7 +1728,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
             <button style={{padding:"8px 13px",borderRadius:10,
               border:"none",background:O,color:"#fff",
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowAds(true)}>Learn more →</button>
+              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>onAdvertise()}>Learn more →</button>
           </div>
         </div>
 
@@ -1792,7 +1802,7 @@ const WEEKLY = [
 ];
 const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
-function OwnerDashboard({ onBack }) {
+function OwnerDashboard({ onBack, onAdvertise }) {
   const [tab, setTab] = useState("overview");
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [tab]);
@@ -1809,7 +1819,6 @@ function OwnerDashboard({ onBack }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
-  const [adOpen, setAdOpen] = useState(false);
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -2145,7 +2154,7 @@ function OwnerDashboard({ onBack }) {
                 <span style={{fontSize:12,fontWeight:700,color:N}}>{v}</span>
               </div>
             ))}
-            <button onClick={()=>setAdOpen(true)} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
+            <button onClick={onAdvertise} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
               border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on GreenChek</button>
           </div>
@@ -2194,7 +2203,6 @@ function OwnerDashboard({ onBack }) {
           </div>
         </div>
       )}
-      {adOpen && <AdvertiseModal onClose={()=>setAdOpen(false)}/>}
     </div>
   );
 }
@@ -2227,11 +2235,12 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")}/>}
         {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
         {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
-        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")}/>}
+        {view==="advertise" && <AdvertisePage onBack={()=>setView("home")}/>}
       </div>
     </div>
   );
