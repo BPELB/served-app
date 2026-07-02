@@ -1265,7 +1265,7 @@ const AD_BUDGETS = [
 
 function AdvertisePage({ onBack }) {
   const [step, setStep] = useState(1);
-  const [budget, setBudget] = useState(1);
+  const [budget, setBudget] = useState(null);
   const [adForm, setAdForm] = useState({ headline:"", tagline:"", cta:"Book now" });
   const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
   const [launched, setLaunched] = useState(false);
@@ -1380,9 +1380,10 @@ function AdvertisePage({ onBack }) {
             </p>
           </div>
 
-          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:O,color:"#fff",fontSize:14,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
+          <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
+            border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
+            cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
+            boxShadow:budget!==null?"0 4px 16px rgba(22,163,74,0.35)":"none"}}>
             Continue →
           </button>
         </>}
