@@ -704,7 +704,7 @@ function StarCard({ cat, value, onChange, box }) {
 
   return (
     <div style={{padding:"14px 16px",borderRadius:16,marginBottom:10,
-      background:BG2,border:`1.5px solid ${SC?SC.bd:BDR}`,
+      background:BG2,border:`1.5px solid ${SC?SC.bd:O}`,
       transition:"border-color 0.2s"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
