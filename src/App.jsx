@@ -1817,8 +1817,9 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               background:O,
               boxShadow:"0 4px 12px rgba(22,163,74,0.3)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 11l17-9v18L3 13H1a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h2z"/>
+                <path d="M7 13v5"/>
               </svg>
             </div>
             <div style={{flex:1}}>
