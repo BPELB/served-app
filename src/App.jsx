@@ -1717,7 +1717,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             fontSize:14,pointerEvents:"none"}}>🔍</span>
           <input value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}
             placeholder="Search by name…"
-            style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
+            style={{width:"100%",borderRadius:"14px 14px 0 0",padding:"11px 12px 11px 38px",
               fontSize:13,border:`1.5px solid ${BDR}`,background:BG2,
               color:N,fontFamily:"inherit",outline:"none"}}/>
           {searching&&<span style={{position:"absolute",right:12,top:"50%",
