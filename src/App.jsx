@@ -631,7 +631,7 @@ function CatPill({ typeKey, selected, onClick }) {
       padding:"7px 13px",borderRadius:20,flexShrink:0,
       border:`2px solid ${on?O:BDR}`,
       background:on?O:"transparent",
-      color:on?"#fff":O,
+      color:on?"#fff":N,
       fontSize:12,fontWeight:on?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
       <svg width="13" height="13" viewBox="0 0 24 24" style={{color:"currentColor",flexShrink:0}}>
