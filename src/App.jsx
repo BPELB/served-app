@@ -1997,11 +1997,11 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="overview" && <>
           {/* Advertise CTA */}
           <button onClick={onAdvertise} style={{width:"100%",padding:"13px 16px",borderRadius:14,
-            border:"none",background:O,color:"#fff",fontSize:14,fontWeight:800,
+            border:`1.5px solid ${O}`,background:"transparent",color:O,fontSize:14,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",marginBottom:14,
             display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-            boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
+            boxShadow:`0 0 12px rgba(22,163,74,0.3), inset 0 0 12px rgba(22,163,74,0.05)`}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
             Start Advertising
           </button>
           {/* KPI row */}
