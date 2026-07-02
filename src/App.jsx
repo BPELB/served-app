@@ -552,7 +552,7 @@ function BusinessCard({ b, onSelect, onRate }) {
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-            border:`2px solid ${O}`,background:"transparent",color:O,fontSize:11,fontWeight:800,
+            border:`2px solid ${O}`,background:"transparent",color:"#fff",fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             display:"flex",alignItems:"center",gap:5}}>
           Rate Now
