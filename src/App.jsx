@@ -552,7 +552,7 @@ function BusinessCard({ b, onSelect, onRate }) {
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-            border:`2px solid ${O}`,background:"transparent",color:"#fff",fontSize:11,fontWeight:800,
+            border:`2px solid ${O}`,background:"transparent",color:N,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
             display:"flex",alignItems:"center",gap:5}}>
           Rate Now
@@ -629,9 +629,9 @@ function CatPill({ typeKey, selected, onClick }) {
     <button onClick={onClick} style={{
       display:"flex",alignItems:"center",gap:5,
       padding:"7px 13px",borderRadius:20,flexShrink:0,
-      border:`2px solid ${on?O:"rgba(255,255,255,0.25)"}`,
+      border:`2px solid ${on?O:BDR}`,
       background:on?O:"transparent",
-      color:on?"#fff":"rgba(255,255,255,0.85)",
+      color:on?"#fff":N,
       fontSize:12,fontWeight:on?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
       <svg width="13" height="13" viewBox="0 0 24 24" style={{color:on?"#fff":O,flexShrink:0}}>
