@@ -469,25 +469,16 @@ function ScoreBadge({ score, size=50 }) {
   const C      = score ? (score>=8?SH:score>=6?SM:SL) : null;
   const dec    = score ? (score/2).toFixed(1) : null;
   const starSz = size > 40 ? 13 : 10;
-  const tail   = 10;
-  const r      = 11;
-  const w = size, h = size;
   const bd = C ? C.bd : BDR;
   const bg = C ? C.bg : BG2;
-  // speech bubble path: rounded rect body + downward center tail
-  const path = `M${r},0 H${w-r} Q${w},0 ${w},${r} V${h-r} Q${w},${h} ${w-r},${h} H${w/2+8} L${w/2},${h+tail} L${w/2-8},${h} H${r} Q0,${h} 0,${h-r} V${r} Q0,0 ${r},0 Z`;
   return (
-    <div style={{position:"relative",width:w,height:h+tail,flexShrink:0}}>
-      <svg width={w} height={h+tail} viewBox={`0 0 ${w} ${h+tail}`} style={{position:"absolute",top:0,left:0}}>
-        <path d={path} fill={bg} stroke={bd} strokeWidth="2"/>
+    <div style={{width:size,height:size,flexShrink:0,borderRadius:12,
+      border:`2px solid ${bd}`,background:bg,
+      display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
+      <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
       </svg>
-      <div style={{position:"absolute",top:0,left:0,width:w,height:h,
-        display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-        <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-        </svg>
-        <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>{dec||"—"}</span>
-      </div>
+      <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>{dec||"—"}</span>
     </div>
   );
 }
@@ -967,13 +958,22 @@ function BusinessPage({ business, onBack, onRate }) {
               </span>
             </div>
           </div>
-          {overallStars&&(
-            <div style={{textAlign:"center",flexShrink:0,
-              background:"#3B82F6",borderRadius:12,padding:"8px 12px"}}>
-              <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
-              <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
-            </div>
-          )}
+          {overallStars&&(()=>{
+            const sw=64,sh=60,tail=10,r=10;
+            const path=`M${r},0 H${sw-r} Q${sw},0 ${sw},${r} V${sh-r} Q${sw},${sh} ${sw-r},${sh} H${sw/2+9} L${sw/2},${sh+tail} L${sw/2-9},${sh} H${r} Q0,${sh} 0,${sh-r} V${r} Q0,0 ${r},0 Z`;
+            return (
+              <div style={{position:"relative",width:sw,height:sh+tail,flexShrink:0,textAlign:"center"}}>
+                <svg width={sw} height={sh+tail} viewBox={`0 0 ${sw} ${sh+tail}`} style={{position:"absolute",top:0,left:0}}>
+                  <path d={path} fill={O}/>
+                </svg>
+                <div style={{position:"absolute",top:0,left:0,width:sw,height:sh,
+                  display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
+                  <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
+                  <PartialStars value={overall/2} size={11} color="#FBBF24"/>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
