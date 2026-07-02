@@ -601,36 +601,85 @@ function BusinessCard({ b, onSelect, onRate }) {
 
 // Mock active sponsored ad — in production this comes from the DB
 function SponsoredCard({ ad, onSelect }) {
+  const [hoursOpen, setHoursOpen] = useState(false);
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+  const W = "rgba(255,255,255,0.9)";
+  const WM = "rgba(255,255,255,0.65)";
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
-      {/* Sponsored label */}
-      <div style={{background:`${O}18`,borderBottom:`1px solid ${O}33`,
+      {/* Header row: name + sponsored badge */}
+      <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <span style={{fontSize:13,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
-        <span style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Sponsored</span>
+        <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
+          background:"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
-      {/* Ad row */}
+      {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}>
         <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",
+          display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
             : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:15,fontWeight:800,color:N,marginBottom:3,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
-          <div style={{fontSize:12,color:MUT,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.tagline}</div>
+          <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,
+            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.bizName}</div>
+          <div style={{fontSize:12,color:WM,marginBottom:4}}>
+            {ad.bizSubtype||ad.bizType}
+            {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
+            {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
+              {ad.bizOpen ? "Open" : "Closed"}
+            </span>
+            {ad.bizHours && (
+              <button onClick={e=>{e.stopPropagation();setHoursOpen(o=>!o);}}
+                style={{display:"inline-flex",alignItems:"center",gap:2,
+                  fontSize:11,color:WM,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                <span>Hours</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
         <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.5)",
+          background:"rgba(255,255,255,0.2)",border:"1.5px solid rgba(255,255,255,0.5)",
           color:"#fff",fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           {ad.cta}
         </div>
       </div>
+      {/* Hours dropdown */}
+      {hoursOpen && ad.bizHours && (
+        <div style={{borderTop:"1px solid rgba(255,255,255,0.2)",padding:"12px 16px 14px",
+          background:"rgba(0,0,0,0.12)"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+            {days.map(day=>{
+              const isToday = day === todayKey;
+              const h = ad.bizHours[day];
+              return (
+                <div key={day} style={{textAlign:"center"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:isToday?"#fff":WM,
+                    textTransform:"uppercase",marginBottom:3}}>{day}</div>
+                  <div style={{fontSize:10,color:isToday?"#fff":WM,fontWeight:isToday?700:400,
+                    lineHeight:1.4,background:isToday?"rgba(255,255,255,0.2)":undefined,
+                    borderRadius:6,padding:"3px 2px"}}>
+                    {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1910,6 +1959,11 @@ const MOCK_AD = {
   bizName: DEMO_BIZ.name,
   bizType: DEMO_BIZ.type,
   bizEmoji: DEMO_BIZ.emoji,
+  bizSubtype: DEMO_BIZ.subtype,
+  bizRating: DEMO_BIZ.rating,
+  bizPrice: DEMO_BIZ.price,
+  bizOpen: DEMO_BIZ.open,
+  bizHours: DEMO_BIZ.hours,
   headline: "Best Italian in McKinney",
   tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
   cta: "Book now",
