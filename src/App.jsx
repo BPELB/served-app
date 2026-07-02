@@ -1714,8 +1714,9 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard }) {
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
-              border:`2px solid ${O}`,background:"transparent",color:O,
-              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",cursor:"pointer"}} onClick={()=>setShowAds(true)}>Learn more →</button>
+              border:"none",background:O,color:"#fff",
+              fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
+              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowAds(true)}>Learn more →</button>
           </div>
         </div>
 
