@@ -1751,14 +1751,12 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           </p>
         )}
 
-        {/* Listings — sponsored card injected after position 1 */}
-        {visible.map((b,i)=>(
-          <Fragment key={b.id}>
-            <BusinessCard b={b} onSelect={onSelect} onRate={onRate}/>
-            {i===0 && MOCK_AD.categories.includes(cat) && (
-              <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
-            )}
-          </Fragment>
+        {/* Listings — sponsored card first */}
+        {MOCK_AD.categories.includes(cat) && (
+          <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
+        )}
+        {visible.map(b=>(
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
         ))}
 
         {/* Pagination */}
