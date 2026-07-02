@@ -518,7 +518,7 @@ function BusinessCard({ b, onSelect, onRate }) {
   const closes = b.hours ? closeTime(b.hours) : null;
 
   return (
-    <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
+    <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",
       transition:"border-color 0.15s",cursor:"pointer"}}
       onMouseEnter={e=>e.currentTarget.style.borderColor=BDR}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
@@ -593,7 +593,7 @@ function BusinessCard({ b, onSelect, onRate }) {
 // Mock active sponsored ad — in production this comes from the DB
 function SponsoredCard({ ad, onSelect }) {
   return (
-    <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
       {/* Sponsored label */}
       <div style={{background:`${O}18`,borderBottom:`1px solid ${O}33`,
