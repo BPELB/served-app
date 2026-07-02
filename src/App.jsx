@@ -1271,6 +1271,7 @@ function AdvertisePage({ onBack }) {
   const [launched, setLaunched] = useState(false);
   const [hoveredPlan, setHoveredPlan] = useState(null);
   const [customCta, setCustomCta] = useState(false);
+  const [adImage, setAdImage] = useState(null);
   const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
   const inp = {width:"100%",padding:"11px 14px",borderRadius:10,border:`1.5px solid ${BDR}`,
     background:BG,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
@@ -1398,16 +1399,26 @@ function AdvertisePage({ onBack }) {
 
             {/* Live preview card */}
             <div style={{background:BG2,border:`1.5px solid ${O}`,borderRadius:16,
-              padding:"14px 16px",marginBottom:16}}>
+              padding:"14px 16px",marginBottom:12}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                <span style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Ad preview</span>
+                <span style={{fontSize:11,fontWeight:800,color:N}}>{DEMO_BIZ.name}</span>
                 <span style={{fontSize:9,fontWeight:700,color:MUT,background:BG3,borderRadius:6,padding:"2px 8px"}}>Sponsored</span>
               </div>
               <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:44,height:44,borderRadius:12,background:O,
-                  display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <span style={{fontSize:22}}>🍕</span>
-                </div>
+                {/* Image / upload tap target */}
+                <label style={{width:44,height:44,borderRadius:12,flexShrink:0,cursor:"pointer",
+                  overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center",
+                  background:adImage?"transparent":O,border:adImage?"none":`2px dashed rgba(255,255,255,0.4)`}}>
+                  {adImage
+                    ? <img src={adImage} alt="ad" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                    : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  }
+                  <input type="file" accept="image/*" style={{display:"none"}}
+                    onChange={e=>{
+                      const f=e.target.files[0];
+                      if(f){const r=new FileReader();r.onload=ev=>setAdImage(ev.target.result);r.readAsDataURL(f);}
+                    }}/>
+                </label>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,fontWeight:800,color:N,
                     whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
@@ -1424,6 +1435,9 @@ function AdvertisePage({ onBack }) {
                   {adForm.cta||"Book now"}
                 </div>
               </div>
+            </div>
+            <div style={{fontSize:11,color:MUT,marginBottom:14,paddingLeft:2}}>
+              Tap the image box to upload a photo — logo, product, or location.
             </div>
 
             <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
