@@ -1687,133 +1687,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
-          <div onClick={toggleTheme} style={{display:"flex",alignItems:"center",gap:7,cursor:"pointer",flexShrink:0}}>
-            <span style={{fontSize:11,fontWeight:700,color:MUT}}>{isDark?"Dark Mode":"Light Mode"}</span>
-            <div style={{
-              width:42,height:22,borderRadius:11,
-              background:isDark?O:BDR,
-              position:"relative",flexShrink:0,
-              transition:"background 0.3s"
-            }}>
-              <div style={{
-                position:"absolute",top:3,
-                left:isDark?21:3,
-                width:16,height:16,borderRadius:"50%",
-                background:"#fff",
-                boxShadow:"0 1px 3px rgba(0,0,0,0.3)",
-                transition:"left 0.3s",
-              }}/>
-            </div>
-          </div>
-        </div>
-        <p style={{fontSize:12,color:MUT,marginTop:5}}>
-          Honest feedback for every business. Free. Always.
-        </p>
-        <div style={{position:"relative",marginTop:14}}>
-          <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",
-            fontSize:14,pointerEvents:"none"}}>🔍</span>
-          <input value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}
-            placeholder="Search by name…"
-            style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
-              fontSize:13,border:`1.5px solid ${BDR}`,background:BG2,
-              color:N,fontFamily:"inherit",outline:"none"}}/>
-          {searching&&<span style={{position:"absolute",right:12,top:"50%",
-            transform:"translateY(-50%)",fontSize:11,color:MUT}}>
-            searching…
-          </span>}
-        </div>
-      </div>
-
-      {/* Category pills */}
-      <div style={{background:BG2,borderBottom:`1.5px solid ${BDR}`,padding:"10px 1rem",
-        display:"flex",gap:6,overflowX:"auto",WebkitOverflowScrolling:"touch",
-        msOverflowStyle:"none",scrollbarWidth:"none"}}>
-        {TYPE_KEYS.map(k=>(
-          <CatPill key={k} typeKey={k} selected={cat} onClick={()=>changeCat(k)}/>
-        ))}
-      </div>
-
-      <div style={{padding:"1rem"}}>
-        {/* Category header */}
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-          <IconBox type={cat} size={30}/>
-          <div>
-            <p style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.08em"}}>
-              {BT[cat].label}
-            </p>
-            <p style={{fontSize:11,color:MUT}}>{filtered.length} nearby</p>
-          </div>
-        </div>
-
-        {filtered.length===0&&!searching&&(
-          <p style={{textAlign:"center",color:MUT,padding:"2rem 0",fontSize:14}}>
-            No results in this category.
-          </p>
-        )}
-
-        {/* Listings — sponsored card first */}
-        {MOCK_AD.categories.includes(cat) && (
-          <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
-        )}
-        {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
-        ))}
-
-        {/* Pagination */}
-        {(hasPrev||hasMore)&&(
-          <div style={{display:"flex",gap:8,marginBottom:14}}>
-            {hasPrev&&(
-              <button onClick={()=>setPage(p=>p-1)}
-                style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${BDR}`,background:BG2,color:N,
-                  fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
-                onMouseEnter={e=>{e.currentTarget.style.background=HOV;}}
-                onMouseLeave={e=>{e.currentTarget.style.background=BG2;}}>
-                ‹ Previous 5
-              </button>
-            )}
-            {hasMore&&(
-              <button onClick={()=>setPage(p=>p+1)}
-                style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${O}`,background:O,color:"#fff",
-                  fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
-                onMouseEnter={e=>{e.currentTarget.style.background=N;e.currentTarget.style.borderColor=N;}}
-                onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.borderColor=O;}}>
-                Next 5 ›
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* CTAs */}
-        <div style={{display:"flex",flexDirection:"column",gap:10}}>
-          {/* Own a business */}
-          <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
-            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
+            border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#16a34a,#15803d)",
-              boxShadow:"0 4px 12px rgba(22,163,74,0.35)",
-              display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                <circle cx="12" cy="9" r="2.5"/>
-              </svg>
-            </div>
-            <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:N}}>Own a business?</div>
-              <div style={{fontSize:11,color:MUT,marginTop:2}}>Free dashboard + AI training</div>
-            </div>
-            <button style={{padding:"8px 13px",borderRadius:10,border:"none",
-              background:O,color:"#fff",fontSize:11,fontWeight:700,
-              whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
-          </div>
-          {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:BG2,
-            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
-            <div style={{width:46,height:46,borderRadius:13,
-              background:O,
-              boxShadow:"0 4px 12px rgba(22,163,74,0.3)",
+              background:"rgba(255,255,255,0.2)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke="white" fill="none"/>
@@ -1822,13 +1699,13 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on GreenChek</div>
-              <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
+              <div style={{fontSize:13,fontWeight:800,color:"#fff"}}>Advertise on GreenChek</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
-              border:"none",background:O,color:"#fff",
+              border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(22,163,74,0.3)",cursor:"pointer"}} onClick={()=>onAdvertise()}>Learn more →</button>
+              cursor:"pointer"}} onClick={e=>{e.stopPropagation();onAdvertise();}}>Learn more →</button>
           </div>
         </div>
 
