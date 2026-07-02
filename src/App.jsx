@@ -390,13 +390,14 @@ function Logo({ light=false }) {
   const c = N;
   const G2 = "#e05535";
   return (
-    <div style={{display:"flex",alignItems:"center",gap:4,userSelect:"none"}}>
-      <span style={{fontSize:26,fontWeight:900,letterSpacing:"-0.04em",color:c,lineHeight:1,fontStyle:"italic"}}>
-        tru<span style={{color:G2}}>filo</span>
-      </span>
-      <svg width="8" height="8" viewBox="0 0 8 8" style={{marginBottom:"-4px",flexShrink:0}}>
-        <circle cx="4" cy="4" r="4" fill={G2}/>
+    <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
+      <svg width="36" height="36" viewBox="0 0 40 40">
+        <rect width="40" height="40" rx="11" fill={G2}/>
+        <polyline points="10,21 17,28 30,13" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
+      <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
+        tru<span style={{color:G2}}>filo</span><span style={{color:G2}}>.</span>
+      </span>
     </div>
   );
 }
