@@ -1975,7 +1975,14 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
-            <div style={{fontSize:11,color:MUT,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{bt.label} · {profile.address}</div>
+            <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
+              <span>⭐ {DEMO_BIZ.rating}</span>
+              <span>·</span>
+              <span>{"$".repeat(DEMO_BIZ.price)}</span>
+              <span>·</span>
+              <span style={{color:DEMO_BIZ.open?"#16a34a":"#dc2626",fontWeight:700}}>{DEMO_BIZ.open?"Open":"Closed"}</span>
+            </div>
+            <div style={{fontSize:11,color:MUT,marginTop:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{bt.label} · {profile.address}</div>
           </div>
         </div>
         {/* Tab bar */}
