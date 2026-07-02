@@ -1812,11 +1812,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:BG2,
-            border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
+            border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:O,
-              boxShadow:"0 4px 12px rgba(255,107,53,0.3)",
+              background:"rgba(255,255,255,0.2)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke="white" fill="none"/>
@@ -1825,13 +1824,13 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:N}}>Advertise on Trufaro</div>
-              <div style={{fontSize:11,color:MUT,marginTop:2}}>Reach local customers now</div>
+              <div style={{fontSize:13,fontWeight:800,color:"#fff"}}>Advertise on Trufaro</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",marginTop:2}}>Reach local customers now</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
-              border:"none",background:O,color:"#fff",
+              border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>onAdvertise()}>Learn more →</button>
+              cursor:"pointer"}} onClick={e=>{e.stopPropagation();onAdvertise();}}>Learn more →</button>
           </div>
         </div>
 
