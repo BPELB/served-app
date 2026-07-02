@@ -390,10 +390,13 @@ function Logo({ light=false }) {
   const c = N;
   const G2 = "#e05535";
   return (
-    <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
-      <svg width="36" height="36" viewBox="0 0 40 40">
-        <rect width="40" height="40" rx="11" fill={G2}/>
-        <polyline points="10,21 17,28 30,13" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+    <div style={{display:"flex",alignItems:"center",gap:8,userSelect:"none"}}>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="1" y="1" width="26" height="22" rx="7" fill={G2}/>
+        <rect x="1" y="1" width="26" height="22" rx="7" stroke={G2} strokeWidth="1.5"/>
+        <line x1="7" y1="8" x2="21" y2="8" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
+        <line x1="7" y1="13" x2="17" y2="13" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
+        <polygon points="8,23 4,31 14,25" fill={G2}/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
         frankly<span style={{color:G2}}>y</span>
