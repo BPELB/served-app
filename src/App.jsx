@@ -1667,7 +1667,11 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const filtered = results.filter(b=>!search||b.name.toLowerCase().includes(search.toLowerCase()));
+  const sponsoredActive = MOCK_AD.categories.includes(cat);
+  const filtered = results.filter(b=>
+    (!search||b.name.toLowerCase().includes(search.toLowerCase())) &&
+    !(sponsoredActive && b.id===MOCK_AD.bizId)
+  );
   const visible  = filtered.slice(page*PAGE,(page+1)*PAGE);
   const hasMore  = (page+1)*PAGE < filtered.length;
   const hasPrev  = page > 0;
