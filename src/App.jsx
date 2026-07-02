@@ -1312,29 +1312,31 @@ function AdvertiseModal({ onClose }) {
               <div key={b.label} onClick={()=>setBudget(i)}
                 style={{padding:"14px 16px",borderRadius:16,cursor:"pointer",
                   border:`2px solid ${budget===i?O:BDR}`,
-                  background:budget===i?`${O}12`:BG2,
+                  background:budget===i?O:BG2,
                   transition:"all 0.15s"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
                   <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:800,color:N}}>{b.label}</span>
-                    <span style={{fontSize:9,fontWeight:700,color:budget===i?O:MUT,
-                      background:budget===i?`${O}20`:BG3,borderRadius:6,padding:"2px 6px",
+                    <span style={{fontSize:14,fontWeight:800,color:budget===i?"#fff":N}}>{b.label}</span>
+                    <span style={{fontSize:9,fontWeight:700,
+                      color:budget===i?"#fff":MUT,
+                      background:budget===i?"rgba(255,255,255,0.25)":BG3,
+                      borderRadius:6,padding:"2px 6px",
                       textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
                   </div>
-                  <span style={{fontSize:16,fontWeight:900,color:O}}>${b.amount}<span style={{fontSize:10,fontWeight:600,color:MUT}}>/mo</span></span>
+                  <span style={{fontSize:16,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:10,fontWeight:600,color:budget===i?"rgba(255,255,255,0.75)":MUT}}>/mo</span></span>
                 </div>
                 <div style={{display:"flex",flexDirection:"column",gap:4}}>
                   <div style={{display:"flex",gap:6,alignItems:"center"}}>
                     <span style={{fontSize:12}}>👥</span>
-                    <span style={{fontSize:11,color:MUT}}><strong style={{color:N}}>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
+                    <span style={{fontSize:11,color:budget===i?"#fff":N}}><strong>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
                   </div>
                   <div style={{display:"flex",gap:6,alignItems:"center"}}>
                     <span style={{fontSize:12}}>📍</span>
-                    <span style={{fontSize:11,color:MUT}}>{b.placements}</span>
+                    <span style={{fontSize:11,color:budget===i?"#fff":N}}>{b.placements}</span>
                   </div>
                   <div style={{display:"flex",gap:6,alignItems:"center"}}>
                     <span style={{fontSize:12}}>🎯</span>
-                    <span style={{fontSize:11,color:MUT}}>{b.audience}</span>
+                    <span style={{fontSize:11,color:budget===i?"#fff":N}}>{b.audience}</span>
                   </div>
                 </div>
               </div>
