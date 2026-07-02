@@ -958,13 +958,22 @@ function BusinessPage({ business, onBack, onRate }) {
               </span>
             </div>
           </div>
-          {overallStars&&(
-            <div style={{textAlign:"center",flexShrink:0,
-              background:"#DC2626",borderRadius:12,padding:"8px 12px"}}>
-              <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
-              <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
-            </div>
-          )}
+          {overallStars&&(()=>{
+            const sw=64,sh=60,tail=10,r=10;
+            const path=`M${r},0 H${sw-r} Q${sw},0 ${sw},${r} V${sh-r} Q${sw},${sh} ${sw-r},${sh} H${sw/2+9} L${sw/2},${sh+tail} L${sw/2-9},${sh} H${r} Q0,${sh} 0,${sh-r} V${r} Q0,0 ${r},0 Z`;
+            return (
+              <div style={{position:"relative",width:sw,height:sh+tail,flexShrink:0}}>
+                <svg width={sw} height={sh+tail} viewBox={`0 0 ${sw} ${sh+tail}`} style={{position:"absolute",top:0,left:0}}>
+                  <path d={path} fill={O}/>
+                </svg>
+                <div style={{position:"absolute",top:0,left:0,width:sw,height:sh,
+                  display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
+                  <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
+                  <PartialStars value={overall/2} size={11} color="#FBBF24"/>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
@@ -1063,7 +1072,7 @@ function RateView({ business, onBack, onDone }) {
 
       {/* Business header — category colored */}
       <div style={{display:"flex",alignItems:"center",gap:12,padding:"14px 16px",
-        background:BG,border:`2px solid #2A3A6A`,borderRadius:16,marginBottom:14,
+        background:BG,border:`2px solid ${BDR}`,borderRadius:16,marginBottom:14,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-15,right:-15,width:60,height:60,
           borderRadius:"50%",background:"rgba(224,85,53,0.15)"}}/>
