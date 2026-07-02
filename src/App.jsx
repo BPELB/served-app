@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Fragment } from "react";
 
 // ============================================================
 // CONFIG — paste your keys here
@@ -1748,12 +1748,12 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Listings — sponsored card injected after position 1 */}
         {visible.map((b,i)=>(
-          <React.Fragment key={b.id}>
+          <Fragment key={b.id}>
             <BusinessCard b={b} onSelect={onSelect} onRate={onRate}/>
             {i===0 && MOCK_AD.categories.includes(cat) && (
               <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
             )}
-          </React.Fragment>
+          </Fragment>
         ))}
 
         {/* Pagination */}
