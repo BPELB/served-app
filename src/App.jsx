@@ -1884,7 +1884,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             </div>
             <div style={{flex:1}}>
               <div style={{fontSize:13,fontWeight:800,color:"#fff"}}>Advertise on GreenChek</div>
-              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",marginTop:2}}>Reach local customers now</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",marginTop:2}}>Reach local customers · No contracts</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
               border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",
