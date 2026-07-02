@@ -1683,8 +1683,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     <div style={{width:"100%"}}>
       {showClaim && <ClaimModal onClose={()=>setShowClaim(false)} onDashboard={()=>{setShowClaim(false);onDashboard();}}/>}
       {/* Navy header */}
-      <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)",
-        backgroundImage:"radial-gradient(circle, #1a4455 1.5px, transparent 1.5px)",backgroundSize:"20px 20px"}}>
+      <div style={{background:BG,padding:"1.5rem 1rem 1.75rem",borderRadius:"0 0 28px 28px",boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
           <Logo light/>
           {/* Dark / Light toggle */}
@@ -1752,14 +1751,12 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           </p>
         )}
 
-        {/* Listings — sponsored card injected after position 1 */}
-        {visible.map((b,i)=>(
-          <Fragment key={b.id}>
-            <BusinessCard b={b} onSelect={onSelect} onRate={onRate}/>
-            {i===0 && MOCK_AD.categories.includes(cat) && (
-              <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
-            )}
-          </Fragment>
+        {/* Listings — sponsored card first */}
+        {MOCK_AD.categories.includes(cat) && (
+          <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
+        )}
+        {visible.map(b=>(
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
         ))}
 
         {/* Pagination */}
