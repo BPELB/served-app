@@ -14,8 +14,8 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#FF6B35";
-const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
+const O   = "#e05535";
+const G   = `linear-gradient(135deg,${O},#8b2a14)`;
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -26,8 +26,8 @@ const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
 
-const DARK_VARS  = { "--bg":"#26373f","--bg2":"#1c2b31","--bg3":"#1a2830","--bdr":"#4a6270","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#243840" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.5)","--hover":"#f0f3f2" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040" };
+const LIGHT_VARS = { "--bg":"#f5f0ee","--bg2":"#ede8e5","--bg3":"#e5deda","--bdr":"#c8b8b0","--text":"#1a2a30","--muted":"rgba(26,42,48,0.5)","--hover":"#e8e0dc" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
@@ -35,10 +35,10 @@ function applyTheme(vars) {
 
 // Functional score colors
 const SH = { bg:"rgba(22,163,74,0.10)",   bd:"#16a34a",  tx:"#16a34a" };
-const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
+const SM = { bg:"rgba(224,85,53,0.10)",   bd:"#e05535",  tx:"#e05535" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
+const stC = s => s>=8?"#16a34a":s>=6?"#e05535":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -388,7 +388,7 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
-  const G2 = "#FF6B35";
+  const G2 = "#e05535";
   return (
     <div style={{display:"flex",alignItems:"center",gap:4,userSelect:"none"}}>
       <span style={{fontSize:26,fontWeight:900,letterSpacing:"-0.04em",color:c,lineHeight:1,fontStyle:"italic"}}>
@@ -532,7 +532,7 @@ function BusinessCard({ b, onSelect, onRate }) {
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:b.open?"#FF6B35":"#dc2626"}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?"#e05535":"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
             {b.hours && (
@@ -782,7 +782,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#FF6B35":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#e05535":"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -829,7 +829,7 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#FF6B35",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:"#e05535",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
@@ -896,14 +896,14 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#FF6B35":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?"#e05535":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
           </div>
           {overallStars&&(
             <div style={{textAlign:"center",flexShrink:0,
-              background:"#FF6B35",borderRadius:12,padding:"8px 12px"}}>
+              background:"#e05535",borderRadius:12,padding:"8px 12px"}}>
               <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
               <div style={{marginTop:3}}><PartialStars value={overall/2} size={11} color="#FBBF24"/></div>
             </div>
@@ -1790,7 +1790,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:"linear-gradient(135deg,#FF6B35,#e05a1e)",
+              background:"linear-gradient(135deg,#e05535,#e05a1e)",
               boxShadow:"0 4px 12px rgba(255,107,53,0.35)",
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1967,8 +1967,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:"#FF6B35"}}/>
-          <span style={{fontSize:11,color:"#FF6B35",fontWeight:700}}>Live</span>
+          <div style={{width:8,height:8,borderRadius:"50%",background:"#e05535"}}/>
+          <span style={{fontSize:11,color:"#e05535",fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
@@ -2235,7 +2235,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
                 <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
                   background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#FF6B35":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  color:sentiment==="positive"?"#e05535":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
                   {sentiment}
                 </span>
               </div>
