@@ -1270,102 +1270,117 @@ function AdvertisePage({ onBack }) {
   const [card, setCard] = useState({ num:"", exp:"", cvv:"" });
   const [launched, setLaunched] = useState(false);
   const set = k => e => setAdForm(f=>({...f,[k]:e.target.value}));
-  const inp = {width:"100%",padding:"13px 16px",borderRadius:12,border:`1.5px solid ${BDR}`,
-    background:BG2,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
+  const inp = {width:"100%",padding:"11px 14px",borderRadius:10,border:`1.5px solid ${BDR}`,
+    background:BG,color:N,fontSize:16,fontFamily:"inherit",outline:"none",boxSizing:"border-box"};
   const sel = AD_BUDGETS[budget];
 
   useEffect(()=>{ window.scrollTo(0,0); },[step]);
 
+  const STEPS = ["Plan","Creative","Funds"];
+
   return (
-    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
-      {/* Header */}
-      <div style={{background:BG2,borderBottom:`1.5px solid ${BDR}`,padding:"16px 20px",
-        display:"flex",alignItems:"center",gap:12}}>
-        <button onClick={onBack} style={{background:"none",border:"none",color:MUT,
-          cursor:"pointer",padding:"4px 0",fontFamily:"inherit",fontSize:13,fontWeight:700,
-          display:"flex",alignItems:"center",gap:4}}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </button>
-        <div style={{flex:1,textAlign:"center"}}>
-          <span style={{fontSize:15,fontWeight:800,color:N}}>Advertise on GreenChek</span>
+    <div style={{width:"100%",minHeight:"100vh",display:"flex",flexDirection:"column",overflowX:"hidden"}}>
+
+      {/* Header — matches OwnerDashboard */}
+      <div style={{background:BG2,padding:"16px 16px 0",borderBottom:`1.5px solid ${BDR}`}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+          <button onClick={onBack} style={{background:"none",border:"none",color:MUT,
+            cursor:"pointer",padding:"4px 0",fontFamily:"inherit",fontSize:12,fontWeight:700,
+            display:"flex",alignItems:"center",gap:4}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
         </div>
-        <div style={{width:48}}/>
-      </div>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <div style={{width:44,height:44,borderRadius:12,background:O,flexShrink:0,
+            display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div>
+            <div style={{fontSize:16,fontWeight:900,color:N}}>Advertise on GreenChek</div>
+            <div style={{fontSize:11,color:MUT}}>Self-serve · No contracts · Cancel anytime</div>
+          </div>
+        </div>
 
-      <div style={{flex:1,padding:"24px 20px 48px",overflowY:"auto"}}>
-
-
-        {/* Step indicator */}
+        {/* Step tab bar */}
         {!launched && (
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:28}}>
-            {["Plan","Creative","Funds"].map((s,i)=>(
-              <div key={s} style={{display:"flex",alignItems:"center",gap:8,flex:i<2?1:undefined}}>
-                <div style={{width:28,height:28,borderRadius:"50%",flexShrink:0,
-                  background:step>=i+1?O:BG3,
+          <div style={{display:"flex",gap:0}}>
+            {STEPS.map((s,i)=>(
+              <div key={s} style={{flex:1,padding:"10px 0",
+                borderBottom:`2.5px solid ${step===i+1?O:"transparent"}`,
+                display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+                <div style={{width:20,height:20,borderRadius:"50%",flexShrink:0,
+                  background:step>i+1?O:step===i+1?O:BG3,
                   border:`2px solid ${step>=i+1?O:BDR}`,
                   display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:12,fontWeight:800,color:step>=i+1?"#fff":MUT}}>{i+1}</div>
-                <span style={{fontSize:12,fontWeight:700,color:step>=i+1?N:MUT}}>{s}</span>
-                {i<2&&<div style={{flex:1,height:2,borderRadius:1,background:step>i+1?O:BDR}}/>}
+                  fontSize:10,fontWeight:800,color:step>=i+1?"#fff":MUT}}>
+                  {step>i+1
+                    ? <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    : i+1}
+                </div>
+                <span style={{fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.05em",
+                  color:step===i+1?O:MUT}}>{s}</span>
               </div>
             ))}
           </div>
         )}
+      </div>
+
+      {/* Content */}
+      <div style={{flex:1,overflowY:"auto",padding:"16px",boxSizing:"border-box",width:"100%"}}>
 
         {/* STEP 1 — Choose plan */}
         {step===1 && !launched && <>
-          <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Choose your ad plan</div>
-          <p style={{fontSize:15,color:N,marginBottom:24,lineHeight:1.7}}>
-            All plans are month-to-month with no contracts. Your ad goes live within 24 hours of approval.
-          </p>
-          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
+          <div style={{fontSize:14,fontWeight:800,color:N,textTransform:"uppercase",
+            letterSpacing:"0.06em",marginBottom:12}}>Choose your plan</div>
+
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:14}}>
             {AD_BUDGETS.map((b,i)=>(
               <div key={b.label} onClick={()=>setBudget(i)}
-                onMouseEnter={e=>{if(budget!==i){e.currentTarget.style.borderColor=O;e.currentTarget.style.background=`${O}10`;}}}
-                onMouseLeave={e=>{if(budget!==i){e.currentTarget.style.borderColor=BDR;e.currentTarget.style.background=BG2;}}}
-                style={{padding:"14px 16px",borderRadius:16,cursor:"pointer",
-                  border:`2px solid ${budget===i?O:BDR}`,
-                  background:budget===i?O:BG2,
-                  transition:"all 0.15s"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                onMouseEnter={e=>{if(budget!==i){e.currentTarget.style.borderColor=O;}}}
+                onMouseLeave={e=>{if(budget!==i){e.currentTarget.style.borderColor=BDR;}}}
+                style={{background:BG2,border:`1.5px solid ${budget===i?O:BDR}`,
+                  borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"border-color 0.15s",
+                  boxShadow:budget===i?`0 0 0 3px ${O}22`:"none"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
                   <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:17,fontWeight:800,color:budget===i?"#fff":N}}>{b.label}</span>
-                    <span style={{fontSize:10,fontWeight:700,
-                      color:budget===i?"#fff":MUT,
-                      background:budget===i?"rgba(255,255,255,0.25)":BG3,
-                      borderRadius:6,padding:"3px 8px",
-                      textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
+                    <span style={{fontSize:14,fontWeight:900,color:budget===i?O:N}}>{b.label}</span>
+                    <span style={{fontSize:9,fontWeight:700,color:MUT,background:BG3,
+                      borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
                   </div>
-                  <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:12,fontWeight:600,color:budget===i?"rgba(255,255,255,0.75)":MUT}}>/mo</span></span>
+                  <span style={{fontSize:18,fontWeight:900,color:O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:MUT}}>/mo</span></span>
                 </div>
+                <div style={{height:1,background:BDR,marginBottom:10}}/>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                    <span style={{fontSize:14}}>👥</span>
-                    <span style={{fontSize:13,color:budget===i?"#fff":N}}><strong>{b.reach}</strong> estimated views/mo · ~{b.cpm} CPM</span>
-                  </div>
-                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                    <span style={{fontSize:14}}>📍</span>
-                    <span style={{fontSize:13,color:budget===i?"#fff":N}}>{b.placements}</span>
-                  </div>
-                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                    <span style={{fontSize:14}}>🎯</span>
-                    <span style={{fontSize:13,color:budget===i?"#fff":N}}>{b.audience}</span>
-                  </div>
+                  {[["👥",<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
+                    ["📍",b.placements],
+                    ["🎯",b.audience]
+                  ].map(([icon,text],j)=>(
+                    <div key={j} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                      <span style={{fontSize:12,lineHeight:"18px"}}>{icon}</span>
+                      <span style={{fontSize:12,color:N,lineHeight:1.5}}>{text}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
-          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:12,
-            padding:"14px 16px",marginBottom:24,display:"flex",gap:10,alignItems:"flex-start"}}>
-            <span style={{fontSize:16}}>ℹ️</span>
-            <p style={{fontSize:13,color:N,margin:0,lineHeight:1.7}}>
-              Ad spend goes directly toward impressions on GreenChek. There are no setup fees or hidden charges. You can pause or cancel from your dashboard at any time.
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"14px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
+            <span style={{fontSize:14,lineHeight:"18px"}}>ℹ️</span>
+            <p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.7}}>
+              No setup fees or hidden charges. Ad spend goes entirely toward impressions. Pause or cancel anytime from your dashboard.
             </p>
           </div>
-          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"16px",borderRadius:14,
-            border:"none",background:O,color:"#fff",fontSize:16,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
+
+          <button onClick={()=>setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
+            border:"none",background:O,color:"#fff",fontSize:14,fontWeight:800,
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
+            Continue →
+          </button>
         </>}
 
         {/* STEP 2 — Ad creative */}
@@ -1373,17 +1388,15 @@ function AdvertisePage({ onBack }) {
           const CTA_PRESETS = ["Book now","Order online","Get directions","Call us","See menu","Learn more"];
           const isCustom = !CTA_PRESETS.includes(adForm.cta);
           return <>
-            <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Build your ad</div>
-            <p style={{fontSize:15,color:N,marginBottom:20,lineHeight:1.7}}>
-              Your ad appears as a sponsored card in category feeds and search results. Keep your headline punchy and your CTA action-oriented — shorter text performs better on mobile.
-            </p>
+            <div style={{fontSize:14,fontWeight:800,color:N,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:12}}>Build your ad</div>
 
-            {/* Live preview */}
-            <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:16,
-              padding:"14px 16px",marginBottom:18}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                <div style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Ad preview</div>
-                <div style={{fontSize:9,fontWeight:700,color:MUT,background:BG3,borderRadius:6,padding:"2px 8px"}}>Sponsored</div>
+            {/* Live preview card */}
+            <div style={{background:BG2,border:`1.5px solid ${O}`,borderRadius:16,
+              padding:"14px 16px",marginBottom:16}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                <span style={{fontSize:9,fontWeight:800,color:O,textTransform:"uppercase",letterSpacing:"0.1em"}}>Ad preview</span>
+                <span style={{fontSize:9,fontWeight:700,color:MUT,background:BG3,borderRadius:6,padding:"2px 8px"}}>Sponsored</span>
               </div>
               <div style={{display:"flex",alignItems:"center",gap:12}}>
                 <div style={{width:44,height:44,borderRadius:12,background:O,
@@ -1391,7 +1404,7 @@ function AdvertisePage({ onBack }) {
                   <span style={{fontSize:22}}>🍕</span>
                 </div>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:14,fontWeight:800,color:N,
+                  <div style={{fontSize:13,fontWeight:800,color:N,
                     whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
                     {adForm.headline||<span style={{color:MUT}}>Your headline here</span>}
                   </div>
@@ -1408,27 +1421,30 @@ function AdvertisePage({ onBack }) {
               </div>
             </div>
 
-            <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:20}}>
+            <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+              padding:"16px",marginBottom:14,display:"flex",flexDirection:"column",gap:14}}>
               <div>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
-                  <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Headline <span style={{color:"#ef4444"}}>*</span></div>
-                  <div style={{fontSize:12,color:MUT}}>{adForm.headline.length}/40</div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
+                  <span style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Headline <span style={{color:"#ef4444"}}>*</span></span>
+                  <span style={{fontSize:11,color:MUT}}>{adForm.headline.length}/40</span>
                 </div>
                 <input placeholder="e.g. Best Italian in McKinney" value={adForm.headline}
                   onChange={set("headline")} style={inp} maxLength={40}/>
-                <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>This is the first thing customers read — make it specific and local.</div>
+                <div style={{fontSize:11,color:MUT,marginTop:5}}>First thing customers read — make it specific and local.</div>
               </div>
+              <div style={{height:1,background:BDR}}/>
               <div>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
-                  <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Tagline</div>
-                  <div style={{fontSize:12,color:MUT}}>{adForm.tagline.length}/60</div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
+                  <span style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",letterSpacing:"0.06em"}}>Tagline</span>
+                  <span style={{fontSize:11,color:MUT}}>{adForm.tagline.length}/60</span>
                 </div>
                 <input placeholder="e.g. Authentic recipes since 1987 · Dine-in & takeout" value={adForm.tagline}
                   onChange={set("tagline")} style={inp} maxLength={60}/>
-                <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>Use this for a hook, offer, or differentiator. Emojis are welcome.</div>
+                <div style={{fontSize:11,color:MUT,marginTop:5}}>Hook, offer, or differentiator. Emojis welcome.</div>
               </div>
+              <div style={{height:1,background:BDR}}/>
               <div>
-                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
+                <div style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Call to action <span style={{color:"#ef4444"}}>*</span></div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
                   {CTA_PRESETS.map(cta=>(
                     <button key={cta} onClick={()=>setAdForm(f=>({...f,cta}))}
@@ -1443,23 +1459,19 @@ function AdvertisePage({ onBack }) {
                       background:isCustom?O:"transparent",
                       color:isCustom?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
                 </div>
-                {isCustom && (
-                  <div>
-                    <input placeholder="e.g. Claim offer, Shop now, Reserve a table…" value={adForm.cta}
-                      onChange={set("cta")} style={inp} maxLength={20}/>
-                    <div style={{fontSize:12,color:MUT,marginTop:6,paddingLeft:2}}>Max 20 characters. Keep it action-first.</div>
-                  </div>
-                )}
-                <div style={{fontSize:12,color:MUT,marginTop:8,paddingLeft:2}}>
-                  The CTA button appears on the right of your sponsored card. When tapped, it links to your GreenChek listing where customers can call, get directions, or leave a review.
-                </div>
+                {isCustom && <>
+                  <input placeholder="e.g. Claim offer, Reserve a table…" value={adForm.cta}
+                    onChange={set("cta")} style={inp} maxLength={20}/>
+                  <div style={{fontSize:11,color:MUT,marginTop:5}}>Max 20 characters. Keep it action-first.</div>
+                </>}
               </div>
             </div>
+
             <div style={{display:"flex",gap:10}}>
-              <button onClick={()=>setStep(1)} style={{flex:1,padding:"13px",borderRadius:14,
+              <button onClick={()=>setStep(1)} style={{flex:1,padding:"12px",borderRadius:12,
                 border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
                 fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
-              <button onClick={()=>setStep(3)} style={{flex:2,padding:"13px",borderRadius:14,
+              <button onClick={()=>setStep(3)} style={{flex:2,padding:"12px",borderRadius:12,
                 border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
                 cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
             </div>
@@ -1468,73 +1480,91 @@ function AdvertisePage({ onBack }) {
 
         {/* STEP 3 — Add funds */}
         {step===3 && !launched && <>
-          <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8}}>Add funds</div>
-          <p style={{fontSize:15,color:N,marginBottom:20,lineHeight:1.7}}>
-            Your card will be charged <strong>${sel.amount}</strong> now, then monthly until you cancel.
-          </p>
-          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:14,
-            padding:"12px 16px",marginBottom:18}}>
-            <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-              <span style={{fontSize:12,color:MUT}}>Plan</span>
-              <span style={{fontSize:12,fontWeight:700,color:N}}>{sel.label}</span>
-            </div>
-            <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-              <span style={{fontSize:12,color:MUT}}>Estimated reach</span>
-              <span style={{fontSize:12,fontWeight:700,color:N}}>{sel.reach}/mo</span>
-            </div>
-            <div style={{height:1,background:BDR,margin:"8px 0"}}/>
-            <div style={{display:"flex",justifyContent:"space-between"}}>
-              <span style={{fontSize:13,fontWeight:800,color:N}}>Total today</span>
-              <span style={{fontSize:15,fontWeight:900,color:O}}>${sel.amount}</span>
+          <div style={{fontSize:14,fontWeight:800,color:N,textTransform:"uppercase",
+            letterSpacing:"0.06em",marginBottom:12}}>Add funds</div>
+
+          {/* Order summary */}
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:11,fontWeight:800,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Order summary</div>
+            {[["Plan",sel.label],["Estimated reach",`${sel.reach}/mo`],["CPM",sel.cpm]].map(([k,v])=>(
+              <div key={k} style={{display:"flex",justifyContent:"space-between",
+                padding:"8px 0",borderBottom:`1px solid ${BDR}`}}>
+                <span style={{fontSize:12,color:MUT}}>{k}</span>
+                <span style={{fontSize:12,fontWeight:700,color:N}}>{v}</span>
+              </div>
+            ))}
+            <div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
+              <span style={{fontSize:14,fontWeight:800,color:N}}>Total today</span>
+              <span style={{fontSize:16,fontWeight:900,color:O}}>${sel.amount}<span style={{fontSize:11,color:MUT,fontWeight:600}}>/mo</span></span>
             </div>
           </div>
-          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
+
+          {/* Payment */}
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14,display:"flex",flexDirection:"column",gap:12}}>
+            <div style={{fontSize:11,fontWeight:800,color:MUT,textTransform:"uppercase",letterSpacing:"0.06em"}}>Payment</div>
             <div>
-              <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+              <div style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",
                 letterSpacing:"0.06em",marginBottom:6}}>Card number</div>
               <input placeholder="1234 5678 9012 3456" value={card.num} maxLength={19}
                 onChange={e=>setCard(c=>({...c,num:e.target.value}))} style={inp}/>
             </div>
             <div style={{display:"flex",gap:10}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+                <div style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",
                   letterSpacing:"0.06em",marginBottom:6}}>Expiry</div>
                 <input placeholder="MM / YY" value={card.exp} maxLength={7}
                   onChange={e=>setCard(c=>({...c,exp:e.target.value}))} style={inp}/>
               </div>
               <div style={{flex:1}}>
-                <div style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",
+                <div style={{fontSize:11,fontWeight:800,color:N,textTransform:"uppercase",
                   letterSpacing:"0.06em",marginBottom:6}}>CVV</div>
                 <input placeholder="•••" value={card.cvv} maxLength={4}
                   onChange={e=>setCard(c=>({...c,cvv:e.target.value}))} style={inp}/>
               </div>
             </div>
           </div>
-          <div style={{display:"flex",gap:10}}>
-            <button onClick={()=>setStep(2)} style={{flex:1,padding:"13px",borderRadius:14,
+
+          <div style={{display:"flex",gap:10,marginBottom:10}}>
+            <button onClick={()=>setStep(2)} style={{flex:1,padding:"12px",borderRadius:12,
               border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
               fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
-            <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"13px",borderRadius:14,
+            <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"12px",borderRadius:12,
               border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
           </div>
-          <p style={{textAlign:"center",fontSize:10,color:MUT,marginTop:12}}>
+          <p style={{textAlign:"center",fontSize:10,color:MUT,margin:0}}>
             Secured by Stripe · Cancel anytime in your dashboard
           </p>
         </>}
 
         {/* SUCCESS */}
         {launched && (
-          <div style={{textAlign:"center",padding:"20px 0"}}>
-            <div style={{fontSize:52,marginBottom:16}}>🚀</div>
+          <div style={{textAlign:"center",padding:"40px 0"}}>
+            <div style={{width:72,height:72,borderRadius:20,background:O,
+              display:"flex",alignItems:"center",justifyContent:"center",
+              margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
             <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Campaign live!</div>
-            <p style={{fontSize:13,color:MUT,lineHeight:1.6,marginBottom:24}}>
-              Your <strong style={{color:N}}>{sel.label}</strong> plan is active. You'll start seeing impressions within the hour.
+            <p style={{fontSize:13,color:MUT,lineHeight:1.7,marginBottom:28}}>
+              Your <strong style={{color:N}}>{sel.label}</strong> plan is active.<br/>You'll start seeing impressions within the hour.
             </p>
-            <button onClick={onBack} style={{padding:"12px 32px",borderRadius:12,border:"none",
+            <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+              padding:"16px",marginBottom:24,textAlign:"left"}}>
+              {[["Plan",sel.label],["Monthly budget",`$${sel.amount}`],["Est. reach",`${sel.reach} views/mo`]].map(([k,v])=>(
+                <div key={k} style={{display:"flex",justifyContent:"space-between",
+                  padding:"8px 0",borderBottom:`1px solid ${BDR}`}}>
+                  <span style={{fontSize:12,color:MUT}}>{k}</span>
+                  <span style={{fontSize:12,fontWeight:700,color:N}}>{v}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={onBack} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",
               background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
-              Done
+              Back to dashboard
             </button>
           </div>
         )}
@@ -1888,6 +1918,15 @@ function OwnerDashboard({ onBack, onAdvertise }) {
 
         {/* ── OVERVIEW ── */}
         {tab==="overview" && <>
+          {/* Advertise CTA */}
+          <button onClick={onAdvertise} style={{width:"100%",padding:"13px 16px",borderRadius:14,
+            border:"none",background:O,color:"#fff",fontSize:14,fontWeight:800,
+            cursor:"pointer",fontFamily:"inherit",marginBottom:14,
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+            boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Start Advertising
+          </button>
           {/* KPI row */}
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
             {[
