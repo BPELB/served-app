@@ -1333,7 +1333,8 @@ function AdvertisePage({ onBack }) {
           <div style={{width:44,height:44,borderRadius:12,background:O,flexShrink:0,
             display:"flex",alignItems:"center",justifyContent:"center"}}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              <path d="M3 11l17-9v18L3 13H1a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h2z"/>
+              <path d="M7 13v5"/>
             </svg>
           </div>
           <div>
