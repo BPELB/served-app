@@ -588,18 +588,6 @@ function BusinessCard({ b, onSelect, onRate }) {
 }
 
 // Mock active sponsored ad — in production this comes from the DB
-const MOCK_AD = {
-  bizId: DEMO_BIZ.id,
-  bizName: DEMO_BIZ.name,
-  bizType: DEMO_BIZ.type,
-  bizEmoji: DEMO_BIZ.emoji,
-  headline: "Best Italian in McKinney",
-  tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
-  cta: "Book now",
-  image: null,
-  categories: ["food"], // show in these category feeds
-};
-
 function SponsoredCard({ ad, onSelect }) {
   return (
     <div style={{background:BG2,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
@@ -1900,6 +1888,17 @@ function DoneScreen({ business, reviewData, onReset }) {
 // OWNER DASHBOARD
 // ============================================================
 const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
+const MOCK_AD = {
+  bizId: DEMO_BIZ.id,
+  bizName: DEMO_BIZ.name,
+  bizType: DEMO_BIZ.type,
+  bizEmoji: DEMO_BIZ.emoji,
+  headline: "Best Italian in McKinney",
+  tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
+  cta: "Book now",
+  image: null,
+  categories: ["food"],
+};
 
 const WEEKLY = [
   {day:"Mon",reviews:3,rating:4.2},{day:"Tue",reviews:5,rating:4.6},
