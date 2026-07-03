@@ -399,7 +399,7 @@ function Logo({ light=false }) {
         <ellipse cx="38" cy="20" rx="2" ry="10" fill="rgba(255,255,255,0.55)"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
-        tru<span style={{color:G2}}>faro</span>
+        trufaro
       </span>
     </div>
   );
