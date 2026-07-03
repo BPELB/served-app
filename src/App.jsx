@@ -393,7 +393,7 @@ function Logo({ light=false }) {
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="32" height="32" viewBox="0 0 40 40">
         <rect width="40" height="40" rx="11" fill={G2}/>
-        <path d="M3,20 C7,15 12,25 18,19 C22,15 27,25 33,19 C35,17 38,21 38,20" fill="none" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3,23 C6,18 10,11 14,11 C17,11 18,15 17,19 C16,23 16,25 19,23 L38,21" fill="none" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
         tru<span style={{color:G2}}>filo</span><span style={{color:G2}}>.</span>
