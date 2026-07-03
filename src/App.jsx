@@ -393,9 +393,9 @@ function Logo({ light=false }) {
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="32" height="32" viewBox="0 0 40 40">
         <rect width="40" height="40" rx="11" fill={G2}/>
-        <path d="M4,13 C9,9 13,17 18,13 C23,9 27,17 32,13 C35,10 38,12 38,13" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"/>
-        <path d="M4,20 C9,16 13,24 18,20 C23,16 27,24 32,20 C35,17 38,19 38,20" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"/>
-        <path d="M4,27 C9,23 13,31 18,27 C23,23 27,31 32,27 C35,24 38,26 38,27" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"/>
+        <path d="M3,14 C7,9 11,18 17,12 C21,8 25,18 31,13 C34,10 37,14 38,12" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95"/>
+        <path d="M3,21 C8,17 12,25 17,20 C22,15 26,25 32,20 C35,18 37,22 38,20" fill="none" stroke="white" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3,28 C7,24 13,32 18,27 C22,23 27,30 32,26 C35,23 38,28 38,27" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
       </svg>
       <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
         tru<span style={{color:G2}}>filo</span><span style={{color:G2}}>.</span>
