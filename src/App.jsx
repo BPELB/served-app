@@ -516,7 +516,7 @@ function BusinessCard({ b, onSelect, onRate }) {
   const closes = b.hours ? closeTime(b.hours) : null;
 
   return (
-    <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
+    <div style={{background:"#0d2b35",border:`2px solid ${BDR}`,borderRadius:18,marginBottom:10,overflow:"hidden",
       transition:"border-color 0.15s",cursor:"pointer"}}
       onMouseEnter={e=>e.currentTarget.style.borderColor=O}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
@@ -525,12 +525,12 @@ function BusinessCard({ b, onSelect, onRate }) {
         onClick={()=>onSelect(b)}>
         <IconBox type={b.type} size={52} emoji={b.emoji}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
+          <div style={{fontSize:16,fontWeight:800,color:"#ffffff",marginBottom:3,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
-          <div style={{fontSize:12,color:MUT,marginBottom:4}}>
+          <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginBottom:4}}>
             {b.subtype||bt.label}
-            {b.rating ? <span style={{color:MUT}}> · ⭐ {b.rating}</span> : null}
-            {b.price ? <span style={{color:MUT}}> · {"$".repeat(b.price)}</span> : null}
+            {b.rating ? <span> · ⭐ {b.rating}</span> : null}
+            {b.price ? <span> · {"$".repeat(b.price)}</span> : null}
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
