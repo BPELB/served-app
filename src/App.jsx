@@ -714,17 +714,9 @@ function PartialStars({ value, size=14, color="#FBBF24" }) {
   return (
     <div style={{display:"flex",gap:1,alignItems:"center"}}>
       <svg width={size*5+4*1} height={size} viewBox={`0 0 ${size*5+4} ${size}`}>
-        <defs>
-          {stars.map((s,i) => s==="half" && (
-            <linearGradient key={i} id={`${id}-${i}`} x1="0" x2="1" y1="0" y2="0">
-              <stop offset="50%" stopColor={color}/>
-              <stop offset="50%" stopColor="#BBBBBB"/>
-            </linearGradient>
-          ))}
-        </defs>
         {stars.map((s,i) => {
           const x = i*(size+1);
-          const c = s==="full" ? color : s==="half" ? `url(#${id}-${i})` : "#BBBBBB";
+          const c = s==="full" || s==="half" ? color : "#BBBBBB";
           // Simple star polygon
           const cx = x + size/2, cy = size/2, r1 = size*0.48, r2 = size*0.2;
           const pts = Array.from({length:10},(_,k)=>{
