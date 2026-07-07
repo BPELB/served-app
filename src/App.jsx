@@ -26,8 +26,8 @@ const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
 
-const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040" };
-const LIGHT_VARS = { "--bg":"#f5f0ee","--bg2":"#ede8e5","--bg3":"#e5deda","--bdr":"#c8b8b0","--text":"#1a2a30","--muted":"rgba(26,42,48,0.5)","--hover":"#e8e0dc" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#2a5568","--text":"#ffffff","--muted":"rgba(255,255,255,0.65)","--hover":"#0f3040" };
+const LIGHT_VARS = { "--bg":"#f0ebe8","--bg2":"#ffffff","--bg3":"#e0d8d4","--bdr":"#a89080","--text":"#111820","--muted":"rgba(17,24,32,0.55)","--hover":"#e8e0dc" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
