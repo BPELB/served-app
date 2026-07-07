@@ -805,7 +805,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
   const ago   = d===0?"Today":d===1?"Yesterday":`${d}d ago`;
 
   return (
-    <div style={{background:BG2,border:`2px solid ${BDR}`,borderRadius:18,padding:"14px 15px",marginBottom:10}}>
+    <div style={{background:"#0d2b35",border:`2px solid ${BDR}`,borderRadius:18,padding:"14px 15px",marginBottom:10}}>
       {/* Photos row if present */}
       {review.photos?.length>0&&(
         <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
@@ -818,9 +818,9 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:rated.length>0?10:0}}>
         <ScoreBadge score={avg} size={50}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:11,color:MUT,marginBottom:4}}>{ago}</div>
+          <div style={{fontSize:11,color:"rgba(255,255,255,0.65)",marginBottom:4}}>{ago}</div>
           {review.feedback&&(
-            <div style={{fontSize:13,color:MUT,lineHeight:1.5,fontStyle:"italic"}}>
+            <div style={{fontSize:13,color:"#ffffff",lineHeight:1.5,fontStyle:"italic"}}>
               "{review.feedback}"
             </div>
           )}
@@ -828,14 +828,14 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
         <button onClick={()=>onHelpful(review.id)}
           style={{display:"flex",flexDirection:"column",alignItems:"center",gap:1,
             padding:"5px 8px",borderRadius:10,flexShrink:0,
-            background:helped?"#FFF3EE":"transparent",
-            border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
+            background:helped?"rgba(224,85,53,0.2)":"transparent",
+            border:`1.5px solid ${helped?"rgba(224,85,53,0.4)":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#e05535":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#e05535":"rgba(255,255,255,0.5)"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
-          <span style={{fontSize:10,color:helped?O:MUT,fontWeight:helped?700:400}}>
+          <span style={{fontSize:10,color:helped?O:"rgba(255,255,255,0.5)",fontWeight:helped?700:400}}>
             {(review.helpful||0)+(helped?1:0)}
           </span>
         </button>
