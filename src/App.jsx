@@ -716,7 +716,7 @@ function PartialStars({ value, size=14, color="#FBBF24" }) {
       <svg width={size*5+4*1} height={size} viewBox={`0 0 ${size*5+4} ${size}`}>
         {stars.map((s,i) => {
           const x = i*(size+1);
-          const c = s==="full" || s==="half" ? color : "#BBBBBB";
+          const c = color;
           // Simple star polygon
           const cx = x + size/2, cy = size/2, r1 = size*0.48, r2 = size*0.2;
           const pts = Array.from({length:10},(_,k)=>{
