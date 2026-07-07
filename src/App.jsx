@@ -27,7 +27,7 @@ const HOV = "var(--hover)";
 const MUT = "var(--muted)";
 
 const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#2a5568","--text":"#ffffff","--muted":"rgba(255,255,255,0.65)","--hover":"#0f3040" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f5f5f5","--bg3":"#eeeeee","--bdr":"#0d2b35","--text":"#0f1a20","--muted":"rgba(15,26,32,0.6)","--hover":"#f0f0f0" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f5f5f5","--bg3":"#eeeeee","--bdr":"#0d2b35","--text":"#0f1a20","--muted":"rgba(15,26,32,0.75)","--hover":"#f0f0f0" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
