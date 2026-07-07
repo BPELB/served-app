@@ -642,10 +642,12 @@ function SponsoredCard({ ad, onSelect }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
+        <div onClick={e=>{e.stopPropagation();if(ad.bookingUrl)window.open(ad.bookingUrl,"_blank");}}
+          style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
           background:"rgba(255,255,255,0.2)",border:"1.5px solid rgba(255,255,255,0.5)",
           color:"#fff",fontSize:11,fontWeight:800,
-          whiteSpace:"nowrap",fontFamily:"inherit"}}>
+          whiteSpace:"nowrap",fontFamily:"inherit",
+          cursor:ad.bookingUrl?"pointer":"default"}}>
           {ad.cta}
         </div>
       </div>
@@ -1960,6 +1962,7 @@ const MOCK_AD = {
   headline: "Best Italian in McKinney",
   tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
   cta: "Book now",
+  bookingUrl: null, // set to OpenTable or reservation URL when provided
   image: null,
   categories: ["food"],
 };
