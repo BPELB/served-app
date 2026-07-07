@@ -701,7 +701,7 @@ function CatPill({ typeKey, selected, onClick }) {
 // ============================================================
 const STAR_LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
-// Renders 5 stars with partial fill support (e.g. 4.5 = 4 full + 1 half)
+// Renders 5 stars — full and half are solid gold, empty are grey
 function PartialStars({ value, size=14, color="#FBBF24" }) {
   // value is 0-5 (can be decimal)
   const stars = [1,2,3,4,5].map(n => {
