@@ -14,7 +14,7 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#16a34a";
+const O   = "#115D3C";
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
@@ -34,11 +34,11 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#16a34a",  tx:"#16a34a" };
+const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#115D3C",  tx:"#115D3C" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
+const stC = s => s>=8?"#115D3C":s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -388,7 +388,7 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
-  const G2 = "#16a34a";
+  const G2 = "#115D3C";
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="36" height="36" viewBox="0 0 40 40">
@@ -533,7 +533,7 @@ function BusinessCard({ b, onSelect, onRate }) {
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:b.open?"#16a34a":"#dc2626"}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?"#115D3C":"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
             {b.hours && (
@@ -837,7 +837,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#16a34a":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#115D3C":"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -884,7 +884,7 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#16a34a",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:"#115D3C",lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
@@ -951,7 +951,7 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#16a34a":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?"#115D3C":"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
@@ -2039,8 +2039,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:"#16a34a"}}/>
-          <span style={{fontSize:11,color:"#16a34a",fontWeight:700}}>Live</span>
+          <div style={{width:8,height:8,borderRadius:"50%",background:"#115D3C"}}/>
+          <span style={{fontSize:11,color:"#115D3C",fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
@@ -2051,7 +2051,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
               <span>·</span>
               <span>{"$".repeat(DEMO_BIZ.price)}</span>
               <span>·</span>
-              <span style={{color:DEMO_BIZ.open?"#16a34a":"#dc2626",fontWeight:700}}>{DEMO_BIZ.open?"Open":"Closed"}</span>
+              <span style={{color:DEMO_BIZ.open?"#115D3C":"#dc2626",fontWeight:700}}>{DEMO_BIZ.open?"Open":"Closed"}</span>
             </div>
             <div style={{fontSize:11,color:MUT,marginTop:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{bt.label} · {profile.address}</div>
           </div>
@@ -2314,7 +2314,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
                 <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
                   background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  color:sentiment==="positive"?"#115D3C":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
                   {sentiment}
                 </span>
               </div>
