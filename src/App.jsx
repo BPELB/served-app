@@ -15,7 +15,6 @@ const CONFIG = {
 // BRAND
 // ============================================================
 const O   = "#16a34a";
-const OD  = "#115D3C"; // darker green — use as bg wherever white text/needs 4.5:1 contrast
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
@@ -593,10 +592,11 @@ function SponsoredCard({ ad, onSelect }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+  const AG = "#0d622c"; // darker than O — needed so white text clears WCAG AA (4.5:1) on this card
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
   return (
-    <div style={{background:OD,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:AG,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
@@ -1280,7 +1280,7 @@ function ClaimModal({ onClose, onDashboard }) {
           </div>
           <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
           <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
-            border:"none",background:OD,color:"#fff",fontSize:15,fontWeight:800,
+            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>
             Claim for free →
           </button>
@@ -1314,7 +1314,7 @@ function ClaimModal({ onClose, onDashboard }) {
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
-                background:OD,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
                 boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
                 View my dashboard →
               </button>
@@ -1529,7 +1529,7 @@ function AdvertisePage({ onBack }) {
                     {adForm.tagline||"Your tagline appears here"}
                   </div>
                 </div>
-                <div style={{padding:"6px 10px",borderRadius:8,background:OD,
+                <div style={{padding:"6px 10px",borderRadius:8,background:O,
                   color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:80,
                   whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",textAlign:"center"}}>
                   {adForm.cta||"Book now"}
@@ -1597,7 +1597,7 @@ function AdvertisePage({ onBack }) {
                 border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
                 fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
               <button onClick={()=>setStep(3)} style={{flex:2,padding:"12px",borderRadius:12,
-                border:"none",background:OD,color:"#fff",fontSize:13,fontWeight:800,
+                border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
                 cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
             </div>
           </>;
@@ -1656,7 +1656,7 @@ function AdvertisePage({ onBack }) {
               border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
               fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
             <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"12px",borderRadius:12,
-              border:"none",background:OD,color:"#fff",fontSize:13,fontWeight:800,
+              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
           </div>
@@ -1688,7 +1688,7 @@ function AdvertisePage({ onBack }) {
               ))}
             </div>
             <button onClick={onBack} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",
-              background:OD,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
               Back to dashboard
             </button>
           </div>
@@ -1839,10 +1839,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             {hasMore&&(
               <button onClick={()=>setPage(p=>p+1)}
                 style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${OD}`,background:OD,color:"#fff",
+                  border:`2px solid ${O}`,background:O,color:"#fff",
                   fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
                 onMouseEnter={e=>{e.currentTarget.style.background=N;e.currentTarget.style.borderColor=N;}}
-                onMouseLeave={e=>{e.currentTarget.style.background=OD;e.currentTarget.style.borderColor=OD;}}>
+                onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.borderColor=O;}}>
                 Next 5 ›
               </button>
             )}
@@ -1867,12 +1867,12 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Free dashboard + AI training</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
-              background:OD,color:"#fff",fontSize:11,fontWeight:700,
+              background:O,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
               boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:OD,
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
             border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
@@ -2163,7 +2163,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:14,padding:"12px 14px",marginBottom:8}}>
               <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
-                <div style={{width:26,height:26,borderRadius:"50%",background:OD,
+                <div style={{width:26,height:26,borderRadius:"50%",background:O,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:11,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2191,7 +2191,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:16,padding:"14px",marginBottom:10}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:OD,
+                <div style={{width:30,height:30,borderRadius:"50%",background:O,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:13,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2224,7 +2224,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                         cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
                     <button onClick={()=>sendReply(r.id)}
                       style={{flex:2,padding:"8px",borderRadius:10,border:"none",
-                        background:OD,color:"#fff",fontSize:12,fontWeight:700,
+                        background:O,color:"#fff",fontSize:12,fontWeight:700,
                         cursor:"pointer",fontFamily:"inherit"}}>Post reply</button>
                   </div>
                 </div>
@@ -2395,7 +2395,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                   cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
               <button onClick={()=>{setProfile({...editForm});setEditOpen(false);}}
                 style={{flex:2,padding:"12px",borderRadius:12,border:"none",
-                  background:OD,color:"#fff",fontSize:13,fontWeight:800,
+                  background:O,color:"#fff",fontSize:13,fontWeight:800,
                   cursor:"pointer",fontFamily:"inherit"}}>Save changes</button>
             </div>
           </div>
