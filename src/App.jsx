@@ -593,11 +593,10 @@ function SponsoredCard({ ad, onSelect }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
-  const AG = "#0d622c"; // darker than O — needed so white text clears WCAG AA (4.5:1) on this card
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
   return (
-    <div style={{background:AG,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
