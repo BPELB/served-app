@@ -14,7 +14,8 @@ const CONFIG = {
 // ============================================================
 // BRAND
 // ============================================================
-const O   = "#16a34a";
+const O   = "var(--accent)";
+const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`; // O with alpha — O is a CSS var now, so hex-suffix alpha (${O}33) no longer works
 const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
@@ -26,19 +27,19 @@ const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
 
-const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.5)","--hover":"#f0f3f2" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.5)","--hover":"#f0f3f2","--accent":"#115D3C" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
 }
 
 // Functional score colors
-const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#16a34a",  tx:"#16a34a" };
+const SH = { bg:"rgba(22,163,74,0.10)",  bd:O,  tx:O };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?"#FF6B35":"#dc2626";
+const stC = s => s>=8?O:s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -388,7 +389,7 @@ const gPlaces = {
 // ============================================================
 function Logo({ light=false }) {
   const c = N;
-  const G2 = "#16a34a";
+  const G2 = O;
   return (
     <div style={{display:"flex",alignItems:"center",gap:10,userSelect:"none"}}>
       <svg width="36" height="36" viewBox="0 0 40 40">
@@ -533,7 +534,7 @@ function BusinessCard({ b, onSelect, onRate }) {
           </div>
           {/* Hours row */}
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:b.open?"#16a34a":"#dc2626"}}>
+            <span style={{fontSize:12,fontWeight:700,color:b.open?O:"#dc2626"}}>
               {b.open ? "Open" : "Closed"}
             </span>
             {b.hours && (
@@ -573,7 +574,7 @@ function BusinessCard({ b, onSelect, onRate }) {
                   <div style={{fontSize:9,fontWeight:700,color:isToday?O:MUT,
                     textTransform:"uppercase",marginBottom:3}}>{day}</div>
                   <div style={{fontSize:10,color:isToday?N:MUT,fontWeight:isToday?700:400,
-                    lineHeight:1.4,background:isToday?`${O}22`:undefined,
+                    lineHeight:1.4,background:isToday?OA(13):undefined,
                     borderRadius:6,padding:"3px 2px"}}>
                     {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
                   </div>
@@ -837,7 +838,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             background:helped?"#FFF3EE":"transparent",
             border:`1.5px solid ${helped?"#FFD4C2":"transparent"}`,
             transition:"all 0.15s",fontFamily:"inherit"}}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?"#16a34a":"#999"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:helped?O:"#999"}}>
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
@@ -884,7 +885,7 @@ function ShareCard({ business, scores, onClose }) {
           <Logo light/>
           <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
             <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:"#16a34a",lineHeight:1,letterSpacing:2}}>
+            <div style={{fontSize:32,color:O,lineHeight:1,letterSpacing:2}}>
               {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
             </div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
@@ -951,7 +952,7 @@ function BusinessPage({ business, onBack, onRate }) {
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
-                color:(business.open||business.isOpen)?"#16a34a":"rgba(255,255,255,0.4)"}}>
+                color:(business.open||business.isOpen)?O:"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
             </div>
@@ -1447,7 +1448,7 @@ function AdvertisePage({ onBack }) {
                 style={{background:budget===i?O:BG2,
                   border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"all 0.15s",
-                  boxShadow:budget===i?`0 0 0 3px ${O}33`:"none"}}>
+                  boxShadow:budget===i?`0 0 0 3px ${OA(20)}`:"none"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
                   <div style={{display:"flex",alignItems:"center",gap:8}}>
                     <span style={{fontSize:14,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
@@ -1878,7 +1879,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill={`${O}33`} stroke={O}/>
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill={OA(20)} stroke={O}/>
                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
               </svg>
@@ -2039,8 +2040,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:"#16a34a"}}/>
-          <span style={{fontSize:11,color:"#16a34a",fontWeight:700}}>Live</span>
+          <div style={{width:8,height:8,borderRadius:"50%",background:O}}/>
+          <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
           <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
@@ -2051,7 +2052,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
               <span>·</span>
               <span>{"$".repeat(DEMO_BIZ.price)}</span>
               <span>·</span>
-              <span style={{color:DEMO_BIZ.open?"#16a34a":"#dc2626",fontWeight:700}}>{DEMO_BIZ.open?"Open":"Closed"}</span>
+              <span style={{color:DEMO_BIZ.open?O:"#dc2626",fontWeight:700}}>{DEMO_BIZ.open?"Open":"Closed"}</span>
             </div>
             <div style={{fontSize:11,color:MUT,marginTop:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{bt.label} · {profile.address}</div>
           </div>
@@ -2105,8 +2106,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
 
 
           {/* AI Insight */}
-          <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
-            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:16}}>
+          <div style={{background:`linear-gradient(135deg,${OA(13)},${OA(3)})`,
+            border:`1.5px solid ${OA(27)}`,borderRadius:16,padding:"16px",marginBottom:16}}>
             {/* Header */}
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
               <div style={{width:28,height:28,borderRadius:8,background:O,
@@ -2118,7 +2119,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <div style={{fontSize:10,color:MUT}}>Based on your last 30 days of reviews</div>
               </div>
               <div style={{marginLeft:"auto",fontSize:9,fontWeight:700,color:O,
-                background:`${O}22`,padding:"2px 7px",borderRadius:10,flexShrink:0}}>NEW</div>
+                background:OA(13),padding:"2px 7px",borderRadius:10,flexShrink:0}}>NEW</div>
             </div>
 
             {/* Summary */}
@@ -2147,7 +2148,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             </div>
 
             {/* Action callout */}
-            <div style={{background:`${O}18`,borderRadius:10,padding:"10px 12px",
+            <div style={{background:OA(9),borderRadius:10,padding:"10px 12px",
               borderLeft:`3px solid ${O}`}}>
               <div style={{fontSize:10,fontWeight:800,color:O,textTransform:"uppercase",
                 letterSpacing:"0.06em",marginBottom:4}}>Recommended action</div>
@@ -2240,8 +2241,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
 
         {/* ── INSIGHTS ── */}
         {tab==="insights" && <>
-          <div style={{background:`linear-gradient(135deg,${O}22,${O}08)`,
-            border:`1.5px solid ${O}44`,borderRadius:16,padding:"16px",marginBottom:14}}>
+          <div style={{background:`linear-gradient(135deg,${OA(13)},${OA(3)})`,
+            border:`1.5px solid ${OA(27)}`,borderRadius:16,padding:"16px",marginBottom:14}}>
             <div style={{fontSize:13,fontWeight:900,color:N,marginBottom:4}}>AI Recommendations</div>
             <div style={{fontSize:11,color:MUT,marginBottom:14}}>Powered by your review data · Updated weekly</div>
 
@@ -2314,7 +2315,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                 <span style={{fontSize:12,color:N,textTransform:"capitalize"}}>{tag}</span>
                 <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:8,
                   background:sentiment==="positive"?"#dcfce7":sentiment==="negative"?"#fee2e2":"#fef9c3",
-                  color:sentiment==="positive"?"#16a34a":sentiment==="negative"?"#dc2626":"#ca8a04"}}>
+                  color:sentiment==="positive"?O:sentiment==="negative"?"#dc2626":"#ca8a04"}}>
                   {sentiment}
                 </span>
               </div>
