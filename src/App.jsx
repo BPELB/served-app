@@ -34,7 +34,7 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"rgba(22,163,74,0.10)",  bd:"#115D3C",  tx:"#115D3C" };
+const SH = { bg:"rgba(17,93,60,0.10)",  bd:"#115D3C",  tx:"#115D3C" };
 const SM = { bg:"rgba(255,107,53,0.10)",  bd:"#FF6B35",  tx:"#FF6B35" };
 const SL = { bg:"rgba(220,38,38,0.10)",   bd:"#dc2626",  tx:"#dc2626" };
 const scC = s => s>=4?SH:s>=3?SM:SL;
