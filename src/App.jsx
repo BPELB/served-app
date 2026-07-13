@@ -608,7 +608,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}>
         <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:isDark?"#0d2b35":"rgba(255,255,255,0.15)",
+          background:isDark?"#0d2b35":"#ffffff",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -640,8 +640,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           </div>
         </div>
         <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:"2px solid transparent",display:"flex",alignItems:"center",gap:5,
-          background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",
-          color:"#fff",fontSize:11,fontWeight:800,
+          background:isDark?"#0d2b35":"#ffffff",
+          color:isDark?"#fff":N,fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           Call now
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
