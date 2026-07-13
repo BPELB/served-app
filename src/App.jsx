@@ -561,11 +561,8 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",transition:"all 0.15s",
             display:"flex",alignItems:"center",gap:5}}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={isDark?"#fff":"#16a34a"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 14a8 8 0 0 1-8 8"/>
-            <path d="M18 11v-1a2 2 0 0 0-4 0"/>
-            <path d="M14 10V9a2 2 0 0 0-4 0v1"/>
-            <path d="M10 9.5V4a2 2 0 0 0-4 0v10"/>
-            <path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8v-3a2 2 0 0 0-4 0v-1a2 2 0 0 0-4 0"/>
+            <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="none"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
           Feedback
         </button>
