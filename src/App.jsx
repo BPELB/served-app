@@ -617,15 +617,15 @@ function SponsoredCard({ ad, onSelect, isDark }) {
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
-          <div style={{fontSize:11,color:WM,marginBottom:5,lineHeight:1.4}}>{ad.tagline}</div>
+          <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-            <span style={{fontSize:11,color:WM}}>
+            <span style={{fontSize:12,color:WM}}>
               {ad.bizSubtype||ad.bizType}
               {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
               {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
             </span>
             <span style={{color:WM}}>·</span>
-            <span style={{fontSize:11,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
+            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
               {ad.bizOpen ? "Open" : "Closed"}
             </span>
             {ad.bizHours && (
@@ -640,12 +640,12 @@ function SponsoredCard({ ad, onSelect, isDark }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,display:"flex",alignItems:"center",gap:5,
+        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:"2px solid transparent",display:"flex",alignItems:"center",gap:5,
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",
           color:"#fff",fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           Call now
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
         </div>
