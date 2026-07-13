@@ -1835,24 +1835,18 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Pagination */}
         {(hasPrev||hasMore)&&(
-          <div style={{display:"flex",gap:8,marginBottom:14}}>
+          <div style={{display:"flex",justifyContent:"center",gap:24,marginBottom:14}}>
             {hasPrev&&(
-              <button onClick={()=>setPage(p=>p-1)}
-                style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${BDR}`,background:BG2,color:N,
-                  fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
-                onMouseEnter={e=>{e.currentTarget.style.background=HOV;}}
-                onMouseLeave={e=>{e.currentTarget.style.background=BG2;}}>
+              <button onClick={()=>setPage(p=>p-1)} style={{background:"none",border:"none",
+                color:MUT,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+                textDecoration:"underline",textDecorationColor:BDR}}>
                 ‹ Previous 5
               </button>
             )}
             {hasMore&&(
-              <button onClick={()=>setPage(p=>p+1)}
-                style={{flex:1,padding:"10px",borderRadius:12,
-                  border:`2px solid ${O}`,background:O,color:"#fff",
-                  fontSize:13,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit"}}
-                onMouseEnter={e=>{e.currentTarget.style.background=N;e.currentTarget.style.borderColor=N;}}
-                onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.borderColor=O;}}>
+              <button onClick={()=>setPage(p=>p+1)} style={{background:"none",border:"none",
+                color:MUT,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+                textDecoration:"underline",textDecorationColor:BDR}}>
                 Next 5 ›
               </button>
             )}
