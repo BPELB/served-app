@@ -979,6 +979,20 @@ function ShareCard({ business, scores, onClose }) {
   );
 }
 
+function ImageSlider({ seed }) {
+  const photos = [1,2,3,4,5].map(n=>`https://picsum.photos/seed/${seed}-${n}/400/300`);
+  return (
+    <div style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
+      scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
+      marginBottom:16,paddingBottom:2}}>
+      {photos.map((src,i)=>(
+        <img key={i} src={src} alt="" style={{width:180,height:130,objectFit:"cover",
+          borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+      ))}
+    </div>
+  );
+}
+
 // ============================================================
 // BUSINESS PAGE
 // ============================================================
@@ -1069,6 +1083,8 @@ function BusinessPage({ business, onBack, onRate }) {
       <PrimaryBtn full onClick={onRate} style={{marginBottom:16}}>
         ⭐ Rate {business.name} — 30 seconds
       </PrimaryBtn>
+
+      <ImageSlider seed={business.id||business.name}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
