@@ -589,7 +589,7 @@ function BusinessCard({ b, onSelect, onRate }) {
 }
 
 // Mock active sponsored ad — in production this comes from the DB
-function SponsoredCard({ ad, onSelect }) {
+function SponsoredCard({ ad, onSelect, isDark }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
@@ -603,12 +603,12 @@ function SponsoredCard({ ad, onSelect }) {
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <span style={{fontSize:13,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
-          background:"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
+          background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}>
         <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",
+          background:isDark?"#0d2b35":"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -643,7 +643,7 @@ function SponsoredCard({ ad, onSelect }) {
           </div>
         </div>
         <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-          background:"rgba(255,255,255,0.2)",border:"1.5px solid rgba(255,255,255,0.5)",
+          background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",border:"1.5px solid rgba(255,255,255,0.5)",
           color:"#fff",fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           {ad.cta}
@@ -1817,7 +1817,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Listings — sponsored card first */}
         {MOCK_AD.categories.includes(cat) && (
-          <SponsoredCard ad={MOCK_AD} onSelect={onSelect}/>
+          <SponsoredCard ad={MOCK_AD} onSelect={onSelect} isDark={isDark}/>
         )}
         {visible.map(b=>(
           <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate}/>
