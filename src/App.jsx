@@ -857,7 +857,7 @@ function StarCard({ cat, value, onChange, box }) {
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:22,cursor:"pointer",fontFamily:"inherit",
                 transition:"background 0.12s,border-color 0.12s"}}>
-              <span style={{color:filled?"#fff":MUT,lineHeight:1}}>★</span>
+              <span style={{color:filled?"#fff":O,lineHeight:1}}>★</span>
             </button>
           );
         })}
