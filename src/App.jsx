@@ -1312,7 +1312,7 @@ function RateView({ business, onBack, onDone }) {
             background:hasAny?O:"#eee",color:hasAny?"#fff":"#999",
             fontSize:14,fontWeight:700,cursor:hasAny?"pointer":"default",
             transition:"all 0.2s",fontFamily:"inherit"}}>
-          {submitting?"Submitting…":hasAny?"Submit feedback — free":"Fill out anything above to submit"}
+          {submitting?"Submitting…":hasAny?"Submit feedback":"Fill out anything above to submit"}
         </button>
         {!hasAny&&(
           <p style={{textAlign:"center",fontSize:11,color:MUT,marginTop:5}}>
