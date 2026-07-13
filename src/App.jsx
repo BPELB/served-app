@@ -607,8 +607,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
       </div>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}>
-        <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:isDark?"#0d2b35":"#ffffff",
+        <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",alignSelf:"center",
+          background:isDark?"#0d2b35":"#f4f6f5",border:isDark?"none":"1.5px solid #d0d8db",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -639,8 +639,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:"2px solid transparent",display:"flex",alignItems:"center",gap:5,
-          background:isDark?"#0d2b35":"#ffffff",
+        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
+          background:isDark?"#0d2b35":"#f4f6f5",
           color:isDark?"#fff":N,fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           Call now
