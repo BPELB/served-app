@@ -1877,8 +1877,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill={OA(20)} stroke={O}/>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={isDark?"#fff":O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill={isDark?"rgba(255,255,255,0.25)":OA(20)} stroke={isDark?"#fff":O}/>
                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
               </svg>
@@ -1888,7 +1888,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",marginTop:2}}>Reach local customers · No contracts</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,
-              border:"none",background:BG,color:O,
+              border:"none",background:BG,color:isDark?"#fff":O,
               fontSize:11,fontWeight:700,whiteSpace:"nowrap",fontFamily:"inherit",
               cursor:"pointer"}} onClick={e=>{e.stopPropagation();onAdvertise();}}>Learn more →</button>
           </div>
