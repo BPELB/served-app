@@ -552,12 +552,22 @@ function BusinessCard({ b, onSelect, onRate }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
+          onMouseEnter={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";
+            e.currentTarget.querySelector("svg").style.stroke="#fff";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=N;
+            e.currentTarget.querySelector("svg").style.stroke="#16a34a";}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
             border:`2px solid ${O}`,background:"transparent",color:N,fontSize:11,fontWeight:800,
-            cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",
+            cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",transition:"all 0.15s",
             display:"flex",alignItems:"center",gap:5}}>
           Feedback
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="#16a34a" stroke="#16a34a" strokeWidth="1" strokeLinejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 14a8 8 0 0 1-8 8"/>
+            <path d="M18 11v-1a2 2 0 0 0-4 0"/>
+            <path d="M14 10V9a2 2 0 0 0-4 0v1"/>
+            <path d="M10 9.5V4a2 2 0 0 0-4 0v10"/>
+            <path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8v-3a2 2 0 0 0-4 0v-1a2 2 0 0 0-4 0"/>
+          </svg>
         </button>
       </div>
 
