@@ -1267,7 +1267,7 @@ function RateView({ business, onBack, onDone }) {
             </div>
           ))}
           {photos.length<3&&(
-            <label style={{width:80,height:80,borderRadius:12,border:"2px dashed #FFD4C2",
+            <label style={{width:80,height:80,borderRadius:12,border:`2px dashed ${BDR}`,
               background:BG2,display:"flex",flexDirection:"column",alignItems:"center",
               justifyContent:"center",cursor:"pointer",gap:4}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
