@@ -221,6 +221,10 @@ const DEMOS = {
     {id:"d6",name:"Spice Garden",      addr:"987 Walnut St, McKinney TX",type:"food",subtype:"Indian",         emoji:"🍛",rating:4.5,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
     {id:"d7",name:"Le Petit Café",     addr:"210 Vine St, McKinney TX",  type:"food",subtype:"French",         emoji:"🥐",rating:4.7,price:2,open:true, hours:H.rest},
     {id:"d8",name:"Golden Wok",        addr:"75 Canton Ave, McKinney TX",type:"food",subtype:"Chinese",        emoji:"🥡",rating:4.3,price:1,open:true, hours:{...H.rest,Sun:"12pm–8pm"}},
+    {id:"d9",name:"Bella Notte",       addr:"44 Trattoria Way, McKinney TX",type:"food",subtype:"Italian",     emoji:"🍝",rating:4.5,price:3,open:true, hours:H.rest},
+    {id:"d10",name:"Seoul Kitchen",    addr:"12 K-Town Blvd, McKinney TX",type:"food",subtype:"Korean",        emoji:"🍜",rating:4.6,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
+    {id:"d11",name:"Mediterraneo",     addr:"88 Olive St, McKinney TX",  type:"food",subtype:"Mediterranean",  emoji:"🥙",rating:4.4,price:2,open:false,hours:{...H.rest,Tue:"Closed"}},
+    {id:"d12",name:"Crepe & Co.",      addr:"30 Batter St, McKinney TX", type:"food",subtype:"French",         emoji:"🫓",rating:4.2,price:1,open:true, hours:H.rest},
   ],
   beauty:      [
     {id:"b1",name:"Cuts & Co.",         addr:"321 Pine St",  type:"beauty",subtype:"Hair Salon",   emoji:"✂️",rating:4.4,price:2,open:true, hours:H.std},
@@ -986,7 +990,7 @@ function ImageSlider({ seed }) {
       scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
       marginBottom:16,paddingBottom:2}}>
       {photos.map((src,i)=>(
-        <img key={i} src={src} alt="" style={{width:180,height:130,objectFit:"cover",
+        <img key={i} src={src} alt="" style={{width:180,height:108,objectFit:"cover",
           borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
       ))}
     </div>
