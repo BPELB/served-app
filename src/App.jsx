@@ -601,7 +601,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:16,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
+        <span style={{fontSize:18,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
@@ -616,7 +616,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
+          <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
           <div style={{fontSize:11,color:WM,marginBottom:5,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
             <span style={{fontSize:11,color:WM}}>
