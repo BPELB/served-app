@@ -509,9 +509,18 @@ function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
   );
 }
 
+function LocationMap({ addr }) {
+  return (
+    <iframe title={`Map for ${addr}`} width="100%" height="160" loading="lazy"
+      style={{border:0,borderRadius:10,display:"block"}}
+      src={`https://maps.google.com/maps?q=${encodeURIComponent(addr)}&z=15&output=embed`}/>
+  );
+}
+
 // Category filter pill
 function BusinessCard({ b, onSelect, onRate, isDark }) {
   const [hoursOpen, setHoursOpen] = useState(false);
+  const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
@@ -547,6 +556,17 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
                 <span>Hours</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                </svg>
+              </button>
+            )}
+            {b.addr && (
+              <button
+                onClick={e=>{e.stopPropagation();setLocationOpen(o=>!o);}}
+                style={{display:"inline-flex",alignItems:"center",gap:2,
+                  fontSize:11,color:MUT,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                <span>Location</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <polyline points={locationOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
                 </svg>
               </button>
             )}
@@ -594,6 +614,14 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
           </div>
         </div>
       )}
+
+      {/* Location dropdown */}
+      {locationOpen && b.addr && (
+        <div style={{borderTop:`1.5px solid ${BDR}`,padding:"12px 16px 14px",
+          background:BG3}}>
+          <LocationMap addr={b.addr}/>
+        </div>
+      )}
     </div>
   );
 }
@@ -601,6 +629,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
 // Mock active sponsored ad — in production this comes from the DB
 function SponsoredCard({ ad, onSelect, isDark }) {
   const [hoursOpen, setHoursOpen] = useState(false);
+  const [locationOpen, setLocationOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
   const W = "rgba(255,255,255,0.9)";
@@ -647,6 +676,16 @@ function SponsoredCard({ ad, onSelect, isDark }) {
                 </svg>
               </button>
             )}
+            {ad.addr && (
+              <button onClick={e=>{e.stopPropagation();setLocationOpen(o=>!o);}}
+                style={{display:"inline-flex",alignItems:"center",gap:2,
+                  fontSize:12,color:WM,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                <span>Location</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <polyline points={locationOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
         <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
@@ -680,6 +719,14 @@ function SponsoredCard({ ad, onSelect, isDark }) {
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* Location dropdown */}
+      {locationOpen && ad.addr && (
+        <div style={{borderTop:"1px solid rgba(255,255,255,0.2)",padding:"12px 16px 14px",
+          background:"rgba(0,0,0,0.12)"}}>
+          <LocationMap addr={ad.addr}/>
         </div>
       )}
     </div>
@@ -2005,7 +2052,7 @@ function sponsorFor(catKey) {
   return {
     bizId: biz.id, bizName: biz.name, bizType: biz.type, bizEmoji: biz.emoji,
     bizSubtype: biz.subtype, bizRating: biz.rating, bizPrice: biz.price,
-    bizOpen: biz.open, bizHours: biz.hours,
+    bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     headline: copy.headline, tagline: copy.tagline,
     image: null,
   };
