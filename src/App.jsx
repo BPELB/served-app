@@ -601,14 +601,14 @@ function SponsoredCard({ ad, onSelect, isDark }) {
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:13,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
+        <span style={{fontSize:16,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}>
         <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",
-          background:isDark?"#0d2b35":"rgba(255,255,255,0.15)",border:"1.5px solid rgba(255,255,255,0.4)",
+          background:isDark?"#0d2b35":"rgba(255,255,255,0.15)",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -616,10 +616,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:15,fontWeight:800,color:"#fff",marginBottom:2,
+          <div style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:5,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
-          <div style={{fontSize:11,color:WM,marginBottom:5,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.tagline}</div>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
             <span style={{fontSize:11,color:WM}}>
               {ad.bizSubtype||ad.bizType}
@@ -642,11 +640,14 @@ function SponsoredCard({ ad, onSelect, isDark }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
-          background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",border:"1.5px solid rgba(255,255,255,0.5)",
+        <div style={{flexShrink:0,padding:"9px 14px",borderRadius:10,display:"flex",alignItems:"center",gap:5,
+          background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",
           color:"#fff",fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
-          {ad.cta}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          Call now
         </div>
       </div>
       {/* Hours dropdown */}
