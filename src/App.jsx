@@ -640,7 +640,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   const WM = "rgba(255,255,255,0.85)";
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
-      onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji})}>
+      onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
+        subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours})}>
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -983,8 +984,24 @@ function ShareCard({ business, scores, onClose }) {
   );
 }
 
-function ImageSlider({ seed }) {
-  const photos = [1,2,3,4,5].map(n=>`https://picsum.photos/seed/${seed}-${n}/400/300`);
+const CAT_PHOTO_KEYWORDS = {
+  food:"restaurant,food", beauty:"salon,beauty", health:"medical,clinic",
+  fitness:"gym,fitness", automotive:"car,garage", homeservices:"home,repair",
+  pets:"pet,animal", childcare:"daycare,children", hospitality:"hotel,travel",
+  retail:"shop,store", professional:"office,business", events:"event,party",
+  education:"school,classroom", entertainment:"cinema,entertainment",
+  moving:"moving,boxes", techrepair:"electronics,computer", laundry:"laundry,cleaning",
+  financial:"bank,finance", funeral:"memorial,flowers", government:"government,building",
+};
+function hashStr(s) {
+  let h = 0;
+  for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
+  return Math.abs(h);
+}
+function ImageSlider({ seed, type, subtype }) {
+  const keywords = [subtype, CAT_PHOTO_KEYWORDS[type]||"business"].filter(Boolean).join(",");
+  const base = hashStr(String(seed));
+  const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
   return (
     <div style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
       scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
@@ -1088,7 +1105,7 @@ function BusinessPage({ business, onBack, onRate }) {
         ⭐ Rate {business.name} — 30 seconds
       </PrimaryBtn>
 
-      <ImageSlider seed={business.id||business.name}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
