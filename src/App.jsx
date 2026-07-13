@@ -706,6 +706,20 @@ function CatPill({ typeKey, selected, onClick }) {
   );
 }
 
+function SubPill({ label, selected, onClick }) {
+  return (
+    <button onClick={onClick} style={{
+      padding:"6px 12px",borderRadius:20,flexShrink:0,
+      border:`1.5px solid ${selected?O:BDR}`,
+      background:selected?O:"transparent",
+      color:selected?"#fff":MUT,
+      fontSize:11,fontWeight:selected?700:500,cursor:"pointer",
+      transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
+      {label}
+    </button>
+  );
+}
+
 // ============================================================
 // STAR RATING CARD
 // ============================================================
@@ -1714,6 +1728,7 @@ function AdvertisePage({ onBack }) {
 function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
+  const [subFilter,setSubFilter]= useState(null);
   const [page,setPage]          = useState(0);
   const [loc,setLoc]            = useState(null);
   const [results,setResults]    = useState(DEMOS.food);
@@ -1743,15 +1758,20 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   },[search,cat,loc]);
 
   const sponsorAd = sponsorFor(cat);
+  const sponsorMatches = sponsorAd &&
+    (!subFilter||sponsorAd.bizSubtype===subFilter) &&
+    (!search||sponsorAd.bizName.toLowerCase().includes(search.toLowerCase()));
+  const subtypes = [...new Set(results.map(b=>b.subtype).filter(Boolean))].sort();
   const filtered = results.filter(b=>
     (!search||b.name.toLowerCase().includes(search.toLowerCase())) &&
+    (!subFilter||b.subtype===subFilter) &&
     !(sponsorAd && b.id===sponsorAd.bizId)
   );
   const visible  = filtered.slice(page*PAGE,(page+1)*PAGE);
   const hasMore  = (page+1)*PAGE < filtered.length;
   const hasPrev  = page > 0;
 
-  const changeCat = k => { setCat(k); setPage(0); setSearch(""); };
+  const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); };
 
   return (
     <div style={{width:"100%"}}>
@@ -1815,18 +1835,28 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             <p style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.08em"}}>
               {BT[cat].label}
             </p>
-            <p style={{fontSize:11,color:MUT}}>{filtered.length} nearby</p>
+            <p style={{fontSize:11,color:MUT}}>{filtered.length+(sponsorMatches?1:0)} nearby</p>
           </div>
         </div>
 
-        {filtered.length===0&&!searching&&(
+        {subtypes.length>1 && (
+          <div style={{display:"flex",gap:6,overflowX:"auto",WebkitOverflowScrolling:"touch",
+            msOverflowStyle:"none",scrollbarWidth:"none",marginBottom:14}}>
+            <SubPill label="All" selected={!subFilter} onClick={()=>setSubFilter(null)}/>
+            {subtypes.map(s=>(
+              <SubPill key={s} label={s} selected={subFilter===s} onClick={()=>setSubFilter(s)}/>
+            ))}
+          </div>
+        )}
+
+        {filtered.length===0&&!sponsorMatches&&!searching&&(
           <p style={{textAlign:"center",color:MUT,padding:"2rem 0",fontSize:14}}>
             No results in this category.
           </p>
         )}
 
         {/* Listings — sponsored card first */}
-        {sponsorAd && (
+        {sponsorMatches && (
           <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
         )}
         {visible.map(b=>(
