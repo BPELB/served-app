@@ -1740,10 +1740,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const sponsoredActive = MOCK_AD.categories.includes(cat);
+  const sponsorAd = sponsorFor(cat);
   const filtered = results.filter(b=>
     (!search||b.name.toLowerCase().includes(search.toLowerCase())) &&
-    !(sponsoredActive && b.id===MOCK_AD.bizId)
+    !(sponsorAd && b.id===sponsorAd.bizId)
   );
   const visible  = filtered.slice(page*PAGE,(page+1)*PAGE);
   const hasMore  = (page+1)*PAGE < filtered.length;
@@ -1824,8 +1824,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
         )}
 
         {/* Listings — sponsored card first */}
-        {MOCK_AD.categories.includes(cat) && (
-          <SponsoredCard ad={MOCK_AD} onSelect={onSelect} isDark={isDark}/>
+        {sponsorAd && (
+          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
         )}
         {visible.map(b=>(
           <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark}/>
@@ -1966,22 +1966,23 @@ function DoneScreen({ business, reviewData, onReset }) {
 // OWNER DASHBOARD
 // ============================================================
 const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
-const MOCK_AD = {
-  bizId: DEMO_BIZ.id,
-  bizName: DEMO_BIZ.name,
-  bizType: DEMO_BIZ.type,
-  bizEmoji: DEMO_BIZ.emoji,
-  bizSubtype: DEMO_BIZ.subtype,
-  bizRating: DEMO_BIZ.rating,
-  bizPrice: DEMO_BIZ.price,
-  bizOpen: DEMO_BIZ.open,
-  bizHours: DEMO_BIZ.hours,
-  headline: "Best Italian in McKinney",
-  tagline: "Authentic recipes since 1987",
-  cta: "Book now",
-  image: null,
-  categories: ["food"],
+
+// Sponsored-ad copy per category — falls back to a generic line when a category has none
+const AD_COPY = {
+  food: { headline: "Best Italian in McKinney", tagline: "Authentic recipes since 1987" },
 };
+function sponsorFor(catKey) {
+  const biz = DEMOS[catKey]?.[0];
+  if (!biz) return null;
+  const copy = AD_COPY[catKey] || { headline: `Best ${biz.subtype} in McKinney`, tagline: "Top-rated · Trusted locally" };
+  return {
+    bizId: biz.id, bizName: biz.name, bizType: biz.type, bizEmoji: biz.emoji,
+    bizSubtype: biz.subtype, bizRating: biz.rating, bizPrice: biz.price,
+    bizOpen: biz.open, bizHours: biz.hours,
+    headline: copy.headline, tagline: copy.tagline,
+    image: null,
+  };
+}
 
 const WEEKLY = [
   {day:"Mon",reviews:3,rating:4.2},{day:"Tue",reviews:5,rating:4.6},
