@@ -901,7 +901,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:11,color:MUT,marginBottom:4}}>{ago}</div>
           {review.feedback&&(
-            <div style={{fontSize:13,color:MUT,lineHeight:1.5,fontStyle:"italic"}}>
+            <div style={{fontSize:13,color:N,lineHeight:1.5,fontStyle:"italic"}}>
               "{review.feedback}"
             </div>
           )}
