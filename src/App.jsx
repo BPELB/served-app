@@ -219,6 +219,8 @@ const DEMOS = {
     {id:"d4",name:"El Rancho Tacos",   addr:"321 Pine St, McKinney TX",  type:"food",subtype:"Mexican",        emoji:"🌮",rating:4.4,price:1,open:true, hours:{...H.rest,Mon:"11am–9pm"}},
     {id:"d5",name:"The Burger Lab",    addr:"654 Cedar Rd, McKinney TX", type:"food",subtype:"Burgers",        emoji:"🍔",rating:4.2,price:1,open:true, hours:H.rest},
     {id:"d6",name:"Spice Garden",      addr:"987 Walnut St, McKinney TX",type:"food",subtype:"Indian",         emoji:"🍛",rating:4.5,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
+    {id:"d7",name:"Le Petit Café",     addr:"210 Vine St, McKinney TX",  type:"food",subtype:"French",         emoji:"🥐",rating:4.7,price:2,open:true, hours:H.rest},
+    {id:"d8",name:"Golden Wok",        addr:"75 Canton Ave, McKinney TX",type:"food",subtype:"Chinese",        emoji:"🥡",rating:4.3,price:1,open:true, hours:{...H.rest,Sun:"12pm–8pm"}},
   ],
   beauty:      [
     {id:"b1",name:"Cuts & Co.",         addr:"321 Pine St",  type:"beauty",subtype:"Hair Salon",   emoji:"✂️",rating:4.4,price:2,open:true, hours:H.std},
