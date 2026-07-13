@@ -1888,6 +1888,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               <svg width="24" height="24" viewBox="0 0 24 24" fill={isDark?"#fff":O} stroke={isDark?"#fff":O} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m3 11 18-5v12L3 14v-3z"/>
                 <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" fill="none"/>
+                <path d="M1 9a7 7 0 0 1 0 6" fill="none"/>
               </svg>
             </div>
             <div style={{flex:1}}>
