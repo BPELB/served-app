@@ -617,21 +617,21 @@ function SponsoredCard({ ad, onSelect, isDark }) {
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
-          <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4}}>{ad.tagline}</div>
-          <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-            <span style={{fontSize:12,color:WM}}>
-              {ad.bizSubtype||ad.bizType}
-              {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
-              {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
-            </span>
-            <span style={{color:WM}}>·</span>
+          <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
+          <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4}}>
+            {ad.bizSubtype||ad.bizType}
+            {ad.service ? <span> · {ad.service}</span> : null}
+            {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
+            {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
             <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
               {ad.bizOpen ? "Open" : "Closed"}
             </span>
             {ad.bizHours && (
               <button onClick={e=>{e.stopPropagation();setHoursOpen(o=>!o);}}
                 style={{display:"inline-flex",alignItems:"center",gap:2,
-                  fontSize:11,color:WM,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                  fontSize:12,color:WM,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
                 <span>Hours</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
@@ -1971,7 +1971,8 @@ const MOCK_AD = {
   bizOpen: DEMO_BIZ.open,
   bizHours: DEMO_BIZ.hours,
   headline: "Best Italian in McKinney",
-  tagline: "Authentic recipes since 1987 · Dine-in & takeout 🍝",
+  tagline: "Authentic recipes since 1987",
+  service: "Dine-in & takeout",
   cta: "Book now",
   image: null,
   categories: ["food"],
