@@ -618,9 +618,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
-          <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4}}>
+          <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
             {ad.bizSubtype||ad.bizType}
-            {ad.service ? <span> · {ad.service}</span> : null}
             {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
             {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
           </div>
@@ -1972,7 +1971,6 @@ const MOCK_AD = {
   bizHours: DEMO_BIZ.hours,
   headline: "Best Italian in McKinney",
   tagline: "Authentic recipes since 1987",
-  service: "Dine-in & takeout",
   cta: "Book now",
   image: null,
   categories: ["food"],
