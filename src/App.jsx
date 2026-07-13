@@ -1885,9 +1885,9 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={isDark?"#fff":O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m3 11 18-5v12L3 14v-3z" fill={isDark?"rgba(255,255,255,0.25)":OA(20)}/>
-                <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill={isDark?"#fff":O} stroke={isDark?"#fff":O} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m3 11 18-5v12L3 14v-3z"/>
+                <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" fill="none"/>
               </svg>
             </div>
             <div style={{flex:1}}>
