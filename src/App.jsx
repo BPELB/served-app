@@ -999,17 +999,30 @@ function hashStr(s) {
   return Math.abs(h);
 }
 function ImageSlider({ seed, type, subtype }) {
+  const ref = useRef(null);
   const keywords = [subtype, CAT_PHOTO_KEYWORDS[type]||"business"].filter(Boolean).join(",");
   const base = hashStr(String(seed));
   const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
+  const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
+  const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
+    width:30,height:30,borderRadius:"50%",border:"none",background:"rgba(0,0,0,0.55)",color:"#fff",
+    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:1};
   return (
-    <div style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
-      scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
-      marginBottom:16,paddingBottom:2}}>
-      {photos.map((src,i)=>(
-        <img key={i} src={src} alt="" style={{width:180,height:108,objectFit:"cover",
-          borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
-      ))}
+    <div style={{position:"relative",marginBottom:16}}>
+      <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
+        scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
+        paddingBottom:2}}>
+        {photos.map((src,i)=>(
+          <img key={i} src={src} alt="" style={{width:180,height:108,objectFit:"cover",
+            borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+        ))}
+      </div>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:4}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:4}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
     </div>
   );
 }
@@ -1017,9 +1030,11 @@ function ImageSlider({ seed, type, subtype }) {
 // ============================================================
 // BUSINESS PAGE
 // ============================================================
+const REVIEWS_PAGE = 2;
 function BusinessPage({ business, onBack, onRate }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
+  const [revPage,setRevPage] = useState(1);
   const bt = BT[business.type||"food"];
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
@@ -1038,6 +1053,9 @@ function BusinessPage({ business, onBack, onRate }) {
     if(sort==="helpful") return (b.helpful||0)-(a.helpful||0);
     return new Date(b.created_at)-new Date(a.created_at);
   });
+  const totalRevPages = Math.max(1, Math.ceil(sorted.length/REVIEWS_PAGE));
+  const pagedReviews = sorted.slice((revPage-1)*REVIEWS_PAGE, revPage*REVIEWS_PAGE);
+  const changeSort = s => { setSort(s); setRevPage(1); };
 
   return (
     <div style={{maxWidth:560,margin:"0 auto",padding:"1rem 1rem 3rem"}}>
@@ -1121,7 +1139,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <span style={{fontSize:14,fontWeight:700,color:N}}>{DEMO_REVIEWS.length} reviews</span>
         <div style={{display:"flex",gap:5}}>
           {[["recent","Recent"],["highest","Best"],["lowest","Worst"]].map(([s,l])=>(
-            <button key={s} onClick={()=>setSort(s)}
+            <button key={s} onClick={()=>changeSort(s)}
               style={{padding:"4px 9px",borderRadius:10,fontSize:11,fontWeight:sort===s?700:400,
                 border:`2px solid ${sort===s?N:BDR}`,
                 background:sort===s?N:BG2,color:sort===s?BG:N,
@@ -1130,11 +1148,32 @@ function BusinessPage({ business, onBack, onRate }) {
         </div>
       </div>
 
-      {sorted.map(r=>(
+      {pagedReviews.map(r=>(
         <ReviewCard key={r.id} review={r} btKey={business.type}
           onHelpful={id=>setHelped(h=>h.includes(id)?h.filter(x=>x!==id):[...h,id])}
           helpedIds={helpedIds}/>
       ))}
+
+      {totalRevPages>1 && (
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:6,marginTop:8}}>
+          {Array.from({length:totalRevPages},(_,i)=>i+1).map(p=>(
+            <button key={p} onClick={()=>setRevPage(p)}
+              style={{width:28,height:28,borderRadius:"50%",border:`2px solid ${p===revPage?O:BDR}`,
+                background:p===revPage?O:"transparent",color:p===revPage?"#fff":N,
+                fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.15s"}}>
+              {p}
+            </button>
+          ))}
+          {revPage<totalRevPages && (
+            <button onClick={()=>setRevPage(p=>p+1)}
+              style={{marginLeft:4,background:"none",border:"none",color:O,fontSize:12,fontWeight:700,
+                cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:2}}>
+              Next
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
