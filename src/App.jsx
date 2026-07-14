@@ -1101,9 +1101,11 @@ function BusinessPage({ business, onBack, onRate }) {
         </div>
       )}
 
-      <PrimaryBtn full onClick={onRate} style={{marginBottom:16}}>
-        ⭐ Rate {business.name} — 30 seconds
-      </PrimaryBtn>
+      <button onClick={onRate} style={{width:"100%",padding:"13px 22px",borderRadius:14,border:"none",
+        background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
+        marginBottom:16,fontFamily:"inherit"}}>
+        ⭐ Rate {business.name}
+      </button>
 
       <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
 
