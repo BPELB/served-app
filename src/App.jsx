@@ -1047,7 +1047,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative"}}>
-          <IconBox type={business.type} size={64} emoji={business.emoji}/>
+          <IconBox type={business.type} size={84} emoji={business.emoji}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -1102,11 +1102,11 @@ function BusinessPage({ business, onBack, onRate }) {
       )}
 
       <button onClick={onRate}
-        onMouseEnter={e=>{e.currentTarget.style.filter="brightness(0.88)";}}
-        onMouseLeave={e=>{e.currentTarget.style.filter="none";}}
-        style={{width:"100%",padding:"13px 22px",borderRadius:14,border:"none",
+        onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
+        onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+        style={{width:"100%",padding:"13px 22px",borderRadius:14,border:`2px solid ${O}`,
         background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
-        transition:"filter 0.15s",marginBottom:16,fontFamily:"inherit"}}>
+        transition:"all 0.15s",marginBottom:16,fontFamily:"inherit"}}>
         ⭐ Rate {business.name}
       </button>
 
