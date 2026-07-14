@@ -1207,11 +1207,11 @@ function RateView({ business, onBack, onDone }) {
 
       {!showExtra?(
         <button onClick={()=>setExtra(true)}
-          style={{width:"100%",padding:"10px",borderRadius:14,marginBottom:12,
-            border:`1.5px solid ${BDR}`,background:BG2,fontSize:12,color:O,fontWeight:600,
-            transition:"all 0.15s",fontFamily:"inherit"}}
-          onMouseEnter={e=>{e.currentTarget.style.background="#FFE8D6"}}
-          onMouseLeave={e=>{e.currentTarget.style.background="#FFF3EE"}}>
+          onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
+          onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+          style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:12,
+            border:`2px solid ${O}`,background:O,color:"#fff",
+            fontSize:14,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
           + More to rate (optional)
         </button>
       ):(
@@ -1225,16 +1225,12 @@ function RateView({ business, onBack, onDone }) {
         <p style={{fontSize:12,fontWeight:600,color:N,marginBottom:7}}>
           {bt.itemLabel} <span style={{fontWeight:400,color:MUT}}>(optional)</span>
         </p>
-        <div style={{display:"flex",gap:8,marginBottom:items.length?8:0}}>
+        <div style={{marginBottom:items.length?8:0}}>
           <input value={newItem} onChange={e=>setNewItem(e.target.value)}
             onKeyDown={e=>e.key==="Enter"&&addItem()}
             placeholder="Type and press Enter…"
-            style={{flex:1,borderRadius:12,border:`1.5px solid ${BDR}`,
-              padding:"9px 13px",fontSize:13,background:BG2,color:N}}/>
-          <button onClick={addItem} disabled={!newItem.trim()}
-            style={{padding:"9px 14px",borderRadius:12,border:`2px solid ${O}`,
-              background:O,color:N,fontSize:12,fontWeight:700,
-              opacity:newItem.trim()?1:0.4,fontFamily:"inherit"}}>Add</button>
+            style={{width:"100%",borderRadius:12,border:`1.5px solid ${BDR}`,
+              padding:"9px 13px",fontSize:13,background:BG2,color:N,outline:"none",boxSizing:"border-box"}}/>
         </div>
         {items.length>0&&(
           <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
@@ -1289,7 +1285,7 @@ function RateView({ business, onBack, onDone }) {
         <textarea value={feedback} onChange={e=>setFeedback(e.target.value)}
           placeholder="Say as much or as little as you want…"
           style={{width:"100%",minHeight:72,borderRadius:14,border:`1.5px solid ${BDR}`,
-            padding:"11px 13px",fontSize:13,lineHeight:1.6,
+            padding:"11px 13px",fontSize:13,lineHeight:1.6,outline:"none",
             background:BG2,color:N,boxSizing:"border-box"}}/>
         <div style={{display:"flex",flexWrap:"wrap",gap:5,marginTop:6}}>
           {bt.chips.map(c=>(
