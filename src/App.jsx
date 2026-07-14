@@ -1004,11 +1004,10 @@ function ImageSlider({ seed, type, subtype }) {
   const base = hashStr(String(seed));
   const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
-  const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
-    width:30,height:30,borderRadius:"50%",border:"none",background:"rgba(0,0,0,0.55)",color:"#fff",
-    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:1};
+  const arrowStyle = {width:30,height:30,borderRadius:"50%",border:"none",
+    background:BG3,color:N,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"};
   return (
-    <div style={{position:"relative",marginBottom:16}}>
+    <div style={{marginBottom:16}}>
       <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
@@ -1017,12 +1016,14 @@ function ImageSlider({ seed, type, subtype }) {
             borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
         ))}
       </div>
-      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:4}}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:4}}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
+      <div style={{display:"flex",justifyContent:"center",gap:10,marginTop:8}}>
+        <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={arrowStyle}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button onClick={()=>scroll(1)} aria-label="Next photo" style={arrowStyle}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
     </div>
   );
 }
@@ -1030,7 +1031,7 @@ function ImageSlider({ seed, type, subtype }) {
 // ============================================================
 // BUSINESS PAGE
 // ============================================================
-const REVIEWS_PAGE = 2;
+const REVIEWS_PAGE = 3;
 function BusinessPage({ business, onBack, onRate }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
