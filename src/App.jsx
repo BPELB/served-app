@@ -1004,10 +1004,12 @@ function ImageSlider({ seed, type, subtype }) {
   const base = hashStr(String(seed));
   const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
-  const arrowStyle = {width:30,height:30,borderRadius:"50%",border:"none",
-    background:BG3,color:N,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"};
+  const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
+    width:26,height:26,borderRadius:"50%",border:`1.5px solid rgba(255,255,255,0.6)`,
+    background:"rgba(20,20,20,0.45)",backdropFilter:"blur(2px)",color:"#fff",
+    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0};
   return (
-    <div style={{marginBottom:16}}>
+    <div style={{position:"relative",marginBottom:16}}>
       <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
@@ -1016,14 +1018,12 @@ function ImageSlider({ seed, type, subtype }) {
             borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
         ))}
       </div>
-      <div style={{display:"flex",justifyContent:"center",gap:10,marginTop:8}}>
-        <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={arrowStyle}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button onClick={()=>scroll(1)} aria-label="Next photo" style={arrowStyle}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:8}}>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:8}}>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
     </div>
   );
 }
