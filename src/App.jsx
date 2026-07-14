@@ -1046,7 +1046,7 @@ function BusinessPage({ business, onBack, onRate }) {
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
-        <div style={{display:"flex",alignItems:"center",gap:12,position:"relative"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
           <IconBox type={business.type} size={84} emoji={business.emoji}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
@@ -1106,8 +1106,12 @@ function BusinessPage({ business, onBack, onRate }) {
         onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
         style={{width:"100%",padding:"13px 22px",borderRadius:14,border:`2px solid ${O}`,
         background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
+        display:"flex",alignItems:"center",justifyContent:"center",gap:8,
         transition:"all 0.15s",marginBottom:16,fontFamily:"inherit"}}>
-        ⭐ Rate {business.name}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+        </svg>
+        Give us your feedback!
       </button>
 
       <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
