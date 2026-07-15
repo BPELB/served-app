@@ -673,8 +673,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
       {/* Main row */}
-      <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}>
-        <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",alignSelf:"center",
+      <div style={{display:"flex",alignItems:"flex-start",gap:10,padding:"14px 16px"}}>
+        <div style={{width:46,height:46,borderRadius:14,flexShrink:0,overflow:"hidden",alignSelf:"center",
           background:isDark?"#0d2b35":"#f4f6f5",border:isDark?"none":"1.5px solid #d0d8db",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
@@ -683,7 +683,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:14,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
+          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
@@ -717,7 +717,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
+        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 11px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
           background:isDark?"#0d2b35":"#f4f6f5",
           color:isDark?"#fff":N,fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
