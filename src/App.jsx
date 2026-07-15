@@ -539,11 +539,10 @@ function IconBox({ type, size=44, emoji }) {
 }
 
 function ScoreBadge({ score, size=50 }) {
-  const C      = score ? (score>=8?SH:score>=6?SM:SL) : null;
   const dec    = score ? (score/2).toFixed(1) : null;
   const starSz = size > 40 ? 13 : 10;
-  const bd = C ? C.bd : BDR;
-  const bg = C ? C.bg : BG2;
+  const bd = score ? O : BDR;
+  const bg = BG2;
   return (
     <div style={{width:size,height:size,flexShrink:0,borderRadius:12,
       border:`2px solid ${bd}`,background:bg,
@@ -1004,9 +1003,9 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             const s  = review.scores[cat.id];
             return (
               <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:4,
-                padding:"3px 10px",background:"rgba(255,255,255,0.06)",
+                padding:"3px 10px",background:"rgba(13,20,24,0.85)",
                 border:`1.5px solid ${BDR}`,borderRadius:10}}>
-                <span style={{fontSize:10,fontWeight:700,color:O}}>{cat.label}</span>
+                <span style={{fontSize:10,fontWeight:700,color:"#fff"}}>{cat.label}</span>
                 <PartialStars value={s/2} size={10} color="#FBBF24"/>
               </div>
             );
