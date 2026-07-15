@@ -1116,7 +1116,7 @@ function ImageSlider({ seed, type, subtype }) {
   const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
-    width:24,height:24,borderRadius:"50%",border:"none",background:BG3,color:N,
+    width:24,height:24,border:"none",background:"none",color:O,
     display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0,zIndex:1};
   return (
     <div style={{position:"relative",marginBottom:16}}>
@@ -1127,11 +1127,11 @@ function ImageSlider({ seed, type, subtype }) {
           <SliderPhoto key={i} src={src}/>
         ))}
       </div>
-      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:-30}}>
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:-24}}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:-30}}>
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:-24}}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
   );
