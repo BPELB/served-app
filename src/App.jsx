@@ -1008,25 +1008,75 @@ function ShareCard({ business, scores, onClose }) {
   );
 }
 
-const CAT_PHOTO_KEYWORDS = {
-  food:"restaurant,food", beauty:"salon,beauty", health:"medical,clinic",
-  fitness:"gym,fitness", automotive:"car,garage", homeservices:"home,repair",
-  pets:"pet,animal", childcare:"daycare,children", hospitality:"hotel,travel",
-  retail:"shop,store", professional:"office,business", events:"event,party",
-  education:"school,classroom", entertainment:"cinema,entertainment",
-  moving:"moving,boxes", techrepair:"electronics,computer", laundry:"laundry,cleaning",
-  financial:"bank,finance", funeral:"memorial,flowers", government:"government,building",
+// Hand-picked photos, keyed by food subtype first (most specific), falling
+// back to a generic-but-relevant set per top-level category. Curated instead
+// of pulled from a random-by-keyword service so what shows up actually looks
+// appetizing/relevant instead of arbitrary stock-photo noise.
+const CAT_PHOTOS = {
+  // Food subtypes
+  Italian:       ["1513104890138-7c749659a591","1548365328-9f547fb0953b","1551183053-bf91a1d81141","1546549032-9571cd6b27df"],
+  American:      ["1550547660-d9450f859349","1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1553979459-d2229ba7433b"],
+  Japanese:      ["1579584425555-c3ce17fd4351","1553621042-f6e147245754","1611143669185-af224c5e3252","1553163147-622ab57be1c7"],
+  Mexican:       ["1565299624946-b28f40a0ae38","1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
+  Burgers:       ["1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1550547660-d9450f859349","1586190848861-99aa4a171e90"],
+  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1567188040759-fb8a883dc6d8","1631452180519-c014fe946bc7"],
+  French:        ["1555507036-ab1f4038808a","1550617931-e17a7b70dce2","1608198093002-ad4e005484ec","1608039829572-78524f79c4c7"],
+  Chinese:       ["1585032226651-759b368d7246","1563245372-f21724e3856d","1526318896980-cf78c088247c","1552611052-33e04de081de"],
+  Korean:        ["1590301157890-4810ed352733","1580651315530-69c8e0026377","1583224964978-2257b960c3d3"],
+  Mediterranean: ["1540420773420-3366772f4999","1512058564366-18510be2db19","1615719413546-198b25453f85"],
+  // Top-level category fallback
+  food:          ["1517248135467-4c7edcad34c4","1414235077428-338989a2e8c0","1517244683847-7456b63c5969"],
+  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035"],
+  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907"],
+  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b"],
+  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
+  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
+  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
+  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
+  hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
+  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
+  professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
+  events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
+  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
+  entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
+  moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
+  techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
+  laundry:       ["1545173168-9f1947eebb7f"],
+  financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
+  funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
+  government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
 };
+function photoPool(type, subtype) {
+  return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
+}
 function hashStr(s) {
   let h = 0;
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
-function ImageSlider({ seed, type, subtype }) {
+function SliderPhoto({ src, emoji }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div style={{width:180,height:108,borderRadius:14,flexShrink:0,scrollSnapAlign:"start",
+        background:BG3,border:`1px solid ${BDR}`,
+        display:"flex",alignItems:"center",justifyContent:"center",fontSize:34}}>
+        {emoji||"📷"}
+      </div>
+    );
+  }
+  return (
+    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:180,height:108,objectFit:"cover",
+      borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+  );
+}
+function ImageSlider({ seed, type, subtype, emoji }) {
   const ref = useRef(null);
-  const keywords = [subtype, CAT_PHOTO_KEYWORDS[type]||"business"].filter(Boolean).join(",");
+  const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
-  const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
+  // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
+  const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
+  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
     width:22,height:22,borderRadius:"50%",border:"none",background:BG3,color:N,
@@ -1037,8 +1087,7 @@ function ImageSlider({ seed, type, subtype }) {
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
         {photos.map((src,i)=>(
-          <img key={i} src={src} alt="" style={{width:180,height:108,objectFit:"cover",
-            borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+          <SliderPhoto key={i} src={src} emoji={emoji}/>
         ))}
       </div>
       <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:0}}>
@@ -1156,7 +1205,7 @@ function BusinessPage({ business, onBack, onRate }) {
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} emoji={business.emoji}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
