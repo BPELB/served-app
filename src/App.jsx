@@ -35,10 +35,6 @@ function applyTheme(vars) {
 }
 
 // Functional score colors
-const SH = { bg:"transparent",  bd:O,  tx:O };
-const SM = { bg:"transparent",  bd:"#FF6B35",  tx:"#FF6B35" };
-const SL = { bg:"transparent",  bd:"#FBBF24",  tx:"#FBBF24" };
-const scC = s => s>=4?SH:s>=3?SM:SL;
 const stC = s => s>=8?O:s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
@@ -889,11 +885,10 @@ function StarCard({ cat, value, onChange, box }) {
   const [hov,setHov] = useState(0);
   const sv   = value ? value/2 : 0;
   const show = hov || sv;
-  const SC   = sv ? scC(sv) : null;
 
   return (
     <div style={{padding:"14px 16px",borderRadius:16,marginBottom:10,
-      background:BG2,border:`1.5px solid ${SC?SC.bd:O}`,
+      background:BG2,border:`1.5px solid ${O}`,
       transition:"border-color 0.2s"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
@@ -909,9 +904,9 @@ function StarCard({ cat, value, onChange, box }) {
           <div style={{fontSize:11,color:MUT,marginTop:1}}>{cat.q}</div>
         </div>
         {sv>0&&(
-          <div style={{fontSize:12,fontWeight:800,color:SC?SC.tx:MUT,
-            background:SC?SC.bg:BG3,padding:"3px 10px",borderRadius:20,
-            border:`1.5px solid ${SC?SC.bd:BDR}`,whiteSpace:"nowrap"}}>
+          <div style={{fontSize:12,fontWeight:800,color:O,
+            background:OA(15),padding:"3px 10px",borderRadius:20,
+            border:`1.5px solid ${O}`,whiteSpace:"nowrap"}}>
             {sv}/5
           </div>
         )}
@@ -936,7 +931,7 @@ function StarCard({ cat, value, onChange, box }) {
       {sv>0&&(
         <div style={{textAlign:"center",marginTop:7}}>
           <button onClick={()=>onChange(null)}
-            style={{fontSize:11,color:SC?"rgba(255,255,255,0.6)":"#aaa",background:"none",border:"none",
+            style={{fontSize:11,color:MUT,background:"none",border:"none",
               cursor:"pointer",textDecoration:"underline",fontFamily:"inherit"}}>clear</button>
         </div>
       )}
