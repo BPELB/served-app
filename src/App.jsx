@@ -1108,7 +1108,7 @@ function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:180,height:108,objectFit:"cover",
+    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:"calc(50% - 5px)",height:108,objectFit:"cover",
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
@@ -1119,23 +1119,24 @@ function ImageSlider({ seed, type, subtype }) {
   // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
   const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
-  const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
-  const arrowStyle = {flexShrink:0,width:20,height:20,borderRadius:"50%",border:"none",background:BG3,color:N,
-    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0};
+  const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
+  const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
+    width:26,height:26,borderRadius:"50%",border:"none",background:"rgba(13,20,24,0.75)",color:"#fff",
+    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0,zIndex:1};
   return (
-    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
-      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={arrowStyle}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <div ref={ref} style={{flex:1,minWidth:0,display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
+    <div style={{position:"relative",marginBottom:16}}>
+      <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
         {photos.map((src,i)=>(
           <SliderPhoto key={i} src={src}/>
         ))}
       </div>
-      <button onClick={()=>scroll(1)} aria-label="Next photo" style={arrowStyle}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:6}}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:6}}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
   );
