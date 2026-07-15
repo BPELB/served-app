@@ -997,7 +997,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
           {rated.map(cat=>{
             const s  = review.scores[cat.id];
             return (
-              <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:3,flexShrink:0,
+              <div key={cat.id} style={{flex:1,minWidth:0,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:3,
                 padding:"2px 7px",background:"rgba(13,20,24,0.85)",
                 border:`1.5px solid ${O}`,borderRadius:10}}>
                 <span style={{fontSize:9,fontWeight:700,color:"#fff",whiteSpace:"nowrap"}}>{cat.label}</span>
