@@ -1115,22 +1115,21 @@ function ImageSlider({ seed, type, subtype }) {
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
   const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
-  const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
-    width:26,height:26,borderRadius:"50%",border:"none",background:"rgba(13,20,24,0.75)",color:"#fff",
-    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0,zIndex:1};
+  const arrowStyle = {flexShrink:0,width:26,height:26,borderRadius:"50%",border:"none",background:BG3,color:N,
+    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0};
   return (
-    <div style={{position:"relative",marginBottom:16}}>
-      <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
+    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={arrowStyle}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div ref={ref} style={{flex:1,minWidth:0,display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
         {photos.map((src,i)=>(
           <SliderPhoto key={i} src={src}/>
         ))}
       </div>
-      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:6}}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:6}}>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={arrowStyle}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
