@@ -1116,7 +1116,7 @@ function ImageSlider({ seed, type, subtype }) {
   const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
-    width:16,height:16,border:"none",background:"none",color:"#fff",
+    width:16,height:16,border:"none",background:"none",color:MUT,
     display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0,zIndex:1};
   return (
     <div style={{position:"relative",marginBottom:16}}>
