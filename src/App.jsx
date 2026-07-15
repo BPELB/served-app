@@ -944,7 +944,11 @@ function StarCard({ cat, value, onChange, box }) {
 // ============================================================
 function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
   const bt    = BT[btKey||"food"];
-  const rated = bt.core.filter(c=>review.scores?.[c.id]);
+  // Demo reviews are always scored on food/service/vibe regardless of the business
+  // being viewed — fall back to Food's category labels so pills still render.
+  const rated = bt.core.some(c=>review.scores?.[c.id])
+    ? bt.core.filter(c=>review.scores?.[c.id])
+    : BT.food.core.filter(c=>review.scores?.[c.id]);
   const vals  = Object.values(review.scores||{}).filter(Boolean);
   const avg   = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
   const helped = helpedIds?.includes(review.id);
