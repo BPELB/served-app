@@ -310,6 +310,29 @@ const DEMOS = {
   ],
 };
 
+// Finds which category a search query most likely belongs to, searching across
+// every category rather than just the one currently selected. Prefers keeping
+// the current category if it already has a match, to avoid needless switching.
+function bestCategoryMatch(query, preferredCat) {
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+  const matches = key => (DEMOS[key]||[]).some(b=>b.name.toLowerCase().includes(q));
+  if (preferredCat && matches(preferredCat)) return preferredCat;
+
+  let best = null;
+  for (const key of TYPE_KEYS) {
+    for (const biz of DEMOS[key]||[]) {
+      const name = biz.name.toLowerCase();
+      if (!name.includes(q)) continue;
+      const rank = name.startsWith(q) ? 2 : 1;
+      if (!best || rank > best.rank || (rank === best.rank && (biz.rating||0) > best.rating)) {
+        best = { key, rank, rating: biz.rating||0 };
+      }
+    }
+  }
+  return best ? best.key : null;
+}
+
 const DEMO_REVIEWS = [
   {id:1,avg:9.1,scores:{food:10,service:8,vibe:9},  feedback:"Best pasta in Dallas. The carbonara is absolutely unreal.",items:["Carbonara","Tiramisu"],created_at:"2026-05-28",helpful:12},
   {id:2,avg:5.7,scores:{food:7,service:3,vibe:7},   feedback:"Food was solid but waited 25 minutes to be acknowledged.",items:["Margherita Pizza"],created_at:"2026-05-25",helpful:19},
@@ -1873,6 +1896,19 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     );
   },[]);
 
+  // Search isn't scoped to the active tab — find whichever category the query
+  // actually belongs to and switch to it, so results aren't hidden behind the wrong tab.
+  useEffect(()=>{
+    const q = search.trim();
+    if (!q) return;
+    const matchCat = bestCategoryMatch(q,cat);
+    if (matchCat && matchCat!==cat) {
+      setCat(matchCat);
+      setPage(0);
+      setSubFilter(null);
+    }
+  },[search]);
+
   useEffect(()=>{
     clearTimeout(timer.current);
     timer.current = setTimeout(async()=>{
@@ -1937,9 +1973,17 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             fontSize:14,pointerEvents:"none"}}>🔍</span>
           <input value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}
             placeholder="Search by name…"
-            style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
+            style={{width:"100%",borderRadius:14,padding:"11px 34px 11px 38px",
               fontSize:13,border:`1.5px solid ${BDR}`,background:BG2,
               color:N,fontFamily:"inherit",outline:"none"}}/>
+          {search&&!searching&&(
+            <button onClick={()=>{setSearch("");setPage(0);}} aria-label="Clear search"
+              style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",
+                width:20,height:20,borderRadius:"50%",border:"none",background:BG3,color:MUT,
+                display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0}}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          )}
           {searching&&<span style={{position:"absolute",right:12,top:"50%",
             transform:"translateY(-50%)",fontSize:11,color:MUT}}>
             searching…
