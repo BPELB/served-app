@@ -1201,13 +1201,15 @@ function BusinessPage({ business, onBack, onRate }) {
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
             <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
             <div style={{fontSize:11,color:MUT}}>{business.addr||business.address}</div>
-            <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4,flexWrap:"wrap"}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}>
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
                 color:(business.open||business.isOpen)?O:"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:14,marginTop:4}}>
               {business.hours && (
                 <button onClick={()=>setHoursOpen(o=>!o)}
                   style={{display:"inline-flex",alignItems:"center",gap:2,
@@ -1277,11 +1279,11 @@ function BusinessPage({ business, onBack, onRate }) {
         )}
       </div>
 
-      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
+      <div style={{display:"flex",gap:8,marginBottom:16}}>
         <a href={`tel:${bizPhone(business)}`}
           onMouseEnter={e=>e.currentTarget.style.background=HOV}
           onMouseLeave={e=>e.currentTarget.style.background=BG2}
-          style={{display:"inline-flex",alignItems:"center",gap:6,padding:"9px 14px",borderRadius:12,
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
             border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
             textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1292,7 +1294,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <a href={`https://${bizWebsite(business)}`} target="_blank" rel="noreferrer"
           onMouseEnter={e=>e.currentTarget.style.background=HOV}
           onMouseLeave={e=>e.currentTarget.style.background=BG2}
-          style={{display:"inline-flex",alignItems:"center",gap:6,padding:"9px 14px",borderRadius:12,
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
             border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
             textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1305,7 +1307,7 @@ function BusinessPage({ business, onBack, onRate }) {
           <a href={`https://${bizMenuUrl(business)}`} target="_blank" rel="noreferrer"
             onMouseEnter={e=>e.currentTarget.style.background=HOV}
             onMouseLeave={e=>e.currentTarget.style.background=BG2}
-            style={{display:"inline-flex",alignItems:"center",gap:6,padding:"9px 14px",borderRadius:12,
+            style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
               border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
               textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1318,7 +1320,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <button onClick={handleShare}
           onMouseEnter={e=>e.currentTarget.style.background=HOV}
           onMouseLeave={e=>e.currentTarget.style.background=BG2}
-          style={{display:"inline-flex",alignItems:"center",gap:6,padding:"9px 14px",borderRadius:12,
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
             border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
             cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1330,7 +1332,6 @@ function BusinessPage({ business, onBack, onRate }) {
       </div>
 
       <div style={{marginBottom:16}}>
-        <div style={{fontSize:14,fontWeight:700,color:N,marginBottom:6}}>About</div>
         <p style={{fontSize:13,color:MUT,lineHeight:1.6,margin:0}}>{bizAbout(business)}</p>
       </div>
 
