@@ -1004,7 +1004,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
             return (
               <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:4,
                 padding:"3px 10px",background:"rgba(13,20,24,0.85)",
-                border:`1.5px solid ${BDR}`,borderRadius:10}}>
+                border:`1.5px solid ${O}`,borderRadius:10}}>
                 <span style={{fontSize:10,fontWeight:700,color:"#fff"}}>{cat.label}</span>
                 <PartialStars value={s/2} size={10} color="#FBBF24"/>
               </div>
