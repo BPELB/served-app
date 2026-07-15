@@ -1120,12 +1120,12 @@ function ImageSlider({ seed, type, subtype }) {
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
   const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
-  const arrowStyle = {flexShrink:0,width:28,height:28,borderRadius:"50%",border:"none",background:BG3,color:N,
+  const arrowStyle = {flexShrink:0,width:20,height:20,borderRadius:"50%",border:"none",background:BG3,color:N,
     display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0};
   return (
-    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}>
+    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
       <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={arrowStyle}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div ref={ref} style={{flex:1,minWidth:0,display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
@@ -1135,7 +1135,7 @@ function ImageSlider({ seed, type, subtype }) {
         ))}
       </div>
       <button onClick={()=>scroll(1)} aria-label="Next photo" style={arrowStyle}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
   );
