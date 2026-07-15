@@ -1054,23 +1054,15 @@ function hashStr(s) {
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
-function SliderPhoto({ src, emoji }) {
+function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <div style={{width:180,height:108,borderRadius:14,flexShrink:0,scrollSnapAlign:"start",
-        background:BG3,border:`1px solid ${BDR}`,
-        display:"flex",alignItems:"center",justifyContent:"center",fontSize:34}}>
-        {emoji||"📷"}
-      </div>
-    );
-  }
+  if (failed) return null;
   return (
     <img src={src} alt="" onError={()=>setFailed(true)} style={{width:180,height:108,objectFit:"cover",
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
-function ImageSlider({ seed, type, subtype, emoji }) {
+function ImageSlider({ seed, type, subtype }) {
   const ref = useRef(null);
   const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
@@ -1087,7 +1079,7 @@ function ImageSlider({ seed, type, subtype, emoji }) {
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
         {photos.map((src,i)=>(
-          <SliderPhoto key={i} src={src} emoji={emoji}/>
+          <SliderPhoto key={i} src={src}/>
         ))}
       </div>
       <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:0}}>
@@ -1205,7 +1197,7 @@ function BusinessPage({ business, onBack, onRate }) {
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} emoji={business.emoji}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
@@ -1936,6 +1928,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   const [searching,setSearching]= useState(false);
   const [showClaim,setShowClaim]= useState(false);
   const timer                   = useRef(null);
+  const reqId                   = useRef(0);
   const PAGE = 5;
 
   useEffect(()=>{
@@ -1960,12 +1953,16 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
   useEffect(()=>{
     clearTimeout(timer.current);
+    const myReq = ++reqId.current;
     timer.current = setTimeout(async()=>{
       if (!loc) return;
       setSearching(true);
       setPage(0);
       const q = search.trim()||BT[cat].label;
       const r = await gPlaces.search(q,loc.lat,loc.lng,cat);
+      // Discard the response if a newer search/category change fired after this one —
+      // a slow request for a stale query must never clobber a fresher result set.
+      if (myReq !== reqId.current) return;
       setResults(r);
       setSearching(false);
     },400);
