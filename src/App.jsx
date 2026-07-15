@@ -998,15 +998,15 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       </div>
       {/* Category star pills below */}
       {rated.length>0&&(
-        <div style={{display:"flex",gap:4,flexWrap:"wrap",marginTop:4}}>
+        <div style={{display:"flex",gap:3,flexWrap:"nowrap",marginTop:4}}>
           {rated.map(cat=>{
             const s  = review.scores[cat.id];
             return (
-              <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:4,
-                padding:"3px 10px",background:"rgba(13,20,24,0.85)",
+              <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:3,flexShrink:0,
+                padding:"2px 7px",background:"rgba(13,20,24,0.85)",
                 border:`1.5px solid ${O}`,borderRadius:10}}>
-                <span style={{fontSize:10,fontWeight:700,color:"#fff"}}>{cat.label}</span>
-                <PartialStars value={s/2} size={10} color="#FBBF24"/>
+                <span style={{fontSize:9,fontWeight:700,color:"#fff",whiteSpace:"nowrap"}}>{cat.label}</span>
+                <PartialStars value={s/2} size={8} color="#FBBF24"/>
               </div>
             );
           })}
