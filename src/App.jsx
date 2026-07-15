@@ -600,12 +600,11 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       onMouseEnter={e=>e.currentTarget.style.borderColor=O}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
       {/* Main row */}
-      <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
+      <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
         <IconBox type={b.type} size={52} emoji={b.emoji}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
+          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
             {b.subtype||bt.label}
             {b.rating ? <span style={{color:MUT}}> · ⭐ {b.rating}</span> : null}
@@ -725,8 +724,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
+          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
             {ad.bizSubtype||ad.bizType}
