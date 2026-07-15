@@ -213,18 +213,42 @@ function closeTime(hours) {
 
 const DEMOS = {
   food:        [
-    {id:"d1",name:"Osteria Romana",    addr:"123 Main St, McKinney TX",  type:"food",subtype:"Italian",        emoji:"🍕",rating:4.3,price:2,open:true, hours:H.rest},
-    {id:"d2",name:"The Garden Bistro", addr:"456 Oak Ave, McKinney TX",  type:"food",subtype:"American",       emoji:"🥗",rating:4.1,price:2,open:true, hours:{...H.rest,Sun:"Closed"}},
-    {id:"d3",name:"Sakura House",      addr:"789 Elm St, McKinney TX",   type:"food",subtype:"Japanese",       emoji:"🍱",rating:4.6,price:3,open:false,hours:{...H.rest,Mon:"Closed",Tue:"Closed"}},
-    {id:"d4",name:"El Rancho Tacos",   addr:"321 Pine St, McKinney TX",  type:"food",subtype:"Mexican",        emoji:"🌮",rating:4.4,price:1,open:true, hours:{...H.rest,Mon:"11am–9pm"}},
-    {id:"d5",name:"The Burger Lab",    addr:"654 Cedar Rd, McKinney TX", type:"food",subtype:"Burgers",        emoji:"🍔",rating:4.2,price:1,open:true, hours:H.rest},
-    {id:"d6",name:"Spice Garden",      addr:"987 Walnut St, McKinney TX",type:"food",subtype:"Indian",         emoji:"🍛",rating:4.5,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
-    {id:"d7",name:"Le Petit Café",     addr:"210 Vine St, McKinney TX",  type:"food",subtype:"French",         emoji:"🥐",rating:4.7,price:2,open:true, hours:H.rest},
-    {id:"d8",name:"Golden Wok",        addr:"75 Canton Ave, McKinney TX",type:"food",subtype:"Chinese",        emoji:"🥡",rating:4.3,price:1,open:true, hours:{...H.rest,Sun:"12pm–8pm"}},
-    {id:"d9",name:"Bella Notte",       addr:"44 Trattoria Way, McKinney TX",type:"food",subtype:"Italian",     emoji:"🍝",rating:4.5,price:3,open:true, hours:H.rest},
-    {id:"d10",name:"Seoul Kitchen",    addr:"12 K-Town Blvd, McKinney TX",type:"food",subtype:"Korean",        emoji:"🍜",rating:4.6,price:2,open:true, hours:{...H.rest,Mon:"Closed"}},
-    {id:"d11",name:"Mediterraneo",     addr:"88 Olive St, McKinney TX",  type:"food",subtype:"Mediterranean",  emoji:"🥙",rating:4.4,price:2,open:false,hours:{...H.rest,Tue:"Closed"}},
-    {id:"d12",name:"Crepe & Co.",      addr:"30 Batter St, McKinney TX", type:"food",subtype:"French",         emoji:"🫓",rating:4.2,price:1,open:true, hours:H.rest},
+    {id:"d1",name:"Osteria Romana",    addr:"123 Main St, McKinney TX",  type:"food",subtype:"Italian",        emoji:"🍕",rating:4.3,price:2,open:true, hours:H.rest,
+      phone:"(972) 555-0142", website:"osteriaromana.com", menuUrl:"osteriaromana.com/menu",
+      about:"Family-owned Italian trattoria serving handmade pasta and wood-fired pizza since 1987. Recipes passed down three generations, sourced from local Texas farms wherever possible."},
+    {id:"d2",name:"The Garden Bistro", addr:"456 Oak Ave, McKinney TX",  type:"food",subtype:"American",       emoji:"🥗",rating:4.1,price:2,open:true, hours:{...H.rest,Sun:"Closed"},
+      phone:"(972) 555-0198", website:"thegardenbistro.com", menuUrl:"thegardenbistro.com/menu",
+      about:"A relaxed neighborhood bistro serving elevated American comfort food, seasonal salads, and craft cocktails on a plant-filled patio."},
+    {id:"d3",name:"Sakura House",      addr:"789 Elm St, McKinney TX",   type:"food",subtype:"Japanese",       emoji:"🍱",rating:4.6,price:3,open:false,hours:{...H.rest,Mon:"Closed",Tue:"Closed"},
+      phone:"(972) 555-0163", website:"sakurahousemckinney.com", menuUrl:"sakurahousemckinney.com/menu",
+      about:"Traditional Japanese sushi and ramen counter with fish flown in fresh several times a week. Omakase available by reservation."},
+    {id:"d4",name:"El Rancho Tacos",   addr:"321 Pine St, McKinney TX",  type:"food",subtype:"Mexican",        emoji:"🌮",rating:4.4,price:1,open:true, hours:{...H.rest,Mon:"11am–9pm"},
+      phone:"(972) 555-0117", website:"elranchotacos.com", menuUrl:"elranchotacos.com/menu",
+      about:"Family taqueria serving street-style tacos, fresh-pressed tortillas, and house-made salsas. A McKinney lunch staple since day one."},
+    {id:"d5",name:"The Burger Lab",    addr:"654 Cedar Rd, McKinney TX", type:"food",subtype:"Burgers",        emoji:"🍔",rating:4.2,price:1,open:true, hours:H.rest,
+      phone:"(972) 555-0184", website:"theburgerlab.com", menuUrl:"theburgerlab.com/menu",
+      about:"Scratch-made smash burgers, hand-cut fries, and thick shakes. Every patty is ground in-house daily."},
+    {id:"d6",name:"Spice Garden",      addr:"987 Walnut St, McKinney TX",type:"food",subtype:"Indian",         emoji:"🍛",rating:4.5,price:2,open:true, hours:{...H.rest,Mon:"Closed"},
+      phone:"(972) 555-0129", website:"spicegardentx.com", menuUrl:"spicegardentx.com/menu",
+      about:"Northern and Southern Indian cuisine cooked to order, from tandoori classics to slow-simmered curries. Full vegetarian and vegan menu available."},
+    {id:"d7",name:"Le Petit Café",     addr:"210 Vine St, McKinney TX",  type:"food",subtype:"French",         emoji:"🥐",rating:4.7,price:2,open:true, hours:H.rest,
+      phone:"(972) 555-0155", website:"lepetitcafemckinney.com", menuUrl:"lepetitcafemckinney.com/menu",
+      about:"A cozy French café serving buttery croissants, quiche, and espresso drinks. Weekend brunch is the neighborhood's best-kept secret."},
+    {id:"d8",name:"Golden Wok",        addr:"75 Canton Ave, McKinney TX",type:"food",subtype:"Chinese",        emoji:"🥡",rating:4.3,price:1,open:true, hours:{...H.rest,Sun:"12pm–8pm"},
+      phone:"(972) 555-0171", website:"goldenwoktx.com", menuUrl:"goldenwoktx.com/menu",
+      about:"Wok-fired Chinese classics made fast without cutting corners — from Kung Pao chicken to fresh-made dumplings."},
+    {id:"d9",name:"Bella Notte",       addr:"44 Trattoria Way, McKinney TX",type:"food",subtype:"Italian",     emoji:"🍝",rating:4.5,price:3,open:true, hours:H.rest,
+      phone:"(972) 555-0138", website:"bellanottemckinney.com", menuUrl:"bellanottemckinney.com/menu",
+      about:"Upscale Italian dining for date nights and special occasions, with an extensive Italian wine list and tableside service."},
+    {id:"d10",name:"Seoul Kitchen",    addr:"12 K-Town Blvd, McKinney TX",type:"food",subtype:"Korean",        emoji:"🍜",rating:4.6,price:2,open:true, hours:{...H.rest,Mon:"Closed"},
+      phone:"(972) 555-0192", website:"seoulkitchentx.com", menuUrl:"seoulkitchentx.com/menu",
+      about:"Korean BBQ and comfort classics — bulgogi, bibimbap, and build-your-own banchan spreads in a lively dining room."},
+    {id:"d11",name:"Mediterraneo",     addr:"88 Olive St, McKinney TX",  type:"food",subtype:"Mediterranean",  emoji:"🥙",rating:4.4,price:2,open:false,hours:{...H.rest,Tue:"Closed"},
+      phone:"(972) 555-0146", website:"mediterraneomckinney.com", menuUrl:"mediterraneomckinney.com/menu",
+      about:"Mediterranean small plates and mezze built for sharing, with housemade hummus, fresh pita, and grilled skewers."},
+    {id:"d12",name:"Crepe & Co.",      addr:"30 Batter St, McKinney TX", type:"food",subtype:"French",         emoji:"🫓",rating:4.2,price:1,open:true, hours:H.rest,
+      phone:"(972) 555-0103", website:"crepeandco.com", menuUrl:"crepeandco.com/menu",
+      about:"Sweet and savory crepes made to order on a traditional French griddle, plus strong coffee and fresh-squeezed juice."},
   ],
   beauty:      [
     {id:"b1",name:"Cuts & Co.",         addr:"321 Pine St",  type:"beauty",subtype:"Hair Salon",   emoji:"✂️",rating:4.4,price:2,open:true, hours:H.std},
@@ -309,6 +333,51 @@ const DEMOS = {
     {id:"g2",name:"McKinney DMV",       addr:"400 License Blvd",  type:"government",subtype:"DMV",          emoji:"🪪",rating:2.8,price:1,open:true, hours:{Mon:"8am–4:30pm",Tue:"8am–4:30pm",Wed:"8am–4:30pm",Thu:"8am–4:30pm",Fri:"8am–4:30pm",Sat:"Closed",Sun:"Closed"}},
   ],
 };
+
+// Finds which category a search query most likely belongs to, searching across
+// every category rather than just the one currently selected. Prefers keeping
+// the current category if it already has a match, to avoid needless switching.
+function bestCategoryMatch(query, preferredCat) {
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+  const matches = key => (DEMOS[key]||[]).some(b=>b.name.toLowerCase().includes(q));
+  if (preferredCat && matches(preferredCat)) return preferredCat;
+
+  let best = null;
+  for (const key of TYPE_KEYS) {
+    for (const biz of DEMOS[key]||[]) {
+      const name = biz.name.toLowerCase();
+      if (!name.includes(q)) continue;
+      const rank = name.startsWith(q) ? 2 : 1;
+      if (!best || rank > best.rank || (rank === best.rank && (biz.rating||0) > best.rating)) {
+        best = { key, rank, rating: biz.rating||0 };
+      }
+    }
+  }
+  return best ? best.key : null;
+}
+
+// Fallbacks for businesses without hand-authored contact/about info (everything
+// outside the curated food listings) so the business page always has something to show.
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g,"").slice(0,20)||"business";
+}
+function bizWebsite(b) {
+  return b.website || `${slugify(b.name)}.com`;
+}
+function bizMenuUrl(b) {
+  return b.menuUrl || `${bizWebsite(b)}/menu`;
+}
+function bizPhone(b) {
+  if (b.phone) return b.phone;
+  const n = hashStr(b.id||b.name);
+  return `(972) 555-${String(n%10000).padStart(4,"0")}`;
+}
+function bizAbout(b) {
+  if (b.about) return b.about;
+  const bt = BT[b.type||"food"];
+  return `${b.name} is a locally owned ${b.subtype||bt.label.toLowerCase()} business serving the McKinney community, rated ${b.rating||"highly"}★ by local customers.`;
+}
 
 const DEMO_REVIEWS = [
   {id:1,avg:9.1,scores:{food:10,service:8,vibe:9},  feedback:"Best pasta in Dallas. The carbonara is absolutely unreal.",items:["Carbonara","Tiramisu"],created_at:"2026-05-28",helpful:12},
@@ -643,7 +712,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
-        subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours})}>
+        subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
+        phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -652,8 +722,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
       {/* Main row */}
-      <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}>
-        <div style={{width:52,height:52,borderRadius:14,flexShrink:0,overflow:"hidden",alignSelf:"center",
+      <div style={{display:"flex",alignItems:"flex-start",gap:10,padding:"14px 16px"}}>
+        <div style={{width:46,height:46,borderRadius:14,flexShrink:0,overflow:"hidden",alignSelf:"center",
           background:isDark?"#0d2b35":"#f4f6f5",border:isDark?"none":"1.5px solid #d0d8db",
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
@@ -662,7 +732,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:14,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
+          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
@@ -696,7 +766,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
             )}
           </div>
         </div>
-        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 14px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
+        <div style={{flexShrink:0,alignSelf:"center",padding:"9px 11px",borderRadius:10,border:isDark?"2px solid transparent":"1.5px solid #d0d8db",display:"flex",alignItems:"center",gap:5,
           background:isDark?"#0d2b35":"#f4f6f5",
           color:isDark?"#fff":N,fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
@@ -979,25 +1049,63 @@ function ShareCard({ business, scores, onClose }) {
   );
 }
 
-const CAT_PHOTO_KEYWORDS = {
-  food:"restaurant,food", beauty:"salon,beauty", health:"medical,clinic",
-  fitness:"gym,fitness", automotive:"car,garage", homeservices:"home,repair",
-  pets:"pet,animal", childcare:"daycare,children", hospitality:"hotel,travel",
-  retail:"shop,store", professional:"office,business", events:"event,party",
-  education:"school,classroom", entertainment:"cinema,entertainment",
-  moving:"moving,boxes", techrepair:"electronics,computer", laundry:"laundry,cleaning",
-  financial:"bank,finance", funeral:"memorial,flowers", government:"government,building",
+const CAT_PHOTOS = {
+  // Food subtypes
+  Italian:       ["1513104890138-7c749659a591","1548365328-9f547fb0953b","1551183053-bf91a1d81141","1546549032-9571cd6b27df"],
+  American:      ["1550547660-d9450f859349","1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1553979459-d2229ba7433b"],
+  Japanese:      ["1579584425555-c3ce17fd4351","1553621042-f6e147245754","1611143669185-af224c5e3252","1553163147-622ab57be1c7"],
+  Mexican:       ["1565299624946-b28f40a0ae38","1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
+  Burgers:       ["1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1550547660-d9450f859349","1586190848861-99aa4a171e90"],
+  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1567188040759-fb8a883dc6d8","1631452180519-c014fe946bc7"],
+  French:        ["1555507036-ab1f4038808a","1550617931-e17a7b70dce2","1608198093002-ad4e005484ec","1608039829572-78524f79c4c7"],
+  Chinese:       ["1585032226651-759b368d7246","1563245372-f21724e3856d","1526318896980-cf78c088247c","1552611052-33e04de081de"],
+  Korean:        ["1590301157890-4810ed352733","1580651315530-69c8e0026377","1583224964978-2257b960c3d3"],
+  Mediterranean: ["1540420773420-3366772f4999","1512058564366-18510be2db19","1615719413546-198b25453f85"],
+  // Top-level category fallback
+  food:          ["1517248135467-4c7edcad34c4","1414235077428-338989a2e8c0","1517244683847-7456b63c5969"],
+  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035"],
+  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907"],
+  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b"],
+  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
+  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
+  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
+  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
+  hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
+  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
+  professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
+  events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
+  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
+  entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
+  moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
+  techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
+  laundry:       ["1545173168-9f1947eebb7f"],
+  financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
+  funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
+  government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
 };
+function photoPool(type, subtype) {
+  return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
+}
 function hashStr(s) {
   let h = 0;
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
+function SliderPhoto({ src }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:180,height:108,objectFit:"cover",
+      borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+  );
+}
 function ImageSlider({ seed, type, subtype }) {
   const ref = useRef(null);
-  const keywords = [subtype, CAT_PHOTO_KEYWORDS[type]||"business"].filter(Boolean).join(",");
+  const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
-  const photos = [1,2,3,4,5].map(n=>`https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${base+n}`);
+  // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
+  const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
+  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
     width:22,height:22,borderRadius:"50%",border:"none",background:BG3,color:N,
@@ -1008,8 +1116,7 @@ function ImageSlider({ seed, type, subtype }) {
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
         {photos.map((src,i)=>(
-          <img key={i} src={src} alt="" style={{width:180,height:108,objectFit:"cover",
-            borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
+          <SliderPhoto key={i} src={src}/>
         ))}
       </div>
       <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:0}}>
@@ -1030,7 +1137,25 @@ function BusinessPage({ business, onBack, onRate }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const [revPage,setRevPage] = useState(1);
+  const [hoursOpen,setHoursOpen] = useState(false);
+  const [locationOpen,setLocationOpen] = useState(false);
+  const [shared,setShared] = useState(false);
   const bt = BT[business.type||"food"];
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+
+  const handleShare = async () => {
+    const shareData = { title: business.name, text: `Check out ${business.name} on Trufilo`, url: window.location.href };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch(e) {}
+    } else if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setShared(true);
+        setTimeout(()=>setShared(false), 1800);
+      } catch(e) {}
+    }
+  };
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
@@ -1066,13 +1191,35 @@ function BusinessPage({ business, onBack, onRate }) {
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
             <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
             <div style={{fontSize:11,color:MUT}}>{business.addr||business.address}</div>
-            <div style={{display:"flex",gap:8,marginTop:4}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}>
               {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
                 color:(business.open||business.isOpen)?O:"rgba(255,255,255,0.4)"}}>
                 {(business.open||business.isOpen)?"● Open":"● Closed"}
               </span>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:14,marginTop:4}}>
+              {business.hours && (
+                <button onClick={()=>setHoursOpen(o=>!o)}
+                  style={{display:"inline-flex",alignItems:"center",gap:2,
+                    fontSize:11,color:MUT,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                  <span>Hours</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                    <polyline points={hoursOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                  </svg>
+                </button>
+              )}
+              {(business.addr||business.address) && (
+                <button onClick={()=>setLocationOpen(o=>!o)}
+                  style={{display:"inline-flex",alignItems:"center",gap:2,
+                    fontSize:11,color:MUT,background:"none",border:"none",cursor:"pointer",padding:"0 2px"}}>
+                  <span>Location</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                    <polyline points={locationOpen?"18 15 12 9 6 15":"6 9 12 15 18 9"}/>
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
           {overallStars&&(()=>{
@@ -1092,6 +1239,90 @@ function BusinessPage({ business, onBack, onRate }) {
             );
           })()}
         </div>
+
+        {hoursOpen && business.hours && (
+          <div style={{position:"relative",marginTop:12,paddingTop:12,borderTop:"1px solid rgba(255,255,255,0.15)"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+              {days.map(day=>{
+                const isToday = day === todayKey;
+                const h = business.hours[day];
+                return (
+                  <div key={day} style={{textAlign:"center"}}>
+                    <div style={{fontSize:9,fontWeight:700,color:isToday?O:MUT,
+                      textTransform:"uppercase",marginBottom:3}}>{day}</div>
+                    <div style={{fontSize:10,color:isToday?N:MUT,fontWeight:isToday?700:400,
+                      lineHeight:1.4,background:isToday?OA(13):undefined,
+                      borderRadius:6,padding:"3px 2px"}}>
+                      {h==="Closed"?"—":h==="24hrs"?"24h":h?.replace("am","a").replace("pm","p")||"—"}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {locationOpen && (business.addr||business.address) && (
+          <div style={{position:"relative",marginTop:12,paddingTop:12,borderTop:"1px solid rgba(255,255,255,0.15)"}}>
+            <LocationMap addr={business.addr||business.address}/>
+          </div>
+        )}
+      </div>
+
+      <div style={{display:"flex",gap:8,marginBottom:16}}>
+        <a href={`tel:${bizPhone(business)}`}
+          onMouseEnter={e=>e.currentTarget.style.background=HOV}
+          onMouseLeave={e=>e.currentTarget.style.background=BG2}
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
+            border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
+            textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          Call
+        </a>
+        <a href={`https://${bizWebsite(business)}`} target="_blank" rel="noreferrer"
+          onMouseEnter={e=>e.currentTarget.style.background=HOV}
+          onMouseLeave={e=>e.currentTarget.style.background=BG2}
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
+            border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
+            textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          Website
+        </a>
+        {(business.type||"food")==="food" && (
+          <a href={`https://${bizMenuUrl(business)}`} target="_blank" rel="noreferrer"
+            onMouseEnter={e=>e.currentTarget.style.background=HOV}
+            onMouseLeave={e=>e.currentTarget.style.background=BG2}
+            style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
+              border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
+              textDecoration:"none",cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            Menu
+          </a>
+        )}
+        <button onClick={handleShare}
+          onMouseEnter={e=>e.currentTarget.style.background=HOV}
+          onMouseLeave={e=>e.currentTarget.style.background=BG2}
+          style={{flex:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:"9px 8px",borderRadius:12,
+            border:`1.5px solid ${BDR}`,background:BG2,color:N,fontSize:12,fontWeight:700,
+            cursor:"pointer",transition:"background 0.15s",fontFamily:"inherit"}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          {shared?"Copied!":"Share"}
+        </button>
+      </div>
+
+      <div style={{marginBottom:16}}>
+        <p style={{fontSize:13,color:MUT,lineHeight:1.6,margin:0}}>{bizAbout(business)}</p>
       </div>
 
       {catAvgs.length>0&&(
@@ -1858,6 +2089,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   const [searching,setSearching]= useState(false);
   const [showClaim,setShowClaim]= useState(false);
   const timer                   = useRef(null);
+  const reqId                   = useRef(0);
   const PAGE = 5;
 
   useEffect(()=>{
@@ -1867,14 +2099,31 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     );
   },[]);
 
+  // Search isn't scoped to the active tab — find whichever category the query
+  // actually belongs to and switch to it, so results aren't hidden behind the wrong tab.
+  useEffect(()=>{
+    const q = search.trim();
+    if (!q) return;
+    const matchCat = bestCategoryMatch(q,cat);
+    if (matchCat && matchCat!==cat) {
+      setCat(matchCat);
+      setPage(0);
+      setSubFilter(null);
+    }
+  },[search]);
+
   useEffect(()=>{
     clearTimeout(timer.current);
+    const myReq = ++reqId.current;
     timer.current = setTimeout(async()=>{
       if (!loc) return;
       setSearching(true);
       setPage(0);
       const q = search.trim()||BT[cat].label;
       const r = await gPlaces.search(q,loc.lat,loc.lng,cat);
+      // Discard the response if a newer search/category change fired after this one —
+      // a slow request for a stale query must never clobber a fresher result set.
+      if (myReq !== reqId.current) return;
       setResults(r);
       setSearching(false);
     },400);
@@ -1931,9 +2180,17 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
             fontSize:14,pointerEvents:"none"}}>🔍</span>
           <input value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}
             placeholder="Search by name…"
-            style={{width:"100%",borderRadius:14,padding:"11px 12px 11px 38px",
+            style={{width:"100%",borderRadius:14,padding:"11px 34px 11px 38px",
               fontSize:13,border:`1.5px solid ${BDR}`,background:BG2,
               color:N,fontFamily:"inherit",outline:"none"}}/>
+          {search&&!searching&&(
+            <button onClick={()=>{setSearch("");setPage(0);}} aria-label="Clear search"
+              style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",
+                width:20,height:20,borderRadius:"50%",border:"none",background:BG3,color:MUT,
+                display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0}}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          )}
           {searching&&<span style={{position:"absolute",right:12,top:"50%",
             transform:"translateY(-50%)",fontSize:11,color:MUT}}>
             searching…
@@ -2127,6 +2384,7 @@ function sponsorFor(catKey) {
     bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     headline: copy.headline, tagline: copy.tagline,
     image: null,
+    phone: biz.phone, website: biz.website, menuUrl: biz.menuUrl, about: biz.about,
   };
 }
 
