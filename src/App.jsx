@@ -1486,14 +1486,17 @@ function RateView({ business, onBack, onDone }) {
       ))}
 
       {!showExtra?(
-        <button onClick={()=>setExtra(true)}
-          onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
-          onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
-          style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:12,
-            border:`2px solid ${O}`,background:O,color:"#fff",
-            fontSize:14,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
-          + More to rate (optional)
-        </button>
+        <div style={{marginBottom:12}}>
+          <button onClick={()=>setExtra(true)}
+            onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
+            onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+            style={{width:"100%",padding:"11px",borderRadius:14,
+              border:`2px solid ${O}`,background:O,color:"#fff",
+              fontSize:14,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
+            + More feedback
+          </button>
+          <div style={{textAlign:"center",fontSize:11,color:MUT,marginTop:5}}>(optional)</div>
+        </div>
       ):(
         bt.extra?.map(cat=>(
           <StarCard key={cat.id} cat={cat} value={scores[cat.id]} box={bt.box}
