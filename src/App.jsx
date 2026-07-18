@@ -2341,35 +2341,37 @@ function DoneScreen({ business, reviewData, onReset }) {
   return (
     <div style={{maxWidth:480,margin:"0 auto",padding:"4rem 1.5rem",textAlign:"center"}}>
       {shareOpen&&<ShareCard business={business} scores={reviewData?.scores||{}} onClose={()=>setShare(false)}/>}
-      <div style={{width:72,height:72,borderRadius:20,background:G,
+      <div style={{width:72,height:72,borderRadius:20,background:O,
         display:"flex",alignItems:"center",justifyContent:"center",
-        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
+        margin:"0 auto 20px"}}>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
         </svg>
       </div>
-      <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8,letterSpacing:"-0.5px"}}>
-        greenchek approved!
+      <div style={{fontSize:26,fontWeight:900,marginBottom:8,letterSpacing:"-0.5px"}}>
+        <span style={{color:N}}>green<span style={{color:O}}>chek</span> approved!</span>
       </div>
       <p style={{fontSize:14,color:MUT,lineHeight:1.8,marginBottom:32,textAlign:"center"}}>
         Your feedback is heading to {business?.name}.<br/>
         Honest reviews make every business better.
       </p>
       <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:300,margin:"0 auto"}}>
-        <PrimaryBtn full onClick={()=>setShare(true)}>
-          <span style={{display:"inline-flex",alignItems:"center",gap:8}}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-              <polyline points="16 6 12 2 8 6"/>
-              <line x1="12" y1="2" x2="12" y2="15"/>
-            </svg>
-            Share your review
-          </span>
-        </PrimaryBtn>
-        <button onClick={onReset}
+        <button onClick={()=>setShare(true)}
           style={{width:"100%",padding:"13px",borderRadius:14,
             border:`2px solid ${BDR}`,background:"transparent",color:N,
-            fontSize:14,fontWeight:700,fontFamily:"inherit"}}>
+            fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+          Share your review
+        </button>
+        <button onClick={onReset}
+          style={{width:"100%",padding:"13px",borderRadius:14,border:"none",
+            background:O,color:"#fff",
+            fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
           Rate another business
         </button>
       </div>
