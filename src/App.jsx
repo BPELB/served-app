@@ -16,7 +16,6 @@ const CONFIG = {
 // ============================================================
 const O   = "var(--accent)";
 const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`; // O with alpha — O is a CSS var now, so hex-suffix alpha (${O}33) no longer works
-const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -564,19 +563,6 @@ function Back({ onClick, label }) {
   );
 }
 
-function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
-  return (
-    <button onClick={onClick} disabled={disabled}
-      style={{width:full?"100%":"auto",padding:"13px 22px",borderRadius:14,border:"none",
-        background:disabled?"#eee":G,color:disabled?"#555":"#fff",
-        fontSize:14,fontWeight:700,cursor:disabled?"default":"pointer",
-        boxShadow:disabled?"none":"0 4px 16px rgba(22,163,74,0.3)",
-        transition:"all 0.2s",fontFamily:"inherit",...style}}>
-      {children}
-    </button>
-  );
-}
-
 function LocationMap({ addr }) {
   return (
     <iframe title={`Map for ${addr}`} width="100%" height="160" loading="lazy"
@@ -1013,39 +999,76 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
 // SHARE CARD
 // ============================================================
 function ShareCard({ business, scores, onClose }) {
+  const [copied, setCopied] = useState(false);
   const vals  = Object.values(scores).filter(Boolean);
   const avg   = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
   const stars = avg ? Math.round(avg/2) : null;
-  const bt    = BT[business?.type||"food"];
-  const text  = `Just rated ${business?.name} on GreenChek — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at greenchek.co`;
+  const url   = "https://greenchek.co";
+  const text  = stars
+    ? `Just rated ${business?.name} on GreenChek — ${"★".repeat(stars)}${"☆".repeat(5-stars)} ${stars}/5. Free at greenchek.co`
+    : `Just left a review for ${business?.name} on GreenChek. Free at greenchek.co`;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${text} ${url}`);
+      setCopied(true);
+      setTimeout(()=>setCopied(false), 1800);
+    } catch(e) {}
+  };
+
+  const iconWrap = (bg, child) => (
+    <div style={{width:52,height:52,borderRadius:"50%",background:bg,
+      display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+      {child}
+    </div>
+  );
+
+  const options = [
+    { label:"Facebook",
+      icon: iconWrap("#1877F2", <span style={{fontSize:24,fontWeight:900,color:"#fff",fontFamily:"Georgia,serif"}}>f</span>),
+      onClick: ()=>window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,"_blank") },
+    { label:"X",
+      icon: iconWrap("#000", <span style={{fontSize:20,fontWeight:900,color:"#fff"}}>𝕏</span>),
+      onClick: ()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,"_blank") },
+    { label:"WhatsApp",
+      icon: iconWrap("#25D366", <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 6.9 12l-.3.5.7 2.6-2.7-.7-.5.3A8 8 0 1 1 12 4zm-3.4 3.6c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.2.2 2 3 4.7 4.2 2.3 1 2.7.8 3.2.8.5 0 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.2-.2-.5-.3l-2-1c-.2-.1-.4-.2-.6.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.5-.4-.5-.6-.5h-.5z"/></svg>),
+      onClick: ()=>window.open(`https://wa.me/?text=${encodeURIComponent(text+" "+url)}`,"_blank") },
+    { label:"Text",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>),
+      onClick: ()=>window.open(`sms:?body=${encodeURIComponent(text+" "+url)}`) },
+    { label:"Email",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>),
+      onClick: ()=>window.open(`mailto:?subject=${encodeURIComponent("Check out "+business?.name)}&body=${encodeURIComponent(text+" "+url)}`) },
+    { label: copied?"Copied!":"Copy Link",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5"/></svg>),
+      onClick: copyLink },
+  ];
+
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,0.7)",display:"flex",
-      alignItems:"center",justifyContent:"center",zIndex:999,padding:"1rem"}}>
-      <div style={{background:BG2,borderRadius:24,padding:24,maxWidth:360,width:"100%",
-        boxShadow:"0 20px 60px rgba(0,0,0,0.3)"}}>
-        <div style={{background:G,borderRadius:18,padding:22,marginBottom:18,textAlign:"center"}}>
-          <Logo light/>
-          <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
-            <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:O,lineHeight:1,letterSpacing:2}}>
-              {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
-            </div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
-          </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>greenchek.co · free for everyone</div>
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:999}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()}
+        style={{position:"absolute",left:0,right:0,bottom:0,margin:"0 auto",maxWidth:480,
+          background:BG2,borderRadius:"20px 20px 0 0",padding:"10px 20px 24px",
+          boxShadow:"0 -8px 30px rgba(0,0,0,0.3)"}}>
+        <div style={{width:36,height:4,borderRadius:2,background:BDR,margin:"0 auto 16px"}}/>
+        <div style={{fontSize:15,fontWeight:800,color:N,textAlign:"center",marginBottom:18}}>
+          Share this review
         </div>
-        <div style={{fontSize:13,color:MUT,marginBottom:14,lineHeight:1.5}}>{text}</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
-          {[["📋 Copy",()=>navigator.clipboard?.writeText(text)],
-            ["🐦 Tweet",()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`)],
-            ["💬 Text",()=>window.open(`sms:?body=${encodeURIComponent(text)}`)]
-          ].map(([l,fn])=>(
-            <button key={l} onClick={fn}
-              style={{padding:"10px 6px",borderRadius:12,border:`2px solid ${BDR}`,
-                background:BG3,fontSize:12,fontWeight:700,color:N,fontFamily:"inherit"}}>{l}</button>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"18px 8px",marginBottom:20}}>
+          {options.map(opt=>(
+            <button key={opt.label} onClick={opt.onClick}
+              style={{display:"flex",flexDirection:"column",alignItems:"center",gap:6,
+                background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+              {opt.icon}
+              <span style={{fontSize:11,fontWeight:600,color:N}}>{opt.label}</span>
+            </button>
           ))}
         </div>
-        <PrimaryBtn full onClick={onClose}>Done ✓</PrimaryBtn>
+        <button onClick={onClose}
+          style={{width:"100%",padding:"13px",borderRadius:14,border:`2px solid ${BDR}`,
+            background:"transparent",color:N,fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+          Cancel
+        </button>
       </div>
     </div>
   );
