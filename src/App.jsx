@@ -1576,7 +1576,7 @@ function RateView({ business, onBack, onDone }) {
               style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:`2px solid ${BDR}`,
                 background:BG2,color:MUT,fontWeight:500,
                 transition:"all 0.12s",fontFamily:"inherit",cursor:"pointer"}}
-              onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor="#555";}}
+              onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor=O;}}
               onMouseLeave={e=>{e.target.style.background=BG2;e.target.style.borderColor=BDR;}}>
               {c}
             </button>
