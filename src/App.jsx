@@ -527,14 +527,14 @@ const CAT_ICONS = {
 
 function IconBox({ type, size=44, emoji }) {
   const icon = CAT_ICONS[type] || CAT_ICONS.food;
-  const s = size * 0.5;
+  const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:size*0.32,flexShrink:0,
-      background:O,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
+      background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {emoji
         ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:"#fff"}}>{icon}</svg>
+        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
       }
     </div>
   );
