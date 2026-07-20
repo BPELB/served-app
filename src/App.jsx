@@ -2036,7 +2036,7 @@ function AdvertisePage({ onBack }) {
                   </div>
                 </div>
                 <div style={{padding:"6px 10px",borderRadius:8,background:O,
-                  color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:80,
+                  color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:140,
                   whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",textAlign:"center"}}>
                   {adForm.cta||"Book now"}
                 </div>
