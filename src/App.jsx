@@ -586,7 +586,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       onMouseEnter={e=>e.currentTarget.style.borderColor=O}
       onMouseLeave={e=>e.currentTarget.style.borderColor=BDR}>
       {/* Main row */}
-      <div style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px"}}
+      <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
         <IconBox type={b.type} size={52} emoji={b.emoji}/>
         <div style={{flex:1,minWidth:0}}>
@@ -951,7 +951,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       )}
       {/* Top row: score badge + testimonial + helpful */}
       <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:rated.length>0?10:0}}>
-        <ScoreBadge score={avg} size={50}/>
+        <ScoreBadge score={avg} size={58}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:11,color:MUT,marginBottom:4}}>{ago}</div>
           {review.feedback&&(
@@ -977,15 +977,15 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       </div>
       {/* Category star pills below */}
       {rated.length>0&&(
-        <div style={{display:"flex",gap:3,flexWrap:"nowrap",marginTop:4}}>
+        <div style={{display:"flex",gap:4,flexWrap:"nowrap",marginTop:6}}>
           {rated.map(cat=>{
             const s  = review.scores[cat.id];
             return (
-              <div key={cat.id} style={{flex:1,minWidth:0,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:3,
-                padding:"2px 7px",background:"rgba(13,20,24,0.85)",
-                border:`1.5px solid ${O}`,borderRadius:10}}>
-                <span style={{fontSize:9,fontWeight:700,color:"#fff",whiteSpace:"nowrap"}}>{cat.label}</span>
-                <PartialStars value={s/2} size={8} color="#FBBF24"/>
+              <div key={cat.id} style={{flex:1,minWidth:0,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:4,
+                padding:"5px 8px",background:BG3,
+                border:`1.5px solid ${O}`,borderRadius:12}}>
+                <span style={{fontSize:11,fontWeight:700,color:N,whiteSpace:"nowrap"}}>{cat.label}</span>
+                <PartialStars value={s/2} size={10} color="#FBBF24"/>
               </div>
             );
           })}
