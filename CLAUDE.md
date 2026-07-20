@@ -44,15 +44,25 @@ Everything below was implemented and verified on `v2.0` (greenchek) but has
 asked, one brand at a time, per the workflow above. Each item lists the
 greenchek commit(s) to use as the reference diff.
 
-- [ ] **Review pill borders use accent color** — pill border around
-  Food/Service/Vibe tags is `O` instead of neutral `BDR`. (`d396378`)
-- [ ] **Review pills fill row width** — pills use `flex:1` with centered
-  content instead of clustering left. (`17b5e5e`)
-- [ ] **Review pills stay on one row on mobile** — shrunk padding/font/star
-  size, `flexWrap:nowrap`, fits down to 320px viewports. (`5a60218`)
-- [ ] **ScoreBadge border always accent-colored** — no more green/orange/
-  yellow color-coding by score value; removed unused `SH`/`SM`/`SL`/`scC`.
-  (`e875d51`, part of `6128e7a`)
+- [ ] **Review pill style: final version** — pills use `flex:1` with
+  centered content (fills row width, no clustering left); `flexWrap:nowrap`
+  with shrunk-but-then-rebalanced padding/font/star size so all three fit
+  one row down to 320px; background is `BG3` (theme-adaptive) with `N`
+  text color and `O` border — NOT a hardcoded dark-navy background with
+  white text, that combo was tried and disliked. Bigger sizing: pill
+  padding `5px 8px`, label `fontSize:11`, star `size:10`, gap `4`, row
+  gap `4`, `marginTop:6`. (`d396378` → `17b5e5e` → `5a60218` → `e875d51`
+  → superseded by `eb92c80`; use `eb92c80`'s version as source of truth)
+- [ ] **ScoreBadge border always accent-colored + bigger** — no more green/
+  orange/yellow color-coding by score value; removed unused `SH`/`SM`/
+  `SL`/`scC`. Size bumped from 50 to 58 in `ReviewCard`. (`e875d51`, part
+  of `6128e7a`; size bump in `eb92c80`)
+- [ ] **BusinessCard row uses `alignItems:"center"`, not `"flex-start"`** —
+  an earlier title-wrap fix (see below) set the main row to
+  `alignItems:"flex-start"`, which threw off vertical centering of the
+  icon/Feedback button for the common single-line-title case. Reverted to
+  `"center"` — still looks correct when a title wraps to two lines.
+  (`eb92c80`)
 - [ ] **StarCard (feedback page) always accent-colored** — border and score
   badge on the star-rating boxes use `O` regardless of rating, not
   score-dependent color. (`6128e7a`)
@@ -95,6 +105,13 @@ greenchek commit(s) to use as the reference diff.
   against the white background. Apply the equivalent bump to each other
   brand's own `LIGHT_VARS --muted` value — keep each brand's own base RGB,
   only adjust opacity by the same +0.15 amount. (`57b628c`)
+
+Note: as of `eb92c80` the session workflow changed — the user asked to stop
+porting to other brands mid-session and instead do one big batch port at
+the end. Keep implementing/verifying on greenchek only and keep this list
+updated; hold off pushing `CLAUDE.md` updates to the other three branches
+until that batch port happens (don't touch franklyy/trufaro/trufilo at all
+until told to start the batch).
 
 An icon-style experiment (solid accent-colored `IconBox` background, white
 icon) was tried and **reverted** on trufaro — do not carry that over to any
