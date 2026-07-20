@@ -25,9 +25,10 @@ const BDR = "var(--bdr)";
 const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
+const ST  = "var(--star)"; // rating-star gold — darker in light mode for contrast against the white background
 
-const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.65)","--hover":"#f0f3f2","--accent":"#115D3C" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a","--star":"#FBBF24" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.65)","--hover":"#f0f3f2","--accent":"#115D3C","--star":"#B45309" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
@@ -542,7 +543,7 @@ function ScoreBadge({ score, size=50 }) {
     <div style={{width:size,height:size,flexShrink:0,borderRadius:12,
       border:`2px solid ${bd}`,background:bg,
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+      <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill={ST} stroke={ST} strokeWidth="1">
         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
       </svg>
       <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>{dec||"—"}</span>
@@ -593,7 +594,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
             {b.subtype||bt.label}
-            {b.rating ? <span style={{color:MUT}}> · ⭐ {b.rating}</span> : null}
+            {b.rating ? <span style={{color:MUT}}> · <span style={{color:ST}}>★</span> {b.rating}</span> : null}
             {b.price ? <span style={{color:MUT}}> · {"$".repeat(b.price)}</span> : null}
           </div>
           {/* Hours row */}
@@ -714,7 +715,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
             {ad.bizSubtype||ad.bizType}
-            {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
+            {ad.bizRating ? <span> · <span style={{color:ST}}>★</span> {ad.bizRating}</span> : null}
             {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -828,7 +829,7 @@ function SubPill({ label, selected, onClick }) {
 const STAR_LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // Renders 5 stars with partial fill support (e.g. 4.5 = 4 full + 1 half)
-function PartialStars({ value, size=14, color="#FBBF24" }) {
+function PartialStars({ value, size=14, color=ST }) {
   // value is 0-5 (can be decimal)
   const stars = [1,2,3,4,5].map(n => {
     const diff = value - (n-1);
@@ -985,7 +986,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
                 padding:"5px 8px",background:BG3,
                 border:`1.5px solid ${O}`,borderRadius:12}}>
                 <span style={{fontSize:11,fontWeight:700,color:N,whiteSpace:"nowrap"}}>{cat.label}</span>
-                <PartialStars value={s/2} size={10} color="#FBBF24"/>
+                <PartialStars value={s/2} size={10} color={ST}/>
               </div>
             );
           })}
@@ -1221,7 +1222,7 @@ function BusinessPage({ business, onBack, onRate }) {
             <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
             <div style={{fontSize:11,color:MUT}}>{business.addr||business.address}</div>
             <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}>
-              {business.rating&&<span style={{fontSize:11,color:MUT}}><span style={{color:"#FBBF24"}}>★</span> {business.rating}</span>}
+              {business.rating&&<span style={{fontSize:11,color:MUT}}><span style={{color:ST}}>★</span> {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
                 color:(business.open||business.isOpen)?O:"rgba(255,255,255,0.4)"}}>
@@ -1262,7 +1263,7 @@ function BusinessPage({ business, onBack, onRate }) {
                 <div style={{position:"absolute",top:0,left:0,width:sw,height:sh,
                   display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
                   <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
-                  <PartialStars value={overall/2} size={11} color="#FBBF24"/>
+                  <PartialStars value={overall/2} size={11} color={ST}/>
                 </div>
               </div>
             );
@@ -1366,7 +1367,7 @@ function BusinessPage({ business, onBack, onRate }) {
                   letterSpacing:"0.06em",marginBottom:6}}>{cat.label}</div>
                 <div style={{fontSize:18,fontWeight:900,color:N,lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
                 <div style={{display:"flex",justifyContent:"center"}}>
-                  <PartialStars value={cat.avg/2} size={13} color="#FBBF24"/>
+                  <PartialStars value={cat.avg/2} size={13} color={ST}/>
                 </div>
               </div>
             );
@@ -1381,7 +1382,7 @@ function BusinessPage({ business, onBack, onRate }) {
         background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
         display:"flex",alignItems:"center",justifyContent:"center",gap:8,
         transition:"all 0.15s",marginBottom:16,fontFamily:"inherit"}}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill={ST} stroke={ST} strokeWidth="1">
           <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
         </svg>
         Give us your feedback!
@@ -2496,7 +2497,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
-              <span>⭐ {DEMO_BIZ.rating}</span>
+              <span><span style={{color:ST}}>★</span> {DEMO_BIZ.rating}</span>
               <span>·</span>
               <span>{"$".repeat(DEMO_BIZ.price)}</span>
               <span>·</span>
