@@ -99,8 +99,8 @@ greenchek commit(s) to use as the reference diff.
   foreign orange shadow color; removed. (`553c905`)
 - [ ] **All star ratings theme-aware, darker gold in light mode** — added a
   `--star` CSS var (JS constant `ST`) alongside the other theme vars:
-  dark mode keeps `#FBBF24`, light mode uses a darker `#B45309` for
-  contrast against the white background. Every hardcoded `#FBBF24` usage
+  dark mode keeps `#FBBF24`, light mode uses a darker gold for contrast
+  against the white background. Every hardcoded `#FBBF24` usage
   (`ScoreBadge`, `PartialStars` default, BusinessPage header rating,
   feedback-button star icon) now references `ST`, and every "⭐" emoji
   star rating (`BusinessCard`, `SponsoredCard`, `OwnerDashboard` header)
@@ -109,27 +109,54 @@ greenchek commit(s) to use as the reference diff.
   Add `--star` to both `DARK_VARS`/`LIGHT_VARS` and to the `:root` default
   in `index.html` (matches dark mode, since dark is the default theme).
   Pick each brand's own darker light-mode gold rather than reusing
-  greenchek's `#B45309` verbatim — keep it in the same amber family, just
-  legible on that brand's white background. (`57b628c`, superseded by
-  `c7dab78`; use `c7dab78` as source of truth)
+  greenchek's hex verbatim — keep it in the same amber family, just
+  legible on that brand's white background. Note the light-mode value
+  went through two rounds: `#B45309` (`57b628c`→`c7dab78`) was reported
+  too dark against white and was lightened to `#CA8A04` (`98c7753`) — use
+  `98c7753`'s value as source of truth, not `c7dab78`'s.
 - [ ] **Light-mode muted text contrast darkened** — brand's `LIGHT_VARS
   --muted` opacity bumped from `0.5` to `0.65` for better readability
   against the white background. Apply the equivalent bump to each other
   brand's own `LIGHT_VARS --muted` value — keep each brand's own base RGB,
   only adjust opacity by the same +0.15 amount. (`57b628c`)
-- [ ] **No more per-business emoji icons** — `IconBox` no longer accepts an
-  `emoji` prop/branch at all; it always renders `CAT_ICONS[type]`, same as
-  `CatPill`. `SponsoredCard`'s inline icon box also switched from
-  `ad.bizEmoji` (`<span>` emoji) to `<svg>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>`
-  in the `O` accent color. Every business card/box across the app now shows
-  the identical category-level line icon instead of individualized
-  per-business emoji (pizza/salad/sushi/etc). (`3785b41`)
+- [ ] **No more per-business emoji icons, replaced with per-subtype line
+  icons; icon color is theme-aware (white in dark mode)** — two-step
+  change, use the *second* step as source of truth:
+  1. `3785b41` first removed per-business `emoji` rendering entirely —
+     `IconBox` and `SponsoredCard` fell back to one shared `CAT_ICONS[type]`
+     icon per category (e.g. every "food" business showed the same
+     fork/knife icon). This was superseded almost immediately.
+  2. `98c7753` (+ `d10e415` fixup) added a `SUBTYPE_ICONS` map keyed by
+     `[type][subtype]` covering every `(type, subtype)` pair in `DEMOS`
+     (e.g. `food.Italian` → pizza slice, `food.Japanese` → sushi roll,
+     `beauty."Hair Salon"` → comb, etc. — ~50 hand-drawn icons across all
+     20 categories). `IconBox(type, subtype, size)` now looks up
+     `SUBTYPE_ICONS[type]?.[subtype]`, falling back to `CAT_ICONS[type]`
+     then `CAT_ICONS.food` if no subtype entry exists. Businesses within
+     the same category are now visually distinct from each other instead
+     of sharing one icon. `SponsoredCard`'s inline icon does the same
+     lookup via `ad.bizType`/`ad.bizSubtype` (fixed in `d10e415` — the
+     first pass missed this call site and it kept showing the generic
+     category icon).
+     Also added a new theme var `--iconfg` (JS constant `IC`): white in
+     dark mode, accent green in light mode — replaces the old hardcoded
+     `color:O` on every icon `<svg>`. Add `--iconfg` to `DARK_VARS`/
+     `LIGHT_VARS` and to the `:root` default in `index.html`. Each brand
+     should reuse its own light-mode accent value for `--iconfg` in light
+     mode (not greenchek's `#115D3C`), same pattern as `--accent`.
+     When porting, redraw the ~50 `SUBTYPE_ICONS` entries as-is (they're
+     brand-neutral line art, no brand colors baked in — only `IC`
+     determines color) rather than reinventing them per brand.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
   `background:O,color:"#fff"`, matching the app's other solid-accent CTA
   buttons. The overview button's decorative glow `boxShadow` was removed
   too (not needed on a solid-fill button). (`3785b41`)
+- [ ] **Ad-builder live-preview CTA pill: fix truncation** — the pill's
+  `maxWidth:80` was narrower than what its own 20-character custom-text
+  limit needs, so valid input (e.g. "Reservation Here") got ellipsis-cut
+  well before the character cap. Bumped `maxWidth` to `140`. (`171522a`)
 
 Note: as of `eb92c80` the session workflow changed — the user asked to stop
 porting to other brands mid-session and instead do one big batch port at
