@@ -803,7 +803,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:O}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>
+            : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{SUBTYPE_ICONS[ad.bizType]?.[ad.bizSubtype]||CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
