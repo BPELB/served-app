@@ -117,6 +117,19 @@ greenchek commit(s) to use as the reference diff.
   against the white background. Apply the equivalent bump to each other
   brand's own `LIGHT_VARS --muted` value — keep each brand's own base RGB,
   only adjust opacity by the same +0.15 amount. (`57b628c`)
+- [ ] **No more per-business emoji icons** — `IconBox` no longer accepts an
+  `emoji` prop/branch at all; it always renders `CAT_ICONS[type]`, same as
+  `CatPill`. `SponsoredCard`'s inline icon box also switched from
+  `ad.bizEmoji` (`<span>` emoji) to `<svg>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>`
+  in the `O` accent color. Every business card/box across the app now shows
+  the identical category-level line icon instead of individualized
+  per-business emoji (pizza/salad/sushi/etc). (`3785b41`)
+- [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
+  both CTA buttons (Overview tab top button, and the Profile tab's Account
+  section button) switched from `background:"transparent",color:O` to
+  `background:O,color:"#fff"`, matching the app's other solid-accent CTA
+  buttons. The overview button's decorative glow `boxShadow` was removed
+  too (not needed on a solid-fill button). (`3785b41`)
 
 Note: as of `eb92c80` the session workflow changed — the user asked to stop
 porting to other brands mid-session and instead do one big batch port at
