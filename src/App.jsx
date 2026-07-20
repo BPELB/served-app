@@ -518,18 +518,14 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-function IconBox({ type, size=44, emoji }) {
+function IconBox({ type, size=44 }) {
   const icon = CAT_ICONS[type] || CAT_ICONS.food;
-  const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
   const s = size * 0.55;
   return (
     <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {emoji
-        ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
-      }
+      <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
     </div>
   );
 }
@@ -707,7 +703,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
+            : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:O}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
@@ -2529,10 +2525,9 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="overview" && <>
           {/* Advertise CTA */}
           <button onClick={onAdvertise} style={{width:"100%",padding:"13px 16px",borderRadius:14,
-            border:`1.5px solid ${O}`,background:"transparent",color:O,fontSize:14,fontWeight:800,
+            border:`1.5px solid ${O}`,background:O,color:"#fff",fontSize:14,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",marginBottom:14,
-            display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-            boxShadow:`0 0 12px rgba(22,163,74,0.3), inset 0 0 12px rgba(22,163,74,0.05)`}}>
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
             Start Advertising
           </button>
@@ -2803,7 +2798,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
               </div>
             ))}
             <button onClick={onAdvertise} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
-              border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
+              border:`2px solid ${O}`,background:O,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on GreenChek</button>
           </div>
         </>}
