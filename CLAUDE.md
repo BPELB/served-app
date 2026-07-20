@@ -97,9 +97,21 @@ greenchek commit(s) to use as the reference diff.
   Update the brand name/domain in the share text per brand. (`e81d79d`)
 - [ ] **"Claim for free" button: no box shadow** — also had a hardcoded
   foreign orange shadow color; removed. (`553c905`)
-- [ ] **Gold rating star on BusinessPage header** — the `★` next to the
-  numeric rating (e.g. "★ 4.3") is now `#FBBF24` (the app's standard star
-  gold, same as `PartialStars`/`ScoreBadge`), not muted grey. (`57b628c`)
+- [ ] **All star ratings theme-aware, darker gold in light mode** — added a
+  `--star` CSS var (JS constant `ST`) alongside the other theme vars:
+  dark mode keeps `#FBBF24`, light mode uses a darker `#B45309` for
+  contrast against the white background. Every hardcoded `#FBBF24` usage
+  (`ScoreBadge`, `PartialStars` default, BusinessPage header rating,
+  feedback-button star icon) now references `ST`, and every "⭐" emoji
+  star rating (`BusinessCard`, `SponsoredCard`, `OwnerDashboard` header)
+  was converted to a solid `★` character colored `ST`, so all stars are
+  visually consistent instead of a mix of emoji glyphs and a fixed hex.
+  Add `--star` to both `DARK_VARS`/`LIGHT_VARS` and to the `:root` default
+  in `index.html` (matches dark mode, since dark is the default theme).
+  Pick each brand's own darker light-mode gold rather than reusing
+  greenchek's `#B45309` verbatim — keep it in the same amber family, just
+  legible on that brand's white background. (`57b628c`, superseded by
+  `c7dab78`; use `c7dab78` as source of truth)
 - [ ] **Light-mode muted text contrast darkened** — brand's `LIGHT_VARS
   --muted` opacity bumped from `0.5` to `0.65` for better readability
   against the white background. Apply the equivalent bump to each other
