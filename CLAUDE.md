@@ -115,10 +115,13 @@ greenchek commit(s) to use as the reference diff.
   too dark against white and was lightened to `#CA8A04` (`98c7753`) — use
   `98c7753`'s value as source of truth, not `c7dab78`'s.
 - [ ] **Light-mode muted text contrast darkened** — brand's `LIGHT_VARS
-  --muted` opacity bumped from `0.5` to `0.65` for better readability
-  against the white background. Apply the equivalent bump to each other
-  brand's own `LIGHT_VARS --muted` value — keep each brand's own base RGB,
-  only adjust opacity by the same +0.15 amount. (`57b628c`)
+  --muted` opacity bumped twice: `0.5` → `0.65` (`57b628c`), then still
+  reported too light and bumped again to `0.78` (`fc69169`) — use `0.78`
+  as the source of truth, not `0.65`. At `0.65` the effective contrast
+  ratio against white was ~4.3:1 (just under WCAG AA's 4.5:1 for normal
+  text); `0.78` lands around 5.7:1. Apply the equivalent total bump
+  (+0.28 from the original `0.5`) to each other brand's own `LIGHT_VARS
+  --muted` value — keep each brand's own base RGB, only adjust opacity.
 - [ ] **No more per-business emoji icons, replaced with per-business Lucide
   icons; icon color is theme-aware (white in dark mode)** — three-step
   change, use the *third* step as source of truth:
@@ -173,6 +176,29 @@ greenchek commit(s) to use as the reference diff.
      (Mediterraneo) → `Grape` (freed up since `Salad` moved to `d2`) —
      use `25b973e`'s `BIZ_ICONS` map as the source of truth over
      `bcd33c8`'s for these five ids.
+  4. `1bbd757` (**current source of truth** — icons alone were never
+     enough, no matter how polished): `IconBox` and `SponsoredCard` now
+     show a **real photo** first, falling back to the `BIZ_ICONS` icon
+     only via `onError` (i.e. icons are now a safety net, not the
+     primary treatment). Reuses the curated per-subtype Unsplash photo
+     pool that already existed for the BusinessPage slider (`CAT_PHOTOS`/
+     `photoPool(type, subtype)`, defined further down in `App.jsx`) — no
+     new photo curation needed. Each business deterministically picks one
+     photo from its subtype's pool via `photoPool(type,subtype)[hashStr(id)
+     % pool.length]`, so the same business always shows the same photo
+     across renders/sessions. Photo URL pattern: `https://images.unsplash
+     .com/photo-${id}?w=200&h=200&fit=crop&q=80`.
+     **Cannot be visually verified in this sandbox** — the outbound proxy
+     blocks Unsplash outright (confirmed via `curl`, also true of
+     picsum/pixabay/wikimedia, so this isn't Unsplash-specific). What
+     *was* verified: the build succeeds, there are no JS errors, and the
+     `onError` fallback correctly renders the `BIZ_ICONS` icon when the
+     photo request fails — which is exactly what happens in this sandbox,
+     so that code path is proven. The photos themselves should render
+     normally in any unrestricted browser, including the real Vercel
+     deploy — confirm this directly in the browser (not just via
+     Playwright-in-this-sandbox) before considering it done on each
+     brand.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
