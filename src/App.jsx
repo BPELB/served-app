@@ -1,4 +1,24 @@
 import { useState, useEffect, useRef, useCallback, Fragment } from "react"; // trigger
+import {
+  Pizza, Sandwich, Fish, Flame, Hamburger, Soup, Croissant, UtensilsCrossed, Wine, Beef, Salad, CakeSlice,
+  Scissors, Sparkles, Droplet,
+  Stethoscope, Smile, Glasses,
+  Dumbbell, Flower2, Activity,
+  Wrench, Droplets, Car,
+  Hammer, SprayCan,
+  HeartPulse, Dog,
+  Baby, BookOpen,
+  Hotel, BedDouble,
+  Shirt, Library, Smartphone,
+  Gavel, Calculator,
+  PartyPopper, Camera,
+  Gamepad2, Target,
+  Truck, Package,
+  TabletSmartphone, Monitor,
+  WashingMachine,
+  Landmark, Receipt,
+  Flower, Building2, IdCard,
+} from "lucide-react";
 
 // ============================================================
 // CONFIG — paste your keys here
@@ -519,113 +539,64 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-// Per-subtype icons — layered on top of CAT_ICONS so businesses within the same
-// category (e.g. two "food" places) still look visually distinct from each other.
-// Falls back to CAT_ICONS[type] when a business's subtype has no entry here.
-const OPEN_BOOK = <><path d="M2 5c2-1 5-1 7 0v14c-2-1-5-1-7 0V5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M22 5c-2-1-5-1-7 0v14c2-1 5-1 7 0V5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/></>;
-const HANGER    = <><path d="M12 3a2 2 0 1 1 2 2c0 1-1 1.5-2 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><path d="M12 7.5L3 14h18L12 7.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></>;
-
-const SUBTYPE_ICONS = {
-  food: {
-    Italian:        <><path d="M12 2 3 19h18L12 2z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M6 15q6-3 12 0" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="11" cy="12" r="1" fill="currentColor"/><circle cx="14" cy="14.5" r="1" fill="currentColor"/></>,
-    American:       <><path d="M4 13c0-3 2-5 4-5h8c2 0 4 2 4 5s-2 5-4 5H8c-2 0-4-2-4-5z" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M6 13q3-2 6 0t6 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/></>,
-    Japanese:       <><circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="7" cy="9" r="0.9" fill="currentColor"/><circle cx="17" cy="9" r="0.9" fill="currentColor"/><circle cx="7" cy="15" r="0.9" fill="currentColor"/><circle cx="17" cy="15" r="0.9" fill="currentColor"/></>,
-    Mexican:        <><path d="M3 13a9 9 0 0 1 18 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><line x1="3" y1="13" x2="21" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M7 13V9M11 13V6.5M15 13V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></>,
-    Burgers:        <><path d="M4 10c0-3.5 3.5-6 8-6s8 2.5 8 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="15" x2="21" y2="15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M3 18a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/></>,
-    Indian:         <><path d="M3 12h18a9 6 0 0 1-18 0z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M9 8c0-1.5 1-1.5 1-3M13 8c0-1.5 1-1.5 1-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/></>,
-    French:         <><path d="M15 4a9 9 0 1 0 0 16 7 7 0 0 1 0-16z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M9 8l2 2M8 12l2 2M9 16l2 2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></>,
-    Chinese:        <><path d="M4 8l1-3h14l1 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M9 8c0-2 1-3 3-3s3 1 3 3" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-    Korean:         <><path d="M3 12h18a9 6 0 0 1-18 0z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><line x1="9" y1="10" x2="14" y2="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><line x1="12" y1="10" x2="17" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></>,
-    Mediterranean:  <><path d="M3 21c6-2 9-8 9-15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><ellipse cx="9" cy="14" rx="2" ry="1.2" transform="rotate(-30 9 14)" stroke="currentColor" strokeWidth="1.5" fill="none"/><ellipse cx="13" cy="9" rx="2" ry="1.2" transform="rotate(-30 13 9)" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="6.5" cy="18" r="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-  },
-  beauty: {
-    "Hair Salon":   <><path d="M4 4v4M7 4v4M10 4v4M13 4v4M16 4v4M19 4v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><rect x="3" y="8" width="17" height="3" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-    "Nail & Spa":   <><path d="M9 3h6v3l2 3v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3V3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><line x1="9" y1="3" x2="15" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-    Barbershop:     <><rect x="9" y="2" width="6" height="20" rx="3" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 6q3 2 6 0M9 12q3 2 6 0M9 18q3 2 6 0" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-  },
-  health: {
-    "Family Practice": <><path d="M5 3v5a4 4 0 0 0 8 0V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><path d="M9 8v4a6 6 0 0 0 12 0v-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><circle cx="21" cy="10" r="2" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-    Dentistry:         <><path d="M12 3c-3 0-5 2-5 5 0 3 1 4 1 7 0 2 1 3 2 3s1-3 2-3 2 3 2 3 2-1 2-3c0-3 1-4 1-7 0-3-2-5-5-5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/></>,
-    Optometry:         <><circle cx="6.5" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="17.5" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M10 12h4M3 12h.01M21 12h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-  },
-  fitness: {
-    Gym:      <><circle cx="12" cy="15" r="6" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 9a3 3 0 0 1 6 0v2H9V9z" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-    Yoga:     <><circle cx="12" cy="5" r="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M12 7v5M7 20c0-3 2-5 5-5M17 20c0-3-2-5-5-5M4 20c2-2 4-2 4-5M20 20c-2-2-4-2-4-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/></>,
-    CrossFit: <><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="4" cy="12" r="3" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="20" cy="12" r="3" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="8" cy="12" r="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="16" cy="12" r="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-  },
-  automotive: {
-    "Auto Repair": <><path d="M14.7 6.3a4 4 0 1 0-5.66 5.66L3 18l3 3 6.04-6.04a4 4 0 0 0 5.66-5.66l-2.83 2.83-2-2z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/></>,
-    "Oil Change":  <><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/></>,
-    "Car Wash":    <><path d="M5 16H3a1 1 0 0 1-1-1v-3l2-4h12l2 4v3a1 1 0 0 1-1 1h-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><circle cx="7" cy="16" r="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="15" cy="16" r="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/><path d="M6 4l1 2M12 3l1 2M18 4l1 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></>,
-  },
-  homeservices: {
-    Handyman: <><rect x="2" y="9" width="20" height="11" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="2" y1="13" x2="22" y2="13" stroke="currentColor" strokeWidth="1.5"/></>,
-    Cleaning: <><rect x="8" y="8" width="8" height="13" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M11 8V5h4l2 2h-2" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><line x1="17" y1="6" x2="20" y2="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></>,
-    Plumbing: <><path d="M7 3v6a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><line x1="12" y1="12" x2="12" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 17c0 2-2 2-2 4a2 2 0 0 0 4 0c0-2-2-2-2-4z" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-  },
-  pets: {
-    Veterinary: <><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M6 11h3l1.5-3 2 5 1.5-2H18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/></>,
-    Grooming:   <><path d="M14 4l6 6-8 8-6-6z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M6 14l-3 7 7-3" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/></>,
-    Daycare:    <><path d="M4 12l8-7 8 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M6 11v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="10" cy="16" r="1" fill="currentColor"/><circle cx="14" cy="16" r="1" fill="currentColor"/></>,
-  },
-  childcare: {
-    Daycare:  <><rect x="3" y="13" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="14" y="13" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="8.5" y="4" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-    Tutoring: OPEN_BOOK,
-  },
-  hospitality: {
-    "Boutique Hotel": <><path d="M12 4a5 5 0 0 0-5 5v2a7 7 0 0 1-2 5h18a7 7 0 0 1-2-5V9a5 5 0 0 0-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><circle cx="12" cy="19" r="1.3" fill="currentColor"/></>,
-    "Extended Stay":  <><circle cx="7" cy="12" r="4" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="11" y1="12" x2="21" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="17" y1="12" x2="17" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="20" y1="12" x2="20" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-  },
-  retail: {
-    "Women's Fashion": HANGER,
-    Books:             OPEN_BOOK,
-    Electronics:       <><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="11" y1="18" x2="13" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-  },
-  professional: {
-    "Law Firm":  <><rect x="13" y="2" width="4" height="9" rx="1" transform="rotate(45 15 6.5)" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="6" y1="15" x2="11" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="21" x2="10" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="15" y1="21" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-    Accounting:  <><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="7" y="5" width="10" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="7.5" cy="13" r="1" fill="currentColor"/><circle cx="12" cy="13" r="1" fill="currentColor"/><circle cx="16.5" cy="13" r="1" fill="currentColor"/><circle cx="7.5" cy="17" r="1" fill="currentColor"/><circle cx="12" cy="17" r="1" fill="currentColor"/><circle cx="16.5" cy="17" r="1" fill="currentColor"/></>,
-  },
-  events: {
-    Venue:       <><path d="M4 21V10l8-6 8 6v11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M9 21v-6h6v6" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="2" y1="21" x2="22" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-    Photography: <><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M8 7l1.5-3h5L16 7" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><circle cx="12" cy="14" r="4" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-  },
-  education: {
-    Tutoring:      OPEN_BOOK,
-    "Driver's Ed": <><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M12 5v4.5M6.3 15.5l3.8-2.3M17.7 15.5l-3.8-2.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-  },
-  entertainment: {
-    Arcade:  <><rect x="6" y="16" width="12" height="5" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="12" y1="16" x2="12" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="6" r="2.5" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-    Bowling: <><path d="M12 2c1 2 1.5 3 1 4.5-.5 1.5-.5 2 0 3 .8 1.5 1 3 1 5.5 0 3-.5 6-2 7-1.5-1-2-4-2-7 0-2.5.2-4 1-5.5.5-1 .5-1.5 0-3-.5-1.5 0-2.5 1-4.5z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" fill="none"/><circle cx="19" cy="19" r="3" stroke="currentColor" strokeWidth="2" fill="none"/></>,
-  },
-  moving: {
-    "Full Service": <><rect x="4" y="9" width="9" height="9" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><rect x="11" y="5" width="9" height="9" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="8.5" y1="9" x2="8.5" y2="18" stroke="currentColor" strokeWidth="1.2"/><line x1="15.5" y1="5" x2="15.5" y2="14" stroke="currentColor" strokeWidth="1.2"/></>,
-    "Labor Only":   <><rect x="9" y="4" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M3 20V6a1 1 0 0 1 1-1h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><line x1="3" y1="20" x2="19" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="6" cy="20" r="1.5" fill="currentColor"/></>,
-  },
-  techrepair: {
-    "Phone & Tablet": <><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 8l2 3-2 2 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/></>,
-    "Screen Repair":  <><rect x="3" y="4" width="18" height="13" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 4l3 5-2 2 4 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" strokeWidth="2"/></>,
-  },
-  laundry: {
-    "Dry Cleaning": <><path d="M12 3a2 2 0 1 1 2 2c0 1-1 1.5-2 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/><path d="M12 7.5L3 14h18L12 7.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M5 14v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-    Laundromat:     <><circle cx="7" cy="12" r="5" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="17" cy="12" r="5" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="7" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" fill="none"/><circle cx="17" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" fill="none"/></>,
-  },
-  financial: {
-    Bank:          <><path d="M3 10l9-6 9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/><line x1="4" y1="10" x2="20" y2="10" stroke="currentColor" strokeWidth="2"/><line x1="5" y1="10" x2="5" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="9" y1="10" x2="9" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="15" y1="10" x2="15" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="19" y1="10" x2="19" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="19" x2="21" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
-    "Tax Services": <><path d="M6 2h9l3 3v17H6V2z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M15 2v3h3" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><line x1="9" y1="18" x2="15" y2="12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="9.5" cy="12.5" r="1" fill="currentColor"/><circle cx="14.5" cy="17.5" r="1" fill="currentColor"/></>,
-  },
-  government: {
-    DMV: <><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="8" cy="11" r="2.5" stroke="currentColor" strokeWidth="1.8" fill="none"/><path d="M5 16c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/><line x1="14" y1="9" x2="19" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><line x1="14" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></>,
-  },
+// Per-business icons — every business gets its own specific Lucide icon
+// (not just one per category/subtype) so businesses in the same category list
+// are visually distinct from each other at a glance.
+const BIZ_ICONS = {
+  // food
+  d1: Pizza, d2: Sandwich, d3: Fish, d4: Flame, d5: Hamburger, d6: Soup,
+  d7: Croissant, d8: UtensilsCrossed, d9: Wine, d10: Beef, d11: Salad, d12: CakeSlice,
+  // beauty
+  b1: Scissors, b2: Sparkles, b3: Droplet,
+  // health
+  h1: Stethoscope, h2: Smile, h3: Glasses,
+  // fitness
+  f1: Dumbbell, f2: Flower2, f3: Activity,
+  // automotive
+  a1: Wrench, a2: Droplets, a3: Sparkles,
+  // homeservices
+  hs1: Hammer, hs2: SprayCan, hs3: Droplets,
+  // pets
+  p1: HeartPulse, p2: Scissors, p3: Dog,
+  // childcare
+  c1: Baby, c2: BookOpen,
+  // hospitality
+  ho1: Hotel, ho2: BedDouble,
+  // retail
+  r1: Shirt, r2: Library, r3: Smartphone,
+  // professional
+  pr1: Gavel, pr2: Calculator,
+  // events
+  e1: PartyPopper, e2: Camera,
+  // education
+  ed1: BookOpen, ed2: Car,
+  // entertainment
+  en1: Gamepad2, en2: Target,
+  // moving
+  m1: Truck, m2: Package,
+  // techrepair
+  t1: TabletSmartphone, t2: Monitor,
+  // laundry
+  l1: Shirt, l2: WashingMachine,
+  // financial
+  fi1: Landmark, fi2: Receipt,
+  // funeral
+  fu1: Flower,
+  // government
+  g1: Building2, g2: IdCard,
 };
 
-function IconBox({ type, subtype, size=44 }) {
-  const icon = SUBTYPE_ICONS[type]?.[subtype] || CAT_ICONS[type] || CAT_ICONS.food;
+function IconBox({ id, type, size=44 }) {
+  const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
     <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{icon}</svg>
+      {BizIcon
+        ? <BizIcon size={s} color={IC} strokeWidth={2}/>
+        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>
+      }
     </div>
   );
 }
@@ -685,7 +656,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox type={b.type} subtype={b.subtype} size={52}/>
+        <IconBox id={b.id} type={b.type} size={52}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
@@ -784,6 +755,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
+  const BizIcon = BIZ_ICONS[ad.bizId];
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
@@ -803,7 +775,9 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{SUBTYPE_ICONS[ad.bizType]?.[ad.bizSubtype]||CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>
+            : (BizIcon
+                ? <BizIcon size={24} color={IC} strokeWidth={2}/>
+                : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>)
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
@@ -1311,7 +1285,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox type={business.type} subtype={business.subtype} size={84}/>
+          <IconBox id={business.id} type={business.type} size={84}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -2589,7 +2563,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} size={44}/>
+          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} size={44}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
