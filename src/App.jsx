@@ -621,16 +621,22 @@ const BIZ_ICONS = {
   g1: Building2, g2: IdCard,
 };
 
-function IconBox({ id, type, size=44 }) {
+function IconBox({ id, type, subtype, size=44 }) {
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const pool = photoPool(type, subtype);
+  const photoId = id && pool.length ? pool[hashStr(id) % pool.length] : null;
+  const photoUrl = photoId ? `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80` : null;
   const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,overflow:"hidden",
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {BizIcon
-        ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>
+      {photoUrl && !photoFailed
+        ? <img src={photoUrl} alt="" onError={()=>setPhotoFailed(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        : (BizIcon
+            ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
+            : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
       }
     </div>
   );
@@ -691,7 +697,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox id={b.id} type={b.type} size={52}/>
+        <IconBox id={b.id} type={b.type} subtype={b.subtype} size={52}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
@@ -791,6 +797,10 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
   const BizIcon = BIZ_ICONS[ad.bizId];
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const pool = photoPool(ad.bizType, ad.bizSubtype);
+  const photoId = ad.bizId && pool.length ? pool[hashStr(ad.bizId) % pool.length] : null;
+  const photoUrl = photoId ? `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80` : null;
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
@@ -810,9 +820,11 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : (BizIcon
-                ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
-                : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>)
+            : (photoUrl && !photoFailed
+                ? <img src={photoUrl} alt="" onError={()=>setPhotoFailed(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : (BizIcon
+                    ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
+                    : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>))
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
@@ -1320,7 +1332,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox id={business.id} type={business.type} size={84}/>
+          <IconBox id={business.id} type={business.type} subtype={business.subtype} size={84}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -2598,7 +2610,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} size={44}/>
+          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} size={44}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
