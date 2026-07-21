@@ -217,6 +217,38 @@ greenchek commit(s) to use as the reference diff.
      Unsplash-global, so a bad ID reported on greenchek is bad everywhere
      — remove it from all four brands' `CAT_PHOTOS`, not just the one it
      was reported on).
+     Follow-up (`7aeedf2`): two more problems, one a real functional bug
+     unrelated to photos. (a) **Category switch showed the wrong
+     businesses**: `gPlaces.search()` calls the real Google Places API
+     (the configured `CONFIG.GOOGLE_PLACES_KEY` isn't a placeholder), and
+     the `fetch()` had no timeout — on a preview deploy with an
+     unconfigured/restricted key this can hang indefinitely with no
+     resolve/reject, so `setResults()` never fires and the business list
+     stays stuck on whatever it last held regardless of which category
+     tab is clicked (confirmed live: clicking "Health" showed the
+     correct Health sponsored card — built from local `DEMOS` data
+     directly — but a stale food business list underneath, subtype
+     pills included, because `results` state never updated). Fixed two
+     ways: `changeCat` now sets `results` to `DEMOS[cat]` immediately
+     (before the async fetch even starts) so switching tabs is never
+     stale even momentarily, and the fetch itself got a 5s
+     `AbortController` timeout so a hang can't wedge it forever. (b)
+     **Photos could repeat** across businesses visible together (small
+     pools, e.g. a 2-entry category-level fallback shared by 3+
+     businesses, made this likely). Added `dedupPhotoPools(list)`,
+     computed once per render in `Home()` over the sponsor card + current
+     page of results, which reorders each business's `rotatedPool` so its
+     first pick never collides with an earlier business's pick in the
+     same visible set (falls back to allowing a repeat only once a pool
+     is fully claimed — unavoidable when a category has fewer curated
+     photos than businesses showing at once). `IconBox`/`SponsoredCard`
+     now accept an optional `photos` prop (the pre-resolved deduped pool)
+     and fall back to their own `rotatedPool` call when not given one
+     (BusinessPage/OwnerDashboard, which show one business at a time and
+     have no dedup concern). When porting, copy `dedupPhotoPools` and the
+     `Home()` wiring verbatim, and apply the same `changeCat`/timeout fix
+     — the Google Places bug is not greenchek-specific, it'll reproduce
+     on any brand using the same shared `CONFIG.GOOGLE_PLACES_KEY`.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
