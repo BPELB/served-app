@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, Fragment } from "react"; // trigger
 import {
-  Pizza, Sandwich, Fish, Flame, Hamburger, Soup, Croissant, UtensilsCrossed, Wine, Beef, Salad, CakeSlice,
+  Pizza, Flame, Hamburger, Soup, Croissant, Wine, Beef, Salad, CakeSlice, Grape,
   Scissors, Sparkles, Droplet,
   Stethoscope, Smile, Glasses,
   Dumbbell, Flower2, Activity,
@@ -539,13 +539,48 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-// Per-business icons — every business gets its own specific Lucide icon
-// (not just one per category/subtype) so businesses in the same category list
-// are visually distinct from each other at a glance.
+// Hand-drawn icons for foods Lucide has no literal glyph for, built to match
+// Lucide's own stroke style exactly (24x24 viewBox, round cap/join) so they're
+// indistinguishable from the imported set at a glance.
+function Sushi({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="3.5"/>
+      <circle cx="7" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="7" cy="16" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="16" r="1" fill={color} stroke="none"/>
+    </svg>
+  );
+}
+function Taco({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 13a9 9 0 0 1 18 0"/>
+      <line x1="3" y1="13" x2="21" y2="13"/>
+      <path d="M7 13V9M11 13V6M15 13V9"/>
+    </svg>
+  );
+}
+function TakeoutBox({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 8l1-3h14l1 3"/>
+      <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/>
+      <path d="M9 8c0-2 1-3 3-3s3 1 3 3"/>
+    </svg>
+  );
+}
+
+// Per-business icons — every business gets its own specific icon (not just one
+// per category/subtype) so businesses in the same category list are visually
+// distinct from each other at a glance. Lucide covers most; a few literal foods
+// Lucide has no glyph for (sushi, taco, takeout box) are hand-drawn above to match.
 const BIZ_ICONS = {
   // food
-  d1: Pizza, d2: Sandwich, d3: Fish, d4: Flame, d5: Hamburger, d6: Soup,
-  d7: Croissant, d8: UtensilsCrossed, d9: Wine, d10: Beef, d11: Salad, d12: CakeSlice,
+  d1: Pizza, d2: Salad, d3: Sushi, d4: Taco, d5: Hamburger, d6: Soup,
+  d7: Croissant, d8: TakeoutBox, d9: Wine, d10: Beef, d11: Grape, d12: CakeSlice,
   // beauty
   b1: Scissors, b2: Sparkles, b3: Droplet,
   // health
@@ -594,7 +629,7 @@ function IconBox({ id, type, size=44 }) {
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {BizIcon
-        ? <BizIcon size={s} color={IC} strokeWidth={2}/>
+        ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
         : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>
       }
     </div>
@@ -776,7 +811,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
             : (BizIcon
-                ? <BizIcon size={24} color={IC} strokeWidth={2}/>
+                ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
                 : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>)
           }
         </div>
