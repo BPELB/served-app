@@ -49,7 +49,7 @@ const ST  = "var(--star)"; // rating-star gold — darker in light mode for cont
 const IC  = "var(--iconfg)"; // business icon color — white in dark mode, accent in light mode
 
 const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a","--star":"#FBBF24","--iconfg":"#ffffff" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.65)","--hover":"#f0f3f2","--accent":"#115D3C","--star":"#CA8A04","--iconfg":"#115D3C" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.78)","--hover":"#f0f3f2","--accent":"#115D3C","--star":"#CA8A04","--iconfg":"#115D3C" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
