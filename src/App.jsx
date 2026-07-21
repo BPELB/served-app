@@ -1264,9 +1264,12 @@ function dedupPhotoPools(list) {
   const map = {};
   for (const b of list) {
     const pool = rotatedPool(b.id, b.type, b.subtype);
-    const chosen = pool.find(p=>!used.has(p)) ?? pool[0];
-    if (chosen) used.add(chosen);
-    map[b.id] = chosen ? [chosen, ...pool.filter(p=>p!==chosen)] : [];
+    const chosen = pool.find(p=>!used.has(p));
+    // Once every photo in this business's pool is already claimed by an
+    // earlier business in the same visible set, don't force a repeat —
+    // hand back no photo at all so it falls back to the icon instead.
+    if (chosen) { used.add(chosen); map[b.id] = [chosen, ...pool.filter(p=>p!==chosen)]; }
+    else map[b.id] = [];
   }
   return map;
 }
