@@ -446,6 +446,11 @@ const gPlaces = {
       };
       if (searchQuery) { body.textQuery = searchQuery; }
 
+      // Bound the wait — an unconfigured/restricted key can leave this fetch hanging
+      // indefinitely with no error, which would leave `results` stuck on stale data
+      // forever since nothing else would ever call setResults.
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>controller.abort(), 5000);
       const r = await fetch("https://places.googleapis.com/v1/places:searchNearby", {
         method:"POST",
         headers:{
@@ -454,7 +459,9 @@ const gPlaces = {
           "X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress,places.types,places.rating,places.priceLevel,places.currentOpeningHours,places.photos",
         },
         body:JSON.stringify(body),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       const d = await r.json();
       if (!d.places) return DEMOS[type]||DEMOS.food;
       return d.places.slice(0,10).map(p=>({
@@ -621,9 +628,9 @@ const BIZ_ICONS = {
   g1: Building2, g2: IdCard,
 };
 
-function IconBox({ id, type, subtype, size=44 }) {
+function IconBox({ id, type, subtype, photos, size=44 }) {
   const [photoIdx, setPhotoIdx] = useState(0);
-  const pool = rotatedPool(id, type, subtype);
+  const pool = photos || rotatedPool(id, type, subtype);
   const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
@@ -680,7 +687,7 @@ function LocationMap({ addr }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect, onRate, isDark }) {
+function BusinessCard({ b, onSelect, onRate, isDark, photos }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
@@ -696,7 +703,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox id={b.id} type={b.type} subtype={b.subtype} size={52}/>
+        <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} size={52}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
@@ -788,7 +795,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
 }
 
 // Mock active sponsored ad — in production this comes from the DB
-function SponsoredCard({ ad, onSelect, isDark }) {
+function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -797,7 +804,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   const WM = "rgba(255,255,255,0.85)";
   const BizIcon = BIZ_ICONS[ad.bizId];
   const [photoIdx, setPhotoIdx] = useState(0);
-  const pool = rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
+  const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
   const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
@@ -1246,6 +1253,22 @@ function rotatedPool(id, type, subtype) {
 }
 function thumbUrl(photoId) {
   return `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80`;
+}
+// Assigns each business in a currently-visible list a de-duplicated photo pool
+// (its own rotatedPool, reordered so the first entry never collides with an
+// earlier business's pick in the same list) — so two cards on screen together
+// never show the same photo. Falls back to allowing a repeat only once a
+// business's whole pool has already been claimed by others.
+function dedupPhotoPools(list) {
+  const used = new Set();
+  const map = {};
+  for (const b of list) {
+    const pool = rotatedPool(b.id, b.type, b.subtype);
+    const chosen = pool.find(p=>!used.has(p)) ?? pool[0];
+    if (chosen) used.add(chosen);
+    map[b.id] = chosen ? [chosen, ...pool.filter(p=>p!==chosen)] : [];
+  }
+  return map;
 }
 function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
@@ -2301,7 +2324,18 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   const hasMore  = (page+1)*PAGE < filtered.length;
   const hasPrev  = page > 0;
 
-  const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); };
+  // De-dupe photos across everything on screen together (sponsor card + this
+  // page of results) so no two visible cards ever show the same photo.
+  const photoTargets = [
+    ...(sponsorMatches ? [{id:sponsorAd.bizId, type:sponsorAd.bizType, subtype:sponsorAd.bizSubtype}] : []),
+    ...visible,
+  ];
+  const bizPhotoPools = dedupPhotoPools(photoTargets);
+
+  // Clear stale cross-category results immediately (don't wait on the async
+  // fetch) so switching tabs never shows the previous category's businesses,
+  // even momentarily.
+  const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); setResults(DEMOS[k]||DEMOS.food); };
 
   return (
     <div style={{width:"100%"}}>
@@ -2395,10 +2429,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Listings — sponsored card first */}
         {sponsorMatches && (
-          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
+          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark} photos={bizPhotoPools[sponsorAd.bizId]}/>
         )}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} photos={bizPhotoPools[b.id]}/>
         ))}
 
         {/* Pagination */}
