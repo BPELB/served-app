@@ -199,6 +199,24 @@ greenchek commit(s) to use as the reference diff.
      deploy — confirm this directly in the browser (not just via
      Playwright-in-this-sandbox) before considering it done on each
      brand.
+     Follow-up (`58cf84d`): live testing surfaced two problems this
+     sandbox couldn't have caught: (a) the sponsored card sometimes
+     showed the icon fallback with no photo at all — a single dead/broken
+     Unsplash link and no retry; (b) two specific curated IDs in
+     `CAT_PHOTOS` were bad data — one filed under `Mexican` was actually a
+     pizza photo, one under `Indian` was unclear/unverifiable. Fixed by
+     (1) removing both bad IDs from `CAT_PHOTOS` (`Mexican` and `Indian`
+     pools are now 3 entries each, down from 4), and (2) adding
+     `rotatedPool(id,type,subtype)`/`thumbUrl(photoId)` helpers so
+     `IconBox`/`SponsoredCard` chain through **every** photo in a
+     business's subtype pool via `onError` before giving up to the icon,
+     instead of trying one deterministic pick and quitting on first
+     failure. Since photo content can't be verified in this sandbox at
+     all, treat any newly-reported bad match on another brand the same
+     way: remove the offending ID from that brand's `CAT_PHOTOS` (ids are
+     Unsplash-global, so a bad ID reported on greenchek is bad everywhere
+     — remove it from all four brands' `CAT_PHOTOS`, not just the one it
+     was reported on).
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
