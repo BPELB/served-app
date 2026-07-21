@@ -622,18 +622,17 @@ const BIZ_ICONS = {
 };
 
 function IconBox({ id, type, subtype, size=44 }) {
-  const [photoFailed, setPhotoFailed] = useState(false);
-  const pool = photoPool(type, subtype);
-  const photoId = id && pool.length ? pool[hashStr(id) % pool.length] : null;
-  const photoUrl = photoId ? `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80` : null;
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = rotatedPool(id, type, subtype);
+  const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
     <div style={{width:size,height:size,borderRadius:16,flexShrink:0,overflow:"hidden",
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {photoUrl && !photoFailed
-        ? <img src={photoUrl} alt="" onError={()=>setPhotoFailed(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+      {photoUrl
+        ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
         : (BizIcon
             ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
             : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
@@ -797,10 +796,9 @@ function SponsoredCard({ ad, onSelect, isDark }) {
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
   const BizIcon = BIZ_ICONS[ad.bizId];
-  const [photoFailed, setPhotoFailed] = useState(false);
-  const pool = photoPool(ad.bizType, ad.bizSubtype);
-  const photoId = ad.bizId && pool.length ? pool[hashStr(ad.bizId) % pool.length] : null;
-  const photoUrl = photoId ? `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80` : null;
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
+  const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
     <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
@@ -820,8 +818,8 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : (photoUrl && !photoFailed
-                ? <img src={photoUrl} alt="" onError={()=>setPhotoFailed(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+            : (photoUrl
+                ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                 : (BizIcon
                     ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
                     : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>))
@@ -1201,9 +1199,9 @@ const CAT_PHOTOS = {
   Italian:       ["1513104890138-7c749659a591","1548365328-9f547fb0953b","1551183053-bf91a1d81141","1546549032-9571cd6b27df"],
   American:      ["1550547660-d9450f859349","1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1553979459-d2229ba7433b"],
   Japanese:      ["1579584425555-c3ce17fd4351","1553621042-f6e147245754","1611143669185-af224c5e3252","1553163147-622ab57be1c7"],
-  Mexican:       ["1565299624946-b28f40a0ae38","1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
+  Mexican:       ["1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
   Burgers:       ["1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1550547660-d9450f859349","1586190848861-99aa4a171e90"],
-  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1567188040759-fb8a883dc6d8","1631452180519-c014fe946bc7"],
+  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1631452180519-c014fe946bc7"],
   French:        ["1555507036-ab1f4038808a","1550617931-e17a7b70dce2","1608198093002-ad4e005484ec","1608039829572-78524f79c4c7"],
   Chinese:       ["1585032226651-759b368d7246","1563245372-f21724e3856d","1526318896980-cf78c088247c","1552611052-33e04de081de"],
   Korean:        ["1590301157890-4810ed352733","1580651315530-69c8e0026377","1583224964978-2257b960c3d3"],
@@ -1237,6 +1235,17 @@ function hashStr(s) {
   let h = 0;
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
+}
+// Same photo pool, rotated to a per-business starting point (via hashStr) so
+// businesses sharing a subtype don't all show the same photo first.
+function rotatedPool(id, type, subtype) {
+  const pool = photoPool(type, subtype);
+  if (!id || !pool.length) return [];
+  const base = hashStr(id) % pool.length;
+  return [...pool.slice(base), ...pool.slice(0,base)];
+}
+function thumbUrl(photoId) {
+  return `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80`;
 }
 function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
