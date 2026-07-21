@@ -119,34 +119,44 @@ greenchek commit(s) to use as the reference diff.
   against the white background. Apply the equivalent bump to each other
   brand's own `LIGHT_VARS --muted` value — keep each brand's own base RGB,
   only adjust opacity by the same +0.15 amount. (`57b628c`)
-- [ ] **No more per-business emoji icons, replaced with per-subtype line
-  icons; icon color is theme-aware (white in dark mode)** — two-step
-  change, use the *second* step as source of truth:
+- [ ] **No more per-business emoji icons, replaced with per-business Lucide
+  icons; icon color is theme-aware (white in dark mode)** — three-step
+  change, use the *third* step as source of truth:
   1. `3785b41` first removed per-business `emoji` rendering entirely —
      `IconBox` and `SponsoredCard` fell back to one shared `CAT_ICONS[type]`
      icon per category (e.g. every "food" business showed the same
-     fork/knife icon). This was superseded almost immediately.
-  2. `98c7753` (+ `d10e415` fixup) added a `SUBTYPE_ICONS` map keyed by
-     `[type][subtype]` covering every `(type, subtype)` pair in `DEMOS`
-     (e.g. `food.Italian` → pizza slice, `food.Japanese` → sushi roll,
-     `beauty."Hair Salon"` → comb, etc. — ~50 hand-drawn icons across all
-     20 categories). `IconBox(type, subtype, size)` now looks up
-     `SUBTYPE_ICONS[type]?.[subtype]`, falling back to `CAT_ICONS[type]`
-     then `CAT_ICONS.food` if no subtype entry exists. Businesses within
-     the same category are now visually distinct from each other instead
-     of sharing one icon. `SponsoredCard`'s inline icon does the same
-     lookup via `ad.bizType`/`ad.bizSubtype` (fixed in `d10e415` — the
-     first pass missed this call site and it kept showing the generic
-     category icon).
-     Also added a new theme var `--iconfg` (JS constant `IC`): white in
-     dark mode, accent green in light mode — replaces the old hardcoded
-     `color:O` on every icon `<svg>`. Add `--iconfg` to `DARK_VARS`/
-     `LIGHT_VARS` and to the `:root` default in `index.html`. Each brand
-     should reuse its own light-mode accent value for `--iconfg` in light
-     mode (not greenchek's `#115D3C`), same pattern as `--accent`.
-     When porting, redraw the ~50 `SUBTYPE_ICONS` entries as-is (they're
-     brand-neutral line art, no brand colors baked in — only `IC`
-     determines color) rather than reinventing them per brand.
+     fork/knife icon). Superseded almost immediately.
+  2. `98c7753` (+ `d10e415` fixup) added a hand-drawn `SUBTYPE_ICONS` map
+     keyed by `[type][subtype]`. User feedback: the hand-drawn icons
+     looked low quality, and businesses sharing a subtype (e.g. two
+     Italian restaurants) still looked identical. Superseded.
+  3. `bcd33c8` replaced hand-drawn `SUBTYPE_ICONS` entirely with the
+     `lucide-react` npm package (ISC license — permissive/commercial-
+     friendly, confirmed no copyright issue) and a `BIZ_ICONS` map keyed
+     by **individual business id** (e.g. `d1: Pizza, d5: Hamburger,
+     b1: Scissors, pr1: Gavel` — see the map in `App.jsx` for the full
+     ~56-entry list), so every business gets its own specific,
+     professionally-designed icon rather than one shared per category or
+     subtype. `IconBox({id, type, size})` looks up `BIZ_ICONS[id]` and
+     renders it as `<BizIcon size={s} color={IC} strokeWidth={2}/>`,
+     falling back to the old raw-SVG `CAT_ICONS[type]` only when an id
+     has no entry (this is the path the category-strip pills use, since
+     those represent a category, not a specific business — pass `type`
+     only, no `id`, to keep that fallback). `SponsoredCard` does the same
+     lookup via `ad.bizId`.
+     Also added a theme var `--iconfg` (JS constant `IC`): white in dark
+     mode, accent green in light mode — replaces the old hardcoded
+     `color:O`. Add `--iconfg` to `DARK_VARS`/`LIGHT_VARS` and to the
+     `:root` default in `index.html`. Each brand should reuse its own
+     light-mode accent value for `--iconfg` (not greenchek's `#115D3C`),
+     same pattern as `--accent`.
+     When porting: add `lucide-react` as a dependency (`npm install
+     lucide-react`, already in greenchek's `package.json`/
+     `package-lock.json`), copy the `BIZ_ICONS` map and its Lucide
+     imports verbatim (business ids are shared across brands via `DEMOS`,
+     and the icon choices are brand-neutral — only `IC` determines
+     color), and re-map any businesses that differ from greenchek's
+     `DEMOS` on that brand.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
