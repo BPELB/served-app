@@ -157,6 +157,22 @@ greenchek commit(s) to use as the reference diff.
      and the icon choices are brand-neutral — only `IC` determines
      color), and re-map any businesses that differ from greenchek's
      `DEMOS` on that brand.
+     Follow-up (`25b973e`): `strokeWidth` bumped `2` → `2.5` on every
+     business icon (both `IconBox` and `SponsoredCard`) for a bolder,
+     crisper look per feedback. Also: Lucide has no literal glyph for
+     sushi, taco, or a Chinese takeout box — three small hand-drawn
+     components (`Sushi`, `Taco`, `TakeoutBox`, defined right above
+     `BIZ_ICONS`) fill those gaps, built to match Lucide's own stroke
+     style exactly (24x24 viewBox, round cap/join, same `size`/`color`/
+     `strokeWidth` prop signature) so they're indistinguishable from the
+     imported set. Copy these three components verbatim when porting —
+     they're brand-neutral line art like the rest. Also reassigned:
+     `d2` (Garden Bistro) → `Salad` (was `Sandwich`, read as an envelope
+     at small size), `d3` (Sakura House) → `Sushi`, `d4` (El Rancho
+     Tacos) → `Taco`, `d8` (Golden Wok) → `TakeoutBox`, `d11`
+     (Mediterraneo) → `Grape` (freed up since `Salad` moved to `d2`) —
+     use `25b973e`'s `BIZ_ICONS` map as the source of truth over
+     `bcd33c8`'s for these five ids.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
