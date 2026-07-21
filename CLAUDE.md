@@ -249,6 +249,19 @@ greenchek commit(s) to use as the reference diff.
      `Home()` wiring verbatim, and apply the same `changeCat`/timeout fix
      — the Google Places bug is not greenchek-specific, it'll reproduce
      on any brand using the same shared `CONFIG.GOOGLE_PLACES_KEY`.
+     Follow-up (`a008199`): live testing found two fitness businesses
+     sharing the same photo. Root cause: `fitness` (and `beauty`, `health`,
+     `automotive`, `homeservices`, `pets`, `retail`, `laundry`) only have
+     2 curated photos in `CAT_PHOTOS` but 3 businesses each (`laundry` has
+     only 1 photo for 2 businesses) — `dedupPhotoPools`' old
+     `?? pool[0]` fallback forced a repeat once a pool ran out rather than
+     ever fabricating new unverified photo IDs. Changed the fallback: once
+     every photo in a business's pool is already claimed by an earlier
+     business in the same visible set, that business gets an empty pool
+     (`[]`) instead of a forced repeat, so it falls through to its
+     `BIZ_ICONS` icon instead of duplicating a neighbor's photo. This is
+     the correct behavior on every brand as-is — no brand-specific photo
+     curation needed, just copy `dedupPhotoPools` verbatim.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
