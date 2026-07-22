@@ -262,6 +262,21 @@ greenchek commit(s) to use as the reference diff.
      `BIZ_ICONS` icon instead of duplicating a neighbor's photo. This is
      the correct behavior on every brand as-is — no brand-specific photo
      curation needed, just copy `dedupPhotoPools` verbatim.
+     Follow-up (`9c0ffcd`) — **content-safety fix, not cosmetic**: the
+     curated `childcare` photos turned out to be close-up shots of
+     children's faces, which is inappropriate for this app regardless of
+     curation quality or duplication. Added a `NO_PHOTO_TYPES` set
+     (`childcare`, `education` — `education` includes the same "Tutoring"
+     subtype and could equally end up photographed with minors in frame)
+     checked at the top of `photoPool()`, so these categories return `[]`
+     unconditionally and never attempt a real photo — this is a hard
+     exclusion, not a fallback path. Also deleted the `childcare`/
+     `education` entries from `CAT_PHOTOS` entirely so the bad IDs can't
+     be reintroduced or reached through the type/subtype fallback chain.
+     When porting: copy `NO_PHOTO_TYPES` and the `photoPool()` guard
+     verbatim, and do **not** add `childcare`/`education` entries to that
+     brand's `CAT_PHOTOS` even if asked to "fill in" a thin pool — this
+     exclusion is intentional and permanent, not a gap to fill.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
