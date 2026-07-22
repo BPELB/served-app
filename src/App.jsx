@@ -1221,12 +1221,10 @@ const CAT_PHOTOS = {
   automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
   homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
   pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
-  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
   hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
   retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
   professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
   events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
-  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
   entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
   moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
   techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
@@ -1235,7 +1233,12 @@ const CAT_PHOTOS = {
   funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
   government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
 };
+// Categories whose businesses could realistically be photographed with minors
+// in frame — real photos are never appropriate here no matter how well
+// curated, so these always render their icon instead.
+const NO_PHOTO_TYPES = new Set(["childcare","education"]);
 function photoPool(type, subtype) {
+  if (NO_PHOTO_TYPES.has(type)) return [];
   return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
 }
 function hashStr(s) {
