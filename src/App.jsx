@@ -495,7 +495,7 @@ function Logo({ light=false }) {
         <rect width="40" height="40" rx="11" fill={G2}/>
         <polyline points="10,21 17,28 30,13" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-      <span style={{fontSize:22,fontWeight:900,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
+      <span style={{fontSize:22,fontWeight:700,letterSpacing:"-0.05em",color:c,lineHeight:1}}>
         green<span style={{color:G2}}>chek</span>
       </span>
     </div>
@@ -705,7 +705,7 @@ function BusinessCard({ b, onSelect, onRate, isDark, photos }) {
         onClick={()=>onSelect(b)}>
         <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} size={52}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
+          <div style={{fontSize:16,fontWeight:700,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
             {b.subtype||bt.label}
             {b.rating ? <span style={{color:MUT}}> · <span style={{color:ST}}>★</span> {b.rating}</span> : null}
@@ -814,7 +814,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:18,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
+        <span style={{fontSize:18,fontWeight:700,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
@@ -833,7 +833,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
+          <div style={{fontSize:17,fontWeight:700,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
             {ad.bizSubtype||ad.bizType}
