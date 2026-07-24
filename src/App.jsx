@@ -841,7 +841,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
             {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
+            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?W:"#dc2626"}}>
               {ad.bizOpen ? "Open" : "Closed"}
             </span>
             {ad.bizHours && (
