@@ -12,7 +12,7 @@ import {
   Shirt, Library, Smartphone,
   Gavel, Calculator,
   PartyPopper, Camera,
-  Gamepad2, Target,
+  Gamepad2, Target, Users, MapPin,
   Truck, Package,
   TabletSmartphone, Monitor,
   WashingMachine,
@@ -2024,12 +2024,12 @@ function AdvertisePage({ onBack }) {
                 </div>
                 <div style={{height:1,background:budget===i?"rgba(255,255,255,0.25)":BDR,marginBottom:10}}/>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {[["👥",<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
-                    ["📍",b.placements],
-                    ["🎯",b.audience]
-                  ].map(([icon,text],j)=>(
+                  {[[Users,<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
+                    [MapPin,b.placements],
+                    [Target,b.audience]
+                  ].map(([Icon,text],j)=>(
                     <div key={j} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-                      <span style={{fontSize:12,lineHeight:"18px"}}>{icon}</span>
+                      <Icon size={14} color={budget===i?"rgba(255,255,255,0.9)":O} strokeWidth={2.5} style={{flexShrink:0,marginTop:2}}/>
                       <span style={{fontSize:12,color:budget===i?"rgba(255,255,255,0.9)":N,lineHeight:1.5}}>{text}</span>
                     </div>
                   ))}
