@@ -2012,13 +2012,13 @@ function AdvertisePage({ onBack }) {
                   border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"all 0.15s",
                   boxShadow:budget===i?`0 0 0 3px ${OA(20)}`:"none"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
-                    <span style={{fontSize:9,fontWeight:700,
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:5}}>
+                    <span style={{fontSize:9,fontWeight:700,alignSelf:"flex-start",
                       color:budget===i?"rgba(255,255,255,0.8)":MUT,
                       background:budget===i?"rgba(255,255,255,0.2)":BG3,
                       borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
+                    <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
                   </div>
                   <span style={{fontSize:18,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:budget===i?"rgba(255,255,255,0.7)":MUT}}>/mo</span></span>
                 </div>
@@ -2047,7 +2047,7 @@ function AdvertisePage({ onBack }) {
           </div>
 
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
+            border:"none",background:budget!==null?O:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
             boxShadow:budget!==null?"0 4px 16px rgba(22,163,74,0.35)":"none"}}>
             Continue →
