@@ -1215,30 +1215,29 @@ const CAT_PHOTOS = {
   Mediterranean: ["1540420773420-3366772f4999","1512058564366-18510be2db19","1615719413546-198b25453f85"],
   // Top-level category fallback
   food:          ["1517248135467-4c7edcad34c4","1414235077428-338989a2e8c0","1517244683847-7456b63c5969"],
-  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035"],
-  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907"],
-  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b"],
-  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
-  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
-  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
+  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035","1521590832167-7bcbfaa6381f"],
+  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907","1629909613654-28e377c37b09"],
+  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b","1518611012118-696072aa579a"],
+  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3","1620891549027-942fdc95d3f5"],
+  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837","1581092918056-0c4c3acd3789"],
+  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b","1516734212186-a967f81ad0d7"],
   hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
-  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
+  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc","1489987707025-afc232f7ea0f"],
   professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
   events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
   entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
   moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
   techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
-  laundry:       ["1545173168-9f1947eebb7f"],
+  laundry:       ["1545173168-9f1947eebb7f","1604335398980-ac1695fa2be7"],
   financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
   funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
   government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
+  // Object/building-only photos — no people in frame, so no risk of depicting
+  // minors (see NO_PHOTO_TYPES history below for why this category needed care).
+  childcare:     ["1503676260728-1c00da094a0b","1560785496-3c9d27877182"],
+  education:     ["1546410531-bb4caa6b424d","1497633762265-9d179a990aa6"],
 };
-// Categories whose businesses could realistically be photographed with minors
-// in frame — real photos are never appropriate here no matter how well
-// curated, so these always render their icon instead.
-const NO_PHOTO_TYPES = new Set(["childcare","education"]);
 function photoPool(type, subtype) {
-  if (NO_PHOTO_TYPES.has(type)) return [];
   return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
 }
 function hashStr(s) {
