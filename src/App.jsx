@@ -2017,6 +2017,7 @@ function AdvertisePage({ onBack }) {
                     <span style={{fontSize:9,fontWeight:700,alignSelf:"flex-start",
                       color:budget===i?"rgba(255,255,255,0.8)":MUT,
                       background:budget===i?"rgba(255,255,255,0.2)":BG3,
+                      border:`1px solid ${budget===i?"rgba(255,255,255,0.4)":O}`,
                       borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
                     <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
                   </div>
