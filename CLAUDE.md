@@ -277,6 +277,28 @@ greenchek commit(s) to use as the reference diff.
      verbatim, and do **not** add `childcare`/`education` entries to that
      brand's `CAT_PHOTOS` even if asked to "fill in" a thin pool — this
      exclusion is intentional and permanent, not a gap to fill.
+     Follow-up (`f301d76`) — **superseded the exclusion above**: user
+     confirmed the "shortage" is an artifact of only 1-2 hardcoded IDs per
+     category, not real-world photo scarcity, and asked for every category
+     (including childcare/education) to have enough distinct photos for
+     its business count — no icons, no repeats, anywhere. Removed
+     `NO_PHOTO_TYPES` and the `photoPool()` guard entirely. Added one more
+     entry each to `beauty`, `health`, `fitness`, `automotive`,
+     `homeservices`, `pets`, `retail` (2→3, matching their 3 businesses)
+     and `laundry` (1→2), and restored `childcare`/`education` entries
+     using **object/building-only concepts with no people in frame**
+     (books, building blocks, graduation-adjacent objects) rather than any
+     classroom/daycare scene — deliberately avoiding the exact risk that
+     caused the original violation. None of these new IDs (in any
+     category) have been visually verified — this sandbox cannot fetch or
+     render external images at all (confirmed: WebFetch 403s on Unsplash,
+     Wikimedia, and even plain Wikipedia; direct curl to Unsplash also
+     403s). Treat every new ID the same way the tacos/Indian mismatches
+     were handled: if a business shows a wrong or duplicate-looking photo,
+     remove that specific ID from `CAT_PHOTOS` — but childcare/education
+     specifically need the closest scrutiny of anything in this app given
+     the prior incident; check those two categories first on every brand
+     before considering this shipped.
 - [ ] **OwnerDashboard "Start Advertising" buttons: solid, not outlined** —
   both CTA buttons (Overview tab top button, and the Profile tab's Account
   section button) switched from `background:"transparent",color:O` to
