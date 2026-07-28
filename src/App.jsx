@@ -36,6 +36,7 @@ const CONFIG = {
 // ============================================================
 const O   = "var(--accent)";
 const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`; // O with alpha — O is a CSS var now, so hex-suffix alpha (${O}33) no longer works
+const OBG = "var(--accent-bg)"; // solid accent-fill backgrounds (buttons, selected states, badges) — darker green for better white-text contrast; same value as O in light mode, so light mode is unaffected
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -48,8 +49,8 @@ const MUT = "var(--muted)";
 const ST  = "var(--star)"; // rating-star gold — darker in light mode for contrast against the white background
 const IC  = "var(--iconfg)"; // business icon color — white in dark mode, accent in light mode
 
-const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a","--star":"#FBBF24","--iconfg":"#ffffff" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.78)","--hover":"#f0f3f2","--accent":"#115D3C","--star":"#CA8A04","--iconfg":"#115D3C" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#1e4455","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#0f3040","--accent":"#16a34a","--accent-bg":"#115D3C","--star":"#FBBF24","--iconfg":"#ffffff" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.78)","--hover":"#f0f3f2","--accent":"#115D3C","--accent-bg":"#115D3C","--star":"#CA8A04","--iconfg":"#115D3C" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
@@ -670,7 +671,7 @@ function Back({ onClick, label }) {
   return (
     <button onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
       style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:14,
-        border:`2px solid ${O}`,background:h?BG2:O,color:h?O:"#fff",
+        border:`2px solid ${O}`,background:h?BG2:OBG,color:h?O:"#fff",
         fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,
         transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
       ‹ {label}
@@ -742,10 +743,10 @@ function BusinessCard({ b, onSelect, onRate, isDark, photos }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
-          onMouseEnter={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";
+          onMouseEnter={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";
             e.currentTarget.querySelector("svg").style.stroke="#fff";}}
           onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=N;
-            e.currentTarget.querySelector("svg").style.stroke=isDark?"#fff":"#16a34a";}}
+            e.currentTarget.querySelector("svg").style.stroke=isDark?"#fff":O;}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
             border:`2px solid ${O}`,background:"transparent",color:N,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",transition:"all 0.15s",
@@ -807,7 +808,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
   const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
-    <div style={{background:isDark?"#115D3C":O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:OBG,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
         subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
         phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
@@ -919,7 +920,7 @@ function CatPill({ typeKey, selected, onClick }) {
       display:"flex",alignItems:"center",gap:5,
       padding:"7px 13px",borderRadius:20,flexShrink:0,
       border:`2px solid ${on?O:BDR}`,
-      background:on?O:"transparent",
+      background:on?OBG:"transparent",
       color:on?"#fff":N,
       fontSize:12,fontWeight:on?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
@@ -936,7 +937,7 @@ function SubPill({ label, selected, onClick }) {
     <button onClick={onClick} style={{
       padding:"6px 12px",borderRadius:20,flexShrink:0,
       border:`1.5px solid ${selected?O:BDR}`,
-      background:selected?O:"transparent",
+      background:selected?OBG:"transparent",
       color:selected?"#fff":MUT,
       fontSize:11,fontWeight:selected?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
@@ -1026,7 +1027,7 @@ function StarCard({ cat, value, onChange, box }) {
           return (
             <button key={n} onMouseEnter={()=>setHov(n)} onClick={()=>onChange(sv===n?null:n*2)}
               style={{width:44,height:44,borderRadius:12,
-                background:filled?O:BG3,border:`1.5px solid ${filled?O:BDR}`,
+                background:filled?OBG:BG3,border:`1.5px solid ${filled?O:BDR}`,
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:22,cursor:"pointer",fontFamily:"inherit",
                 transition:"background 0.12s,border-color 0.12s"}}>
@@ -1412,7 +1413,7 @@ function BusinessPage({ business, onBack, onRate }) {
             return (
               <div style={{position:"relative",width:sw,height:sh+tail,flexShrink:0}}>
                 <svg width={sw} height={sh+tail} viewBox={`0 0 ${sw} ${sh+tail}`} style={{position:"absolute",top:0,left:0}}>
-                  <path d={path} fill={O}/>
+                  <path d={path} fill={OBG}/>
                 </svg>
                 <div style={{position:"absolute",top:0,left:0,width:sw,height:sh,
                   display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
@@ -1531,9 +1532,9 @@ function BusinessPage({ business, onBack, onRate }) {
 
       <button onClick={onRate}
         onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
-        onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+        onMouseLeave={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";}}
         style={{width:"100%",padding:"13px 22px",borderRadius:14,border:`2px solid ${O}`,
-        background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
+        background:OBG,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
         display:"flex",alignItems:"center",justifyContent:"center",gap:8,
         transition:"all 0.15s",marginBottom:16,fontFamily:"inherit"}}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={ST} stroke={ST} strokeWidth="1">
@@ -1569,7 +1570,7 @@ function BusinessPage({ business, onBack, onRate }) {
           {Array.from({length:totalRevPages},(_,i)=>i+1).map(p=>(
             <button key={p} onClick={()=>setRevPage(p)}
               style={{width:28,height:28,borderRadius:"50%",border:`2px solid ${p===revPage?O:BDR}`,
-                background:p===revPage?O:"transparent",color:p===revPage?"#fff":N,
+                background:p===revPage?OBG:"transparent",color:p===revPage?"#fff":N,
                 fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.15s"}}>
               {p}
             </button>
@@ -1666,9 +1667,9 @@ function RateView({ business, onBack, onDone }) {
       {!showExtra?(
         <button onClick={()=>setExtra(true)}
           onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
-          onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+          onMouseLeave={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";}}
           style={{width:"100%",padding:"9px 11px",borderRadius:14,marginBottom:12,
-            border:`2px solid ${O}`,background:O,color:"#fff",
+            border:`2px solid ${O}`,background:OBG,color:"#fff",
             display:"flex",flexDirection:"column",alignItems:"center",gap:1,
             transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
           <span style={{fontSize:14,fontWeight:700}}>+ More feedback</span>
@@ -1765,7 +1766,7 @@ function RateView({ business, onBack, onDone }) {
       <div style={{position:"sticky",bottom:16}}>
         <button disabled={!hasAny||submitting} onClick={submit}
           style={{width:"100%",padding:"13px",borderRadius:14,border:"none",
-            background:hasAny?O:"#eee",color:hasAny?"#fff":"#999",
+            background:hasAny?OBG:"#eee",color:hasAny?"#fff":"#999",
             fontSize:14,fontWeight:700,cursor:hasAny?"pointer":"default",
             transition:"all 0.2s",fontFamily:"inherit"}}>
           {submitting?"Submitting…":hasAny?"Submit feedback":"Fill out anything above to submit"}
@@ -1844,7 +1845,7 @@ function ClaimModal({ onClose, onDashboard }) {
           </div>
           <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
           <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
-            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
+            border:"none",background:OBG,color:"#fff",fontSize:15,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>
             Claim for free →
           </button>
@@ -1878,7 +1879,7 @@ function ClaimModal({ onClose, onDashboard }) {
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
-                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+                background:OBG,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
                 boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
                 View my dashboard →
               </button>
@@ -1957,7 +1958,7 @@ function AdvertisePage({ onBack }) {
           </button>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <div style={{width:44,height:44,borderRadius:12,background:O,flexShrink:0,
+          <div style={{width:44,height:44,borderRadius:12,background:OBG,flexShrink:0,
             display:"flex",alignItems:"center",justifyContent:"center"}}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="m3 11 18-5v12L3 14v-3z"/>
@@ -1979,7 +1980,7 @@ function AdvertisePage({ onBack }) {
                 borderBottom:`2.5px solid ${step===i+1?O:"transparent"}`,
                 display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
                 <div style={{width:20,height:20,borderRadius:"50%",flexShrink:0,
-                  background:step>i+1?O:step===i+1?O:BG3,
+                  background:step>i+1?OBG:step===i+1?OBG:BG3,
                   border:`2px solid ${step>=i+1?O:BDR}`,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:10,fontWeight:800,color:step>=i+1?"#fff":MUT}}>
@@ -2008,7 +2009,7 @@ function AdvertisePage({ onBack }) {
               <div key={b.label} onClick={()=>setBudget(i)}
                 onMouseEnter={()=>setHoveredPlan(i)}
                 onMouseLeave={()=>setHoveredPlan(null)}
-                style={{background:budget===i?O:BG2,
+                style={{background:budget===i?OBG:BG2,
                   border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"all 0.15s",
                   boxShadow:budget===i?`0 0 0 3px ${OA(20)}`:"none"}}>
@@ -2048,7 +2049,7 @@ function AdvertisePage({ onBack }) {
           </div>
 
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:budget!==null?O:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
+            border:"none",background:budget!==null?OBG:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
             boxShadow:budget!==null?"0 4px 16px rgba(22,163,74,0.35)":"none"}}>
             Continue →
@@ -2073,7 +2074,7 @@ function AdvertisePage({ onBack }) {
                 {/* Image / upload tap target */}
                 <label style={{width:44,height:44,borderRadius:12,flexShrink:0,cursor:"pointer",
                   overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center",
-                  background:adImage?"transparent":O,border:adImage?"none":`2px dashed rgba(255,255,255,0.4)`}}>
+                  background:adImage?"transparent":OBG,border:adImage?"none":`2px dashed rgba(255,255,255,0.4)`}}>
                   {adImage
                     ? <img src={adImage} alt="ad" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -2094,7 +2095,7 @@ function AdvertisePage({ onBack }) {
                     {adForm.tagline||"Your tagline appears here"}
                   </div>
                 </div>
-                <div style={{padding:"6px 10px",borderRadius:8,background:O,
+                <div style={{padding:"6px 10px",borderRadius:8,background:OBG,
                   color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:140,
                   whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",textAlign:"center"}}>
                   {adForm.cta||"Book now"}
@@ -2134,13 +2135,13 @@ function AdvertisePage({ onBack }) {
                     <button key={cta} onClick={()=>{setAdForm(f=>({...f,cta}));setCustomCta(false);}}
                       style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
                         border:`1.5px solid ${!customCta&&adForm.cta===cta?O:BDR}`,
-                        background:!customCta&&adForm.cta===cta?O:"transparent",
+                        background:!customCta&&adForm.cta===cta?OBG:"transparent",
                         color:!customCta&&adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
                   ))}
                   <button onClick={()=>{setCustomCta(true);setAdForm(f=>({...f,cta:""}));}}
                     style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
                       border:`1.5px solid ${customCta?O:BDR}`,
-                      background:customCta?O:"transparent",
+                      background:customCta?OBG:"transparent",
                       color:customCta?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
                 </div>
                 {customCta && (
@@ -2162,7 +2163,7 @@ function AdvertisePage({ onBack }) {
                 border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
                 fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
               <button onClick={()=>setStep(3)} style={{flex:2,padding:"12px",borderRadius:12,
-                border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+                border:"none",background:OBG,color:"#fff",fontSize:13,fontWeight:800,
                 cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
             </div>
           </>;
@@ -2221,7 +2222,7 @@ function AdvertisePage({ onBack }) {
               border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
               fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
             <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"12px",borderRadius:12,
-              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+              border:"none",background:OBG,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
           </div>
@@ -2233,7 +2234,7 @@ function AdvertisePage({ onBack }) {
         {/* SUCCESS */}
         {launched && (
           <div style={{textAlign:"center",padding:"40px 0"}}>
-            <div style={{width:72,height:72,borderRadius:20,background:O,
+            <div style={{width:72,height:72,borderRadius:20,background:OBG,
               display:"flex",alignItems:"center",justifyContent:"center",
               margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -2253,7 +2254,7 @@ function AdvertisePage({ onBack }) {
               ))}
             </div>
             <button onClick={onBack} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",
-              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+              background:OBG,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
               Back to dashboard
             </button>
           </div>
@@ -2467,7 +2468,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:O,
+              background:OBG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -2479,12 +2480,12 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Free dashboard + AI training</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
-              background:O,color:"#fff",fontSize:11,fontWeight:700,
+              background:OBG,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
               cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:OBG,
             border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
@@ -2531,7 +2532,7 @@ function DoneScreen({ business, reviewData, onReset }) {
   return (
     <div style={{maxWidth:480,margin:"0 auto",padding:"4rem 1.5rem",textAlign:"center"}}>
       {shareOpen&&<ShareCard business={business} scores={reviewData?.scores||{}} onClose={()=>setShare(false)}/>}
-      <div style={{width:72,height:72,borderRadius:20,background:O,
+      <div style={{width:72,height:72,borderRadius:20,background:OBG,
         display:"flex",alignItems:"center",justifyContent:"center",
         margin:"0 auto 20px"}}>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -2560,7 +2561,7 @@ function DoneScreen({ business, reviewData, onReset }) {
         </button>
         <button onClick={onReset}
           style={{width:"100%",padding:"13px",borderRadius:14,border:"none",
-            background:O,color:"#fff",
+            background:OBG,color:"#fff",
             fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
           Rate another business
         </button>
@@ -2655,7 +2656,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:O}}/>
+          <div style={{width:8,height:8,borderRadius:"50%",background:OBG}}/>
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
@@ -2695,7 +2696,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="overview" && <>
           {/* Advertise CTA */}
           <button onClick={onAdvertise} style={{width:"100%",padding:"13px 16px",borderRadius:14,
-            border:`1.5px solid ${O}`,background:O,color:"#fff",fontSize:14,fontWeight:800,
+            border:`1.5px solid ${O}`,background:OBG,color:"#fff",fontSize:14,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",marginBottom:14,
             display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
@@ -2724,7 +2725,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             border:`1.5px solid ${OA(27)}`,borderRadius:16,padding:"16px",marginBottom:16}}>
             {/* Header */}
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-              <div style={{width:28,height:28,borderRadius:8,background:O,
+              <div style={{width:28,height:28,borderRadius:8,background:OBG,
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="white" stroke="none"/></svg>
               </div>
@@ -2778,7 +2779,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:14,padding:"12px 14px",marginBottom:8}}>
               <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
-                <div style={{width:26,height:26,borderRadius:"50%",background:O,
+                <div style={{width:26,height:26,borderRadius:"50%",background:OBG,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:11,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2806,7 +2807,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:16,padding:"14px",marginBottom:10}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:O,
+                <div style={{width:30,height:30,borderRadius:"50%",background:OBG,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:13,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2839,7 +2840,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                         cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
                     <button onClick={()=>sendReply(r.id)}
                       style={{flex:2,padding:"8px",borderRadius:10,border:"none",
-                        background:O,color:"#fff",fontSize:12,fontWeight:700,
+                        background:OBG,color:"#fff",fontSize:12,fontWeight:700,
                         cursor:"pointer",fontFamily:"inherit"}}>Post reply</button>
                   </div>
                 </div>
@@ -2912,7 +2913,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                   <span style={{fontSize:12,fontWeight:800,color:O}}>{(cat.avg/2).toFixed(1)}</span>
                 </div>
                 <div style={{height:8,borderRadius:4,background:BG3,overflow:"hidden"}}>
-                  <div style={{height:"100%",borderRadius:4,background:O,
+                  <div style={{height:"100%",borderRadius:4,background:OBG,
                     width:`${cat.pct}%`,transition:"width 0.5s"}}/>
                 </div>
               </div>
@@ -2968,7 +2969,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
               </div>
             ))}
             <button onClick={onAdvertise} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
-              border:`2px solid ${O}`,background:O,color:"#fff",fontSize:13,fontWeight:800,
+              border:`2px solid ${O}`,background:OBG,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on GreenChek</button>
           </div>
         </>}
@@ -3010,7 +3011,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                   cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
               <button onClick={()=>{setProfile({...editForm});setEditOpen(false);}}
                 style={{flex:2,padding:"12px",borderRadius:12,border:"none",
-                  background:O,color:"#fff",fontSize:13,fontWeight:800,
+                  background:OBG,color:"#fff",fontSize:13,fontWeight:800,
                   cursor:"pointer",fontFamily:"inherit"}}>Save changes</button>
             </div>
           </div>
