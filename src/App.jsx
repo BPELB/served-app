@@ -807,7 +807,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
   const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
-    <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:isDark?"#115D3C":O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
         subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
         phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
