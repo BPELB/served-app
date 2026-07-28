@@ -2015,7 +2015,7 @@ function AdvertisePage({ onBack }) {
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
                   <div style={{display:"flex",flexDirection:"column",gap:5}}>
                     <span style={{fontSize:9,fontWeight:700,alignSelf:"flex-start",
-                      color:budget===i?"rgba(255,255,255,0.8)":MUT,
+                      color:budget===i?"#fff":N,
                       background:budget===i?"rgba(255,255,255,0.2)":BG3,
                       border:`1px solid ${budget===i?"rgba(255,255,255,0.4)":O}`,
                       borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
@@ -2042,7 +2042,7 @@ function AdvertisePage({ onBack }) {
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"14px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
             <span style={{fontSize:14,lineHeight:"18px"}}>ℹ️</span>
-            <p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.7}}>
+            <p style={{fontSize:12,color:N,margin:0,lineHeight:1.7}}>
               No setup fees or hidden charges. Ad spend goes entirely toward impressions. Pause or cancel anytime from your dashboard.
             </p>
           </div>
