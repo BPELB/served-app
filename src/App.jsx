@@ -1232,7 +1232,7 @@ const CAT_PHOTOS = {
   laundry:       ["1545173168-9f1947eebb7f","1604335398980-ac1695fa2be7"],
   financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
   funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
-  government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
+  government:    ["1523292562811-8fa7962a78c8","1461170168-8dc7edf1e59f"],
   // Object/building-only photos — no people in frame, so no risk of depicting
   // minors (see NO_PHOTO_TYPES history below for why this category needed care).
   childcare:     ["1503676260728-1c00da094a0b","1560785496-3c9d27877182"],
