@@ -640,9 +640,7 @@ function IconBox({ id, type, subtype, photos, size=44 }) {
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {photoUrl
-        ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)}
-            onLoad={e=>{ if(e.target.naturalWidth<50) setPhotoIdx(i=>i+1); }}
-            style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
         : (BizIcon
             ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
             : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
@@ -829,9 +827,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
             : (photoUrl
-                ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)}
-                    onLoad={e=>{ if(e.target.naturalWidth<50) setPhotoIdx(i=>i+1); }}
-                    style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                 : (BizIcon
                     ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
                     : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>))
