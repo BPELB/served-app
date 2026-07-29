@@ -629,10 +629,10 @@ const BIZ_ICONS = {
   g1: Building2, g2: IdCard,
 };
 
-function IconBox({ id, type, subtype, photos, size=44 }) {
+function IconBox({ id, type, subtype, photos, uploadedPhoto, size=44 }) {
   const [photoIdx, setPhotoIdx] = useState(0);
   const pool = photos || rotatedPool(id, type, subtype);
-  const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
+  const photoUrl = uploadedPhoto || (photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null);
   const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
@@ -640,7 +640,7 @@ function IconBox({ id, type, subtype, photos, size=44 }) {
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
       {photoUrl
-        ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        ? <img src={photoUrl} alt="" onError={()=>!uploadedPhoto && setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
         : (BizIcon
             ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
             : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
@@ -688,7 +688,7 @@ function LocationMap({ addr }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect, onRate, isDark, photos }) {
+function BusinessCard({ b, onSelect, onRate, isDark, photos, uploadedPhoto }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
@@ -704,7 +704,7 @@ function BusinessCard({ b, onSelect, onRate, isDark, photos }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} size={52}/>
+        <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} uploadedPhoto={uploadedPhoto} size={52}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:700,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
@@ -1257,6 +1257,25 @@ function rotatedPool(id, type, subtype) {
 function thumbUrl(photoId) {
   return `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80`;
 }
+// Business-uploaded photos (featured image + slider images), keyed by business
+// id, persisted to localStorage. A business's own uploaded featured image
+// always takes priority over the curated stock pool and its icon fallback —
+// once a business has one, there's nothing left to guess or dedupe.
+const BIZ_PHOTOS_KEY = "gc_biz_photos";
+function loadBizPhotos() {
+  try { return JSON.parse(localStorage.getItem(BIZ_PHOTOS_KEY)) || {}; } catch { return {}; }
+}
+function saveBizPhotos(all) {
+  try { localStorage.setItem(BIZ_PHOTOS_KEY, JSON.stringify(all)); } catch {}
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 // Assigns each business in a currently-visible list a de-duplicated photo pool
 // (its own rotatedPool, reordered so the first entry never collides with an
 // earlier business's pick in the same list) — so two cards on screen together
@@ -1284,13 +1303,15 @@ function SliderPhoto({ src }) {
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
-function ImageSlider({ seed, type, subtype }) {
+function ImageSlider({ seed, type, subtype, overridePhotos }) {
   const ref = useRef(null);
   const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
   // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
-  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
+  const photos = (overridePhotos && overridePhotos.length)
+    ? overridePhotos
+    : rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
     width:16,height:16,border:"none",background:"none",color:MUT,
@@ -1318,7 +1339,7 @@ function ImageSlider({ seed, type, subtype }) {
 // BUSINESS PAGE
 // ============================================================
 const REVIEWS_PAGE = 3;
-function BusinessPage({ business, onBack, onRate }) {
+function BusinessPage({ business, onBack, onRate, bizPhotos }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const [revPage,setRevPage] = useState(1);
@@ -1370,7 +1391,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox id={business.id} type={business.type} subtype={business.subtype} size={84}/>
+          <IconBox id={business.id} type={business.type} subtype={business.subtype} uploadedPhoto={bizPhotos?.[business.id]?.featured} size={84}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -1543,7 +1564,7 @@ function BusinessPage({ business, onBack, onRate }) {
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} overridePhotos={bizPhotos?.[business.id]?.slider}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
@@ -2267,7 +2288,7 @@ function AdvertisePage({ onBack }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise, bizPhotos }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [subFilter,setSubFilter]= useState(null);
@@ -2317,7 +2338,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const sponsorAd = sponsorFor(cat);
+  const sponsorAd = sponsorFor(cat, bizPhotos);
   const sponsorMatches = sponsorAd &&
     (!subFilter||sponsorAd.bizSubtype===subFilter) &&
     (!search||sponsorAd.bizName.toLowerCase().includes(search.toLowerCase()));
@@ -2439,7 +2460,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark} photos={bizPhotoPools[sponsorAd.bizId]}/>
         )}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} photos={bizPhotoPools[b.id]}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} photos={bizPhotoPools[b.id]} uploadedPhoto={bizPhotos?.[b.id]?.featured}/>
         ))}
 
         {/* Pagination */}
@@ -2579,7 +2600,7 @@ const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
 const AD_COPY = {
   food: { headline: "Best Italian in McKinney", tagline: "Authentic recipes since 1987" },
 };
-function sponsorFor(catKey) {
+function sponsorFor(catKey, bizPhotos) {
   const biz = DEMOS[catKey]?.[0];
   if (!biz) return null;
   const copy = AD_COPY[catKey] || { headline: `Best ${biz.subtype} in McKinney`, tagline: "Top-rated · Trusted locally" };
@@ -2589,7 +2610,7 @@ function sponsorFor(catKey) {
     bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     phone: biz.phone, website: biz.website, menuUrl: biz.menuUrl, about: biz.about,
     headline: copy.headline, tagline: copy.tagline,
-    image: null,
+    image: bizPhotos?.[biz.id]?.featured || null,
   };
 }
 
@@ -2601,7 +2622,7 @@ const WEEKLY = [
 ];
 const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
-function OwnerDashboard({ onBack, onAdvertise }) {
+function OwnerDashboard({ onBack, onAdvertise, bizPhotos, onUpdateBizPhoto }) {
   const [tab, setTab] = useState("overview");
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [tab]);
@@ -2618,6 +2639,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
+  const bizFeatured = bizPhotos?.[DEMO_BIZ.id]?.featured || null;
+  const bizSlider = bizPhotos?.[DEMO_BIZ.id]?.slider || [];
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -2660,7 +2683,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} size={44}/>
+          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} uploadedPhoto={bizPhotos?.[DEMO_BIZ.id]?.featured} size={44}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
@@ -2942,6 +2965,54 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="profile" && <>
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Photos</div>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Featured image</div>
+            <label style={{display:"flex",alignItems:"center",justifyContent:"center",
+              width:88,height:88,borderRadius:14,overflow:"hidden",background:BG3,
+              border:`1.5px dashed ${BDR}`,cursor:"pointer",marginBottom:18}}>
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const dataUrl = await fileToDataUrl(file);
+                onUpdateBizPhoto(DEMO_BIZ.id, { featured: dataUrl });
+                e.target.value = "";
+              }}/>
+              {bizFeatured
+                ? <img src={bizFeatured} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : <Camera size={26} color={MUT} strokeWidth={2}/>}
+            </label>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Slider images</div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {bizSlider.map((src,i)=>(
+                <div key={i} style={{position:"relative",width:64,height:64,borderRadius:10,overflow:"hidden"}}>
+                  <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  <button onClick={()=>onUpdateBizPhoto(DEMO_BIZ.id,{slider:bizSlider.filter((_,idx)=>idx!==i)})}
+                    style={{position:"absolute",top:2,right:2,width:18,height:18,borderRadius:"50%",
+                      border:"none",background:"rgba(0,0,0,0.6)",color:"#fff",fontSize:11,lineHeight:1,
+                      cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0}}>×</button>
+                </div>
+              ))}
+              <label style={{width:64,height:64,borderRadius:10,background:BG3,
+                border:`1.5px dashed ${BDR}`,cursor:"pointer",
+                display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <input type="file" accept="image/*" multiple style={{display:"none"}} onChange={async e=>{
+                  const files = Array.from(e.target.files||[]);
+                  if (!files.length) return;
+                  const dataUrls = await Promise.all(files.map(fileToDataUrl));
+                  onUpdateBizPhoto(DEMO_BIZ.id, { slider:[...bizSlider,...dataUrls] });
+                  e.target.value = "";
+                }}/>
+                <span style={{fontSize:20,color:MUT,lineHeight:1}}>+</span>
+              </label>
+            </div>
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
               <div style={{fontSize:12,fontWeight:800,color:N}}>Business info</div>
               <button onClick={()=>{setEditOpen(true);setEditForm({...profile});}}
@@ -3029,9 +3100,15 @@ export default function ServedApp() {
   const [business,setBiz]    = useState(null);
   const [reviewData,setReview] = useState(null);
   const [isDark,setIsDark]   = useState(true);
+  const [bizPhotos,setBizPhotos] = useState(loadBizPhotos);
 
   useEffect(() => { applyTheme(DARK_VARS); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [view]);
+  useEffect(() => { saveBizPhotos(bizPhotos); }, [bizPhotos]);
+
+  const updateBizPhoto = useCallback((bizId, patch) => {
+    setBizPhotos(all => ({ ...all, [bizId]: { ...all[bizId], ...patch } }));
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
@@ -3049,11 +3126,11 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")}/>}
-        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos}/>}
+        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")} bizPhotos={bizPhotos}/>}
         {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
-        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos} onUpdateBizPhoto={updateBizPhoto}/>}
         {view==="advertise" && <AdvertisePage onBack={()=>setView("home")}/>}
       </div>
     </div>
