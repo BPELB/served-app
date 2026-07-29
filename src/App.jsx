@@ -810,7 +810,7 @@ function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
   const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
-    <div style={{background:OBG,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:OBG,border:isDark?`2px solid ${O}`:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
         subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
         phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
@@ -2490,7 +2490,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           </div>
           {/* Advertise */}
           <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:OBG,
-            border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+            border:isDark?`2px solid ${O}`:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
