@@ -1,4 +1,24 @@
 import { useState, useEffect, useRef, useCallback, Fragment } from "react"; // trigger
+import {
+  Pizza, Flame, Hamburger, Soup, Croissant, Wine, Beef, Salad, CakeSlice, Grape,
+  Scissors, Sparkles, Droplet,
+  Stethoscope, Smile, Glasses,
+  Dumbbell, Flower2, Activity,
+  Wrench, Droplets, Car,
+  Hammer, SprayCan,
+  HeartPulse, Dog,
+  Baby, BookOpen,
+  Hotel, BedDouble,
+  Shirt, Library, Smartphone,
+  Gavel, Calculator,
+  PartyPopper, Camera,
+  Gamepad2, Target, Users, MapPin,
+  Truck, Package,
+  TabletSmartphone, Monitor,
+  WashingMachine,
+  Landmark, Receipt,
+  Flower, Building2, IdCard,
+} from "lucide-react";
 
 // ============================================================
 // CONFIG — paste your keys here
@@ -15,8 +35,8 @@ const CONFIG = {
 // BRAND
 // ============================================================
 const O   = "var(--accent)";
-const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`;
-const G   = `linear-gradient(135deg,${O},#1E2A4A)`;
+const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`; // O with alpha — O is a CSS var now, so hex-suffix alpha (${O}33) no longer works
+const OBG = "var(--accent-bg)"; // solid accent-fill backgrounds (buttons, selected states, badges) — darker blue for better white-text contrast than the brand accent
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -26,20 +46,18 @@ const BDR = "var(--bdr)";
 const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
+const ST  = "var(--star)"; // rating-star gold — darker in light mode for contrast against the white background
+const IC  = "var(--iconfg)"; // business icon color — white in dark mode, accent in light mode
 
-const DARK_VARS  = { "--bg":"#2e4455","--bg2":"#263b4a","--bg3":"#1f3040","--bdr":"#4a6270","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#354f62","--accent":"#1565C0" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.5)","--hover":"#f0f3f2","--accent":"#1565C0" };
+const DARK_VARS  = { "--bg":"#2e4455","--bg2":"#263b4a","--bg3":"#1f3040","--bdr":"#4a6270","--text":"#ffffff","--muted":"rgba(255,255,255,0.55)","--hover":"#354f62","--accent":"#1565C0","--accent-bg":"#0D47A1","--star":"#FBBF24","--iconfg":"#ffffff" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f4f6f5","--bg3":"#eaeef0","--bdr":"#d0d8db","--text":"#2d3f48","--muted":"rgba(45,63,72,0.78)","--hover":"#f0f3f2","--accent":"#1565C0","--accent-bg":"#0D47A1","--star":"#CA8A04","--iconfg":"#1565C0" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
 }
 
 // Functional score colors
-const SH = { bg:"transparent",   bd:"#16a34a",  tx:"#16a34a" };
-const SM = { bg:"transparent",   bd:O,  tx:O };
-const SL = { bg:"transparent",   bd:"#dc2626",  tx:"#dc2626" };
-const scC = s => s>=4?SH:s>=3?SM:SL;
-const stC = s => s>=8?"#16a34a":s>=6?O:"#dc2626";
+const stC = s => s>=8?O:s>=6?"#FF6B35":"#dc2626";
 const LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // ============================================================
@@ -429,6 +447,11 @@ const gPlaces = {
       };
       if (searchQuery) { body.textQuery = searchQuery; }
 
+      // Bound the wait — an unconfigured/restricted key can leave this fetch hanging
+      // indefinitely with no error, which would leave `results` stuck on stale data
+      // forever since nothing else would ever call setResults.
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>controller.abort(), 5000);
       const r = await fetch("https://places.googleapis.com/v1/places:searchNearby", {
         method:"POST",
         headers:{
@@ -437,7 +460,9 @@ const gPlaces = {
           "X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress,places.types,places.rating,places.priceLevel,places.currentOpeningHours,places.photos",
         },
         body:JSON.stringify(body),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       const d = await r.json();
       if (!d.places) return DEMOS[type]||DEMOS.food;
       return d.places.slice(0,10).map(p=>({
@@ -525,32 +550,118 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-function IconBox({ type, size=44, emoji }) {
-  const icon = CAT_ICONS[type] || CAT_ICONS.food;
+// Hand-drawn icons for foods Lucide has no literal glyph for, built to match
+// Lucide's own stroke style exactly (24x24 viewBox, round cap/join) so they're
+// indistinguishable from the imported set at a glance.
+function Sushi({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="3.5"/>
+      <circle cx="7" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="7" cy="16" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="16" r="1" fill={color} stroke="none"/>
+    </svg>
+  );
+}
+function Taco({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 13a9 9 0 0 1 18 0"/>
+      <line x1="3" y1="13" x2="21" y2="13"/>
+      <path d="M7 13V9M11 13V6M15 13V9"/>
+    </svg>
+  );
+}
+function TakeoutBox({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 8l1-3h14l1 3"/>
+      <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/>
+      <path d="M9 8c0-2 1-3 3-3s3 1 3 3"/>
+    </svg>
+  );
+}
+
+// Per-business icons — every business gets its own specific icon (not just one
+// per category/subtype) so businesses in the same category list are visually
+// distinct from each other at a glance. Lucide covers most; a few literal foods
+// Lucide has no glyph for (sushi, taco, takeout box) are hand-drawn above to match.
+const BIZ_ICONS = {
+  // food
+  d1: Pizza, d2: Salad, d3: Sushi, d4: Taco, d5: Hamburger, d6: Soup,
+  d7: Croissant, d8: TakeoutBox, d9: Wine, d10: Beef, d11: Grape, d12: CakeSlice,
+  // beauty
+  b1: Scissors, b2: Sparkles, b3: Droplet,
+  // health
+  h1: Stethoscope, h2: Smile, h3: Glasses,
+  // fitness
+  f1: Dumbbell, f2: Flower2, f3: Activity,
+  // automotive
+  a1: Wrench, a2: Droplets, a3: Sparkles,
+  // homeservices
+  hs1: Hammer, hs2: SprayCan, hs3: Droplets,
+  // pets
+  p1: HeartPulse, p2: Scissors, p3: Dog,
+  // childcare
+  c1: Baby, c2: BookOpen,
+  // hospitality
+  ho1: Hotel, ho2: BedDouble,
+  // retail
+  r1: Shirt, r2: Library, r3: Smartphone,
+  // professional
+  pr1: Gavel, pr2: Calculator,
+  // events
+  e1: PartyPopper, e2: Camera,
+  // education
+  ed1: BookOpen, ed2: Car,
+  // entertainment
+  en1: Gamepad2, en2: Target,
+  // moving
+  m1: Truck, m2: Package,
+  // techrepair
+  t1: TabletSmartphone, t2: Monitor,
+  // laundry
+  l1: Shirt, l2: WashingMachine,
+  // financial
+  fi1: Landmark, fi2: Receipt,
+  // funeral
+  fu1: Flower,
+  // government
+  g1: Building2, g2: IdCard,
+};
+
+function IconBox({ id, type, subtype, photos, uploadedPhoto, size=44 }) {
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = photos || rotatedPool(id, type, subtype);
+  const photoUrl = uploadedPhoto || (photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null);
+  const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,overflow:"hidden",
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {emoji
-        ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
+      {photoUrl
+        ? <img src={photoUrl} alt="" onError={()=>!uploadedPhoto && setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        : (BizIcon
+            ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
+            : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
       }
     </div>
   );
 }
 
 function ScoreBadge({ score, size=50 }) {
-  const C      = score ? (score>=8?SH:score>=6?SM:SL) : null;
   const dec    = score ? (score/2).toFixed(1) : null;
   const starSz = size > 40 ? 13 : 10;
-  const bd = C ? C.bd : BDR;
-  const bg = C ? C.bg : BG2;
+  const bd = score ? O : BDR;
+  const bg = BG2;
   return (
     <div style={{width:size,height:size,flexShrink:0,borderRadius:12,
       border:`2px solid ${bd}`,background:bg,
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
-      <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+      <svg width={starSz} height={starSz} viewBox="0 0 24 24" fill={ST} stroke={ST} strokeWidth="1">
         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
       </svg>
       <span style={{fontSize:size>40?16:12,fontWeight:900,color:N,lineHeight:1}}>{dec||"—"}</span>
@@ -563,7 +674,7 @@ function Back({ onClick, label }) {
   return (
     <button onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
       style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:14,
-        border:`2px solid ${O}`,background:h?BG2:O,color:h?O:"#fff",
+        border:`2px solid ${O}`,background:h?BG2:OBG,color:h?O:"#fff",
         fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,
         transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
       ‹ {label}
@@ -571,20 +682,6 @@ function Back({ onClick, label }) {
   );
 }
 
-function PrimaryBtn({ children, onClick, disabled, full, style={} }) {
-  return (
-    <button onClick={onClick} disabled={disabled}
-      style={{width:full?"100%":"auto",padding:"13px 22px",borderRadius:14,border:"none",
-        background:disabled?"#eee":G,color:disabled?"#555":"#fff",
-        fontSize:14,fontWeight:700,cursor:disabled?"default":"pointer",
-        boxShadow:disabled?"none":"0 4px 16px rgba(255,107,53,0.3)",
-        transition:"all 0.2s",fontFamily:"inherit",...style}}>
-      {children}
-    </button>
-  );
-}
-
-// Category filter pill
 function LocationMap({ addr }) {
   return (
     <iframe title={`Map for ${addr}`} width="100%" height="160" loading="lazy"
@@ -594,7 +691,7 @@ function LocationMap({ addr }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect, onRate, isDark }) {
+function BusinessCard({ b, onSelect, onRate, isDark, photos, uploadedPhoto }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
@@ -610,13 +707,12 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox type={b.type} size={52} emoji={b.emoji}/>
+        <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} uploadedPhoto={uploadedPhoto} size={52}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
+          <div style={{fontSize:16,fontWeight:700,color:N,marginBottom:3,lineHeight:1.25}}>{b.name}</div>
           <div style={{fontSize:12,color:MUT,marginBottom:4}}>
             {b.subtype||bt.label}
-            {b.rating ? <span style={{color:MUT}}> · ⭐ {b.rating}</span> : null}
+            {b.rating ? <span style={{color:MUT}}> · <span style={{color:ST}}>★</span> {b.rating}</span> : null}
             {b.price ? <span style={{color:MUT}}> · {"$".repeat(b.price)}</span> : null}
           </div>
           {/* Hours row */}
@@ -650,16 +746,16 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
         </div>
         <button
           onClick={e=>{e.stopPropagation();onRate(b);}}
-          onMouseEnter={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";
+          onMouseEnter={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";
             e.currentTarget.querySelector("svg").style.stroke="#fff";}}
           onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=N;
-            e.currentTarget.querySelector("svg").style.stroke=isDark?"#fff":"#1565C0";}}
+            e.currentTarget.querySelector("svg").style.stroke=isDark?"#fff":O;}}
           style={{flexShrink:0,padding:"9px 14px",borderRadius:10,
             border:`2px solid ${O}`,background:"transparent",color:N,fontSize:11,fontWeight:800,
             cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit",transition:"all 0.15s",
             display:"flex",alignItems:"center",gap:5}}>
           Feedback
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={isDark?"#fff":"#1565C0"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={isDark?"#fff":"#16a34a"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="none"/>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
@@ -703,22 +799,26 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
 }
 
 // Mock active sponsored ad — in production this comes from the DB
-function SponsoredCard({ ad, onSelect, isDark }) {
+function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
+  const BizIcon = BIZ_ICONS[ad.bizId];
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
+  const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
-    <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:OBG,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
         subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
         phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
       {/* Header row: name + sponsored badge */}
       <div style={{background:"rgba(0,0,0,0.12)",borderBottom:"1px solid rgba(255,255,255,0.15)",
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:18,fontWeight:800,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
+        <span style={{fontSize:18,fontWeight:700,color:"#fff",letterSpacing:"-0.01em"}}>{ad.bizName}</span>
         <span style={{fontSize:9,fontWeight:800,color:"#fff",textTransform:"uppercase",letterSpacing:"0.12em",
           background:isDark?"#0d2b35":"rgba(255,255,255,0.2)",padding:"2px 8px",borderRadius:20}}>Sponsored</span>
       </div>
@@ -729,20 +829,23 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
+            : (photoUrl
+                ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : (BizIcon
+                    ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
+                    : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>))
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:17,fontWeight:800,color:"#fff",marginBottom:3,lineHeight:1.25,
-            whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ad.headline}</div>
+          <div style={{fontSize:17,fontWeight:700,color:"#fff",marginBottom:3,lineHeight:1.25}}>{ad.headline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:2,lineHeight:1.4}}>{ad.tagline}</div>
           <div style={{fontSize:12,color:WM,marginBottom:4,lineHeight:1.4,whiteSpace:"nowrap"}}>
             {ad.bizSubtype||ad.bizType}
-            {ad.bizRating ? <span> · ⭐ {ad.bizRating}</span> : null}
+            {ad.bizRating ? <span> · <span style={{color:ST}}>★</span> {ad.bizRating}</span> : null}
             {ad.bizPrice ? <span> · {"$".repeat(ad.bizPrice)}</span> : null}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?"#86efac":"#fca5a5"}}>
+            <span style={{fontSize:12,fontWeight:700,color:ad.bizOpen?W:"#dc2626"}}>
               {ad.bizOpen ? "Open" : "Closed"}
             </span>
             {ad.bizHours && (
@@ -772,7 +875,7 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           color:isDark?"#fff":N,fontSize:11,fontWeight:800,
           whiteSpace:"nowrap",fontFamily:"inherit"}}>
           Call Now
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1565C0" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
         </div>
@@ -820,7 +923,7 @@ function CatPill({ typeKey, selected, onClick }) {
       display:"flex",alignItems:"center",gap:5,
       padding:"7px 13px",borderRadius:20,flexShrink:0,
       border:`2px solid ${on?O:BDR}`,
-      background:on?O:"transparent",
+      background:on?OBG:"transparent",
       color:on?"#fff":N,
       fontSize:12,fontWeight:on?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
@@ -837,7 +940,7 @@ function SubPill({ label, selected, onClick }) {
     <button onClick={onClick} style={{
       padding:"6px 12px",borderRadius:20,flexShrink:0,
       border:`1.5px solid ${selected?O:BDR}`,
-      background:selected?O:"transparent",
+      background:selected?OBG:"transparent",
       color:selected?"#fff":MUT,
       fontSize:11,fontWeight:selected?700:500,cursor:"pointer",
       transition:"all 0.15s",whiteSpace:"nowrap",fontFamily:"inherit"}}>
@@ -852,7 +955,7 @@ function SubPill({ label, selected, onClick }) {
 const STAR_LABELS = ["","Terrible","Poor","OK","Good","Amazing"];
 
 // Renders 5 stars with partial fill support (e.g. 4.5 = 4 full + 1 half)
-function PartialStars({ value, size=14, color="#FBBF24" }) {
+function PartialStars({ value, size=14, color=ST }) {
   // value is 0-5 (can be decimal)
   const stars = [1,2,3,4,5].map(n => {
     const diff = value - (n-1);
@@ -893,11 +996,10 @@ function StarCard({ cat, value, onChange, box }) {
   const [hov,setHov] = useState(0);
   const sv   = value ? value/2 : 0;
   const show = hov || sv;
-  const SC   = sv ? scC(sv) : null;
 
   return (
     <div style={{padding:"14px 16px",borderRadius:16,marginBottom:10,
-      background:BG2,border:`1.5px solid ${SC?SC.bd:O}`,
+      background:BG2,border:`1.5px solid ${O}`,
       transition:"border-color 0.2s"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
@@ -913,9 +1015,9 @@ function StarCard({ cat, value, onChange, box }) {
           <div style={{fontSize:11,color:MUT,marginTop:1}}>{cat.q}</div>
         </div>
         {sv>0&&(
-          <div style={{fontSize:12,fontWeight:800,color:SC?SC.tx:MUT,
-            background:SC?SC.bg:BG3,padding:"3px 10px",borderRadius:20,
-            border:`1.5px solid ${SC?SC.bd:BDR}`,whiteSpace:"nowrap"}}>
+          <div style={{fontSize:12,fontWeight:800,color:O,
+            background:OA(15),padding:"3px 10px",borderRadius:20,
+            border:`1.5px solid ${O}`,whiteSpace:"nowrap"}}>
             {sv}/5
           </div>
         )}
@@ -928,7 +1030,7 @@ function StarCard({ cat, value, onChange, box }) {
           return (
             <button key={n} onMouseEnter={()=>setHov(n)} onClick={()=>onChange(sv===n?null:n*2)}
               style={{width:44,height:44,borderRadius:12,
-                background:filled?O:BG3,border:`1.5px solid ${filled?O:BDR}`,
+                background:filled?OBG:BG3,border:`1.5px solid ${filled?O:BDR}`,
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:22,cursor:"pointer",fontFamily:"inherit",
                 transition:"background 0.12s,border-color 0.12s"}}>
@@ -940,7 +1042,7 @@ function StarCard({ cat, value, onChange, box }) {
       {sv>0&&(
         <div style={{textAlign:"center",marginTop:7}}>
           <button onClick={()=>onChange(null)}
-            style={{fontSize:11,color:SC?"rgba(255,255,255,0.6)":"#aaa",background:"none",border:"none",
+            style={{fontSize:11,color:MUT,background:"none",border:"none",
               cursor:"pointer",textDecoration:"underline",fontFamily:"inherit"}}>clear</button>
         </div>
       )}
@@ -976,7 +1078,7 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       )}
       {/* Top row: score badge + testimonial + helpful */}
       <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:rated.length>0?10:0}}>
-        <ScoreBadge score={avg} size={50}/>
+        <ScoreBadge score={avg} size={58}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:11,color:MUT,marginBottom:4}}>{ago}</div>
           {review.feedback&&(
@@ -1002,15 +1104,15 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
       </div>
       {/* Category star pills below */}
       {rated.length>0&&(
-        <div style={{display:"flex",gap:4,flexWrap:"wrap",marginTop:4}}>
+        <div style={{display:"flex",gap:4,flexWrap:"nowrap",marginTop:6}}>
           {rated.map(cat=>{
             const s  = review.scores[cat.id];
             return (
-              <div key={cat.id} style={{display:"inline-flex",alignItems:"center",gap:4,
-                padding:"3px 10px",background:"rgba(255,255,255,0.06)",
-                border:`1.5px solid ${BDR}`,borderRadius:10}}>
-                <span style={{fontSize:10,fontWeight:700,color:O}}>{cat.label}</span>
-                <PartialStars value={s/2} size={10} color="#FBBF24"/>
+              <div key={cat.id} style={{flex:1,minWidth:0,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:4,
+                padding:"5px 8px",background:BG3,
+                border:`1.5px solid ${O}`,borderRadius:12}}>
+                <span style={{fontSize:11,fontWeight:700,color:N,whiteSpace:"nowrap"}}>{cat.label}</span>
+                <PartialStars value={s/2} size={10} color={ST}/>
               </div>
             );
           })}
@@ -1024,39 +1126,76 @@ function ReviewCard({ review, btKey, onHelpful, helpedIds }) {
 // SHARE CARD
 // ============================================================
 function ShareCard({ business, scores, onClose }) {
+  const [copied, setCopied] = useState(false);
   const vals  = Object.values(scores).filter(Boolean);
   const avg   = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
   const stars = avg ? Math.round(avg/2) : null;
-  const bt    = BT[business?.type||"food"];
-  const text  = `Just rated ${business?.name} on Trufaro — ${"★".repeat(stars||0)} ${stars||"??"}/5 stars. Free at trufaro.com`;
+  const url   = "https://trufaro.com";
+  const text  = stars
+    ? `Just rated ${business?.name} on Trufaro — ${"★".repeat(stars)}${"☆".repeat(5-stars)} ${stars}/5. Free at trufaro.com`
+    : `Just left a review for ${business?.name} on Trufaro. Free at trufaro.com`;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${text} ${url}`);
+      setCopied(true);
+      setTimeout(()=>setCopied(false), 1800);
+    } catch(e) {}
+  };
+
+  const iconWrap = (bg, child) => (
+    <div style={{width:52,height:52,borderRadius:"50%",background:bg,
+      display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+      {child}
+    </div>
+  );
+
+  const options = [
+    { label:"Facebook",
+      icon: iconWrap("#1877F2", <span style={{fontSize:24,fontWeight:900,color:"#fff",fontFamily:"Georgia,serif"}}>f</span>),
+      onClick: ()=>window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,"_blank") },
+    { label:"X",
+      icon: iconWrap("#000", <span style={{fontSize:20,fontWeight:900,color:"#fff"}}>𝕏</span>),
+      onClick: ()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,"_blank") },
+    { label:"WhatsApp",
+      icon: iconWrap("#25D366", <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 6.9 12l-.3.5.7 2.6-2.7-.7-.5.3A8 8 0 1 1 12 4zm-3.4 3.6c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.2.2 2 3 4.7 4.2 2.3 1 2.7.8 3.2.8.5 0 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.2-.2-.5-.3l-2-1c-.2-.1-.4-.2-.6.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.5-.4-.5-.6-.5h-.5z"/></svg>),
+      onClick: ()=>window.open(`https://wa.me/?text=${encodeURIComponent(text+" "+url)}`,"_blank") },
+    { label:"Message",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>),
+      onClick: ()=>window.open(`sms:?body=${encodeURIComponent(text+" "+url)}`) },
+    { label:"Email",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>),
+      onClick: ()=>window.open(`mailto:?subject=${encodeURIComponent("Check out "+business?.name)}&body=${encodeURIComponent(text+" "+url)}`) },
+    { label: copied?"Copied!":"Copy Link",
+      icon: iconWrap(BG3, <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5"/></svg>),
+      onClick: copyLink },
+  ];
+
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,0.7)",display:"flex",
-      alignItems:"center",justifyContent:"center",zIndex:999,padding:"1rem"}}>
-      <div style={{background:BG2,borderRadius:24,padding:24,maxWidth:360,width:"100%",
-        boxShadow:"0 20px 60px rgba(0,0,0,0.3)"}}>
-        <div style={{background:G,borderRadius:18,padding:22,marginBottom:18,textAlign:"center"}}>
-          <Logo light/>
-          <div style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:16,marginTop:14}}>
-            <div style={{fontSize:15,fontWeight:700,color:N,marginBottom:8}}>{business?.name}</div>
-            <div style={{fontSize:32,color:O,lineHeight:1,letterSpacing:2}}>
-              {"★".repeat(stars||0)}{"☆".repeat(5-(stars||0))}
-            </div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.65)",marginTop:6}}>{stars||"?"}/5 · {bt?.label}</div>
-          </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginTop:10}}>trufaro.com · free for everyone</div>
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:999}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()}
+        style={{position:"absolute",left:0,right:0,bottom:0,margin:"0 auto",maxWidth:480,
+          background:BG2,borderRadius:"20px 20px 0 0",padding:"10px 20px 24px",
+          boxShadow:"0 -8px 30px rgba(0,0,0,0.3)"}}>
+        <div style={{width:36,height:4,borderRadius:2,background:BDR,margin:"0 auto 16px"}}/>
+        <div style={{fontSize:15,fontWeight:800,color:N,textAlign:"center",marginBottom:18}}>
+          Share this review
         </div>
-        <div style={{fontSize:13,color:MUT,marginBottom:14,lineHeight:1.5}}>{text}</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
-          {[["📋 Copy",()=>navigator.clipboard?.writeText(text)],
-            ["🐦 Tweet",()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`)],
-            ["💬 Text",()=>window.open(`sms:?body=${encodeURIComponent(text)}`)]
-          ].map(([l,fn])=>(
-            <button key={l} onClick={fn}
-              style={{padding:"10px 6px",borderRadius:12,border:`2px solid ${BDR}`,
-                background:BG3,fontSize:12,fontWeight:700,color:N,fontFamily:"inherit"}}>{l}</button>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"18px 8px",marginBottom:20}}>
+          {options.map(opt=>(
+            <button key={opt.label} onClick={opt.onClick}
+              style={{display:"flex",flexDirection:"column",alignItems:"center",gap:6,
+                background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+              {opt.icon}
+              <span style={{fontSize:11,fontWeight:600,color:N}}>{opt.label}</span>
+            </button>
           ))}
         </div>
-        <PrimaryBtn full onClick={onClose}>Done ✓</PrimaryBtn>
+        <button onClick={onClose}
+          style={{width:"100%",padding:"13px",borderRadius:14,border:`2px solid ${BDR}`,
+            background:"transparent",color:N,fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+          Cancel
+        </button>
       </div>
     </div>
   );
@@ -1071,34 +1210,36 @@ const CAT_PHOTOS = {
   Italian:       ["1513104890138-7c749659a591","1548365328-9f547fb0953b","1551183053-bf91a1d81141","1546549032-9571cd6b27df"],
   American:      ["1550547660-d9450f859349","1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1553979459-d2229ba7433b"],
   Japanese:      ["1579584425555-c3ce17fd4351","1553621042-f6e147245754","1611143669185-af224c5e3252","1553163147-622ab57be1c7"],
-  Mexican:       ["1565299624946-b28f40a0ae38","1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
+  Mexican:       ["1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
   Burgers:       ["1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1550547660-d9450f859349","1586190848861-99aa4a171e90"],
-  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1567188040759-fb8a883dc6d8","1631452180519-c014fe946bc7"],
+  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1631452180519-c014fe946bc7"],
   French:        ["1555507036-ab1f4038808a","1550617931-e17a7b70dce2","1608198093002-ad4e005484ec","1608039829572-78524f79c4c7"],
   Chinese:       ["1585032226651-759b368d7246","1563245372-f21724e3856d","1526318896980-cf78c088247c","1552611052-33e04de081de"],
   Korean:        ["1590301157890-4810ed352733","1580651315530-69c8e0026377","1583224964978-2257b960c3d3"],
   Mediterranean: ["1540420773420-3366772f4999","1512058564366-18510be2db19","1615719413546-198b25453f85"],
   // Top-level category fallback
   food:          ["1517248135467-4c7edcad34c4","1414235077428-338989a2e8c0","1517244683847-7456b63c5969"],
-  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035"],
-  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907"],
-  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b"],
-  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
-  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
-  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
-  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
+  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035","1521590832167-7bcbfaa6381f"],
+  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907","1629909613654-28e377c37b09"],
+  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b","1518611012118-696072aa579a"],
+  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3","1620891549027-942fdc95d3f5"],
+  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837","1581092918056-0c4c3acd3789"],
+  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b","1516734212186-a967f81ad0d7"],
   hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
-  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
+  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc","1489987707025-afc232f7ea0f"],
   professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
   events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
-  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
   entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
   moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
   techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
-  laundry:       ["1545173168-9f1947eebb7f"],
+  laundry:       ["1545173168-9f1947eebb7f","1604335398980-ac1695fa2be7"],
   financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
   funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
-  government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
+  government:    ["1523292562811-8fa7962a78c8","1461170168-8dc7edf1e59f"],
+  // Object/building-only photos — no people in frame, so no risk of depicting
+  // minors (see NO_PHOTO_TYPES history below for why this category needed care).
+  childcare:     ["1503676260728-1c00da094a0b","1560785496-3c9d27877182"],
+  education:     ["1546410531-bb4caa6b424d","1497633762265-9d179a990aa6"],
 };
 function photoPool(type, subtype) {
   return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
@@ -1108,27 +1249,78 @@ function hashStr(s) {
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
+// Same photo pool, rotated to a per-business starting point (via hashStr) so
+// businesses sharing a subtype don't all show the same photo first.
+function rotatedPool(id, type, subtype) {
+  const pool = photoPool(type, subtype);
+  if (!id || !pool.length) return [];
+  const base = hashStr(id) % pool.length;
+  return [...pool.slice(base), ...pool.slice(0,base)];
+}
+function thumbUrl(photoId) {
+  return `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80`;
+}
+// Business-uploaded photos (featured image + slider images), keyed by business
+// id, persisted to localStorage. A business's own uploaded featured image
+// always takes priority over the curated stock pool and its icon fallback —
+// once a business has one, there's nothing left to guess or dedupe.
+const BIZ_PHOTOS_KEY = "gc_biz_photos";
+function loadBizPhotos() {
+  try { return JSON.parse(localStorage.getItem(BIZ_PHOTOS_KEY)) || {}; } catch { return {}; }
+}
+function saveBizPhotos(all) {
+  try { localStorage.setItem(BIZ_PHOTOS_KEY, JSON.stringify(all)); } catch {}
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+// Assigns each business in a currently-visible list a de-duplicated photo pool
+// (its own rotatedPool, reordered so the first entry never collides with an
+// earlier business's pick in the same list) — so two cards on screen together
+// never show the same photo. Falls back to allowing a repeat only once a
+// business's whole pool has already been claimed by others.
+function dedupPhotoPools(list) {
+  const used = new Set();
+  const map = {};
+  for (const b of list) {
+    const pool = rotatedPool(b.id, b.type, b.subtype);
+    const chosen = pool.find(p=>!used.has(p));
+    // Once every photo in this business's pool is already claimed by an
+    // earlier business in the same visible set, don't force a repeat —
+    // hand back no photo at all so it falls back to the icon instead.
+    if (chosen) { used.add(chosen); map[b.id] = [chosen, ...pool.filter(p=>p!==chosen)]; }
+    else map[b.id] = [];
+  }
+  return map;
+}
 function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:180,height:108,objectFit:"cover",
+    <img src={src} alt="" onError={()=>setFailed(true)} style={{width:"calc(50% - 5px)",height:108,objectFit:"cover",
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
-function ImageSlider({ seed, type, subtype }) {
+function ImageSlider({ seed, type, subtype, overridePhotos }) {
   const ref = useRef(null);
   const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
   // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
-  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
-  const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
+  const photos = (overridePhotos && overridePhotos.length)
+    ? overridePhotos
+    : rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
+  const scroll = dir => ref.current?.scrollBy({left:dir*ref.current.clientWidth, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
-    width:22,height:22,borderRadius:"50%",border:"none",background:BG3,color:N,
-    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0};
+    width:16,height:16,border:"none",background:"none",color:MUT,
+    display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:0,zIndex:1};
   return (
-    <div style={{position:"relative",marginBottom:16,paddingLeft:16,paddingRight:16}}>
+    <div style={{position:"relative",marginBottom:16}}>
       <div ref={ref} style={{display:"flex",gap:10,overflowX:"auto",WebkitOverflowScrolling:"touch",
         scrollSnapType:"x mandatory",msOverflowStyle:"none",scrollbarWidth:"none",
         paddingBottom:2}}>
@@ -1136,11 +1328,11 @@ function ImageSlider({ seed, type, subtype }) {
           <SliderPhoto key={i} src={src}/>
         ))}
       </div>
-      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:0}}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <button onClick={()=>scroll(-1)} aria-label="Previous photo" style={{...arrowStyle,left:-16}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:0}}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <button onClick={()=>scroll(1)} aria-label="Next photo" style={{...arrowStyle,right:-16}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
   );
@@ -1150,7 +1342,7 @@ function ImageSlider({ seed, type, subtype }) {
 // BUSINESS PAGE
 // ============================================================
 const REVIEWS_PAGE = 3;
-function BusinessPage({ business, onBack, onRate }) {
+function BusinessPage({ business, onBack, onRate, bizPhotos }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const [revPage,setRevPage] = useState(1);
@@ -1162,7 +1354,7 @@ function BusinessPage({ business, onBack, onRate }) {
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
 
   const handleShare = async () => {
-    const shareData = { title: business.name, text: `Check out ${business.name} on trufaro`, url: window.location.href };
+    const shareData = { title: business.name, text: `Check out ${business.name} on Trufaro`, url: window.location.href };
     if (navigator.share) {
       try { await navigator.share(shareData); } catch(e) {}
     } else if (navigator.clipboard) {
@@ -1200,16 +1392,16 @@ function BusinessPage({ business, onBack, onRate }) {
       <div style={{background:BG,borderRadius:20,padding:"18px",marginBottom:12,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
-          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox type={business.type} size={84} emoji={business.emoji}/>
+          <IconBox id={business.id} type={business.type} subtype={business.subtype} uploadedPhoto={bizPhotos?.[business.id]?.featured} size={84}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
             <div style={{fontSize:17,fontWeight:900,color:N,marginBottom:2}}>{business.name}</div>
             <div style={{fontSize:11,color:MUT}}>{business.addr||business.address}</div>
             <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}>
-              {business.rating&&<span style={{fontSize:11,color:MUT}}>★ {business.rating}</span>}
+              {business.rating&&<span style={{fontSize:11,color:MUT}}><span style={{color:ST}}>★</span> {business.rating}</span>}
               {(business.price||business.priceLevel)&&<span style={{fontSize:11,color:MUT}}>{"$".repeat(business.price||business.priceLevel)}</span>}
               <span style={{fontSize:11,fontWeight:700,
                 color:(business.open||business.isOpen)?O:"rgba(255,255,255,0.4)"}}>
@@ -1245,12 +1437,12 @@ function BusinessPage({ business, onBack, onRate }) {
             return (
               <div style={{position:"relative",width:sw,height:sh+tail,flexShrink:0}}>
                 <svg width={sw} height={sh+tail} viewBox={`0 0 ${sw} ${sh+tail}`} style={{position:"absolute",top:0,left:0}}>
-                  <path d={path} fill={O}/>
+                  <path d={path} fill={OBG}/>
                 </svg>
                 <div style={{position:"absolute",top:0,left:0,width:sw,height:sh,
                   display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}}>
                   <div style={{fontSize:20,fontWeight:900,color:"#fff",lineHeight:1}}>{(overall/2).toFixed(1)}</div>
-                  <PartialStars value={overall/2} size={11} color="#FBBF24"/>
+                  <PartialStars value={overall/2} size={11} color={ST}/>
                 </div>
               </div>
             );
@@ -1354,7 +1546,7 @@ function BusinessPage({ business, onBack, onRate }) {
                   letterSpacing:"0.06em",marginBottom:6}}>{cat.label}</div>
                 <div style={{fontSize:18,fontWeight:900,color:N,lineHeight:1,marginBottom:4}}>{(cat.avg/2).toFixed(1)}</div>
                 <div style={{display:"flex",justifyContent:"center"}}>
-                  <PartialStars value={cat.avg/2} size={13} color="#FBBF24"/>
+                  <PartialStars value={cat.avg/2} size={13} color={ST}/>
                 </div>
               </div>
             );
@@ -1364,18 +1556,18 @@ function BusinessPage({ business, onBack, onRate }) {
 
       <button onClick={onRate}
         onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
-        onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
+        onMouseLeave={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";}}
         style={{width:"100%",padding:"13px 22px",borderRadius:14,border:`2px solid ${O}`,
-        background:O,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
+        background:OBG,color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",
         display:"flex",alignItems:"center",justifyContent:"center",gap:8,
         transition:"all 0.15s",marginBottom:16,fontFamily:"inherit"}}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" strokeWidth="1">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill={ST} stroke={ST} strokeWidth="1">
           <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
         </svg>
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} overridePhotos={bizPhotos?.[business.id]?.slider}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
@@ -1402,7 +1594,7 @@ function BusinessPage({ business, onBack, onRate }) {
           {Array.from({length:totalRevPages},(_,i)=>i+1).map(p=>(
             <button key={p} onClick={()=>setRevPage(p)}
               style={{width:28,height:28,borderRadius:"50%",border:`2px solid ${p===revPage?O:BDR}`,
-                background:p===revPage?O:"transparent",color:p===revPage?"#fff":N,
+                background:p===revPage?OBG:"transparent",color:p===revPage?"#fff":N,
                 fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.15s"}}>
               {p}
             </button>
@@ -1472,7 +1664,7 @@ function RateView({ business, onBack, onDone }) {
         background:BG,border:`2px solid ${BDR}`,borderRadius:16,marginBottom:14,
         position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-15,right:-15,width:60,height:60,
-          borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
+          borderRadius:"50%",background:"rgba(22,163,74,0.15)"}}/>
         <div style={{width:40,height:40,borderRadius:12,flexShrink:0,
           background:BG2,border:`1.5px solid ${BDR}`,
           display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
@@ -1499,11 +1691,13 @@ function RateView({ business, onBack, onDone }) {
       {!showExtra?(
         <button onClick={()=>setExtra(true)}
           onMouseEnter={e=>{e.currentTarget.style.background=BG2;e.currentTarget.style.color=O;}}
-          onMouseLeave={e=>{e.currentTarget.style.background=O;e.currentTarget.style.color="#fff";}}
-          style={{width:"100%",padding:"11px",borderRadius:14,marginBottom:12,
-            border:`2px solid ${O}`,background:O,color:"#fff",
-            fontSize:14,fontWeight:700,transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
-          + More to rate (optional)
+          onMouseLeave={e=>{e.currentTarget.style.background=OBG;e.currentTarget.style.color="#fff";}}
+          style={{width:"100%",padding:"9px 11px",borderRadius:14,marginBottom:12,
+            border:`2px solid ${O}`,background:OBG,color:"#fff",
+            display:"flex",flexDirection:"column",alignItems:"center",gap:1,
+            transition:"all 0.15s",fontFamily:"inherit",cursor:"pointer"}}>
+          <span style={{fontSize:14,fontWeight:700}}>+ More feedback</span>
+          <span style={{fontSize:10,fontWeight:400,opacity:0.85}}>(optional)</span>
         </button>
       ):(
         bt.extra?.map(cat=>(
@@ -1585,7 +1779,7 @@ function RateView({ business, onBack, onDone }) {
               style={{padding:"4px 11px",fontSize:11,borderRadius:10,border:`2px solid ${BDR}`,
                 background:BG2,color:MUT,fontWeight:500,
                 transition:"all 0.12s",fontFamily:"inherit",cursor:"pointer"}}
-              onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor="#555";}}
+              onMouseEnter={e=>{e.target.style.background=HOV;e.target.style.borderColor=O;}}
               onMouseLeave={e=>{e.target.style.background=BG2;e.target.style.borderColor=BDR;}}>
               {c}
             </button>
@@ -1596,7 +1790,7 @@ function RateView({ business, onBack, onDone }) {
       <div style={{position:"sticky",bottom:16}}>
         <button disabled={!hasAny||submitting} onClick={submit}
           style={{width:"100%",padding:"13px",borderRadius:14,border:"none",
-            background:hasAny?O:"#eee",color:hasAny?"#fff":"#999",
+            background:hasAny?OBG:"#eee",color:hasAny?"#fff":"#999",
             fontSize:14,fontWeight:700,cursor:hasAny?"pointer":"default",
             transition:"all 0.2s",fontFamily:"inherit"}}>
           {submitting?"Submitting…":hasAny?"Submit feedback":"Fill out anything above to submit"}
@@ -1675,8 +1869,8 @@ function ClaimModal({ onClose, onDashboard }) {
           </div>
           <p style={{fontSize:11,color:MUT,marginBottom:20,paddingLeft:2}}>* Required fields</p>
           <button onClick={submit} style={{width:"100%",padding:"14px",borderRadius:14,
-            border:"none",background:O,color:"#fff",fontSize:15,fontWeight:800,
-            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>
+            border:"none",background:OBG,color:"#fff",fontSize:15,fontWeight:800,
+            cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>
             Claim for free →
           </button>
         </>}
@@ -1709,8 +1903,8 @@ function ClaimModal({ onClose, onDashboard }) {
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               <button onClick={onDashboard} style={{padding:"13px 32px",borderRadius:12,border:"none",
-                background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
-                boxShadow:"0 4px 16px rgba(255,107,53,0.35)"}}>
+                background:OBG,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit",
+                boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>
                 View my dashboard →
               </button>
               <button onClick={onClose} style={{padding:"12px 32px",borderRadius:12,
@@ -1788,7 +1982,7 @@ function AdvertisePage({ onBack }) {
           </button>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <div style={{width:44,height:44,borderRadius:12,background:O,flexShrink:0,
+          <div style={{width:44,height:44,borderRadius:12,background:OBG,flexShrink:0,
             display:"flex",alignItems:"center",justifyContent:"center"}}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="m3 11 18-5v12L3 14v-3z"/>
@@ -1810,7 +2004,7 @@ function AdvertisePage({ onBack }) {
                 borderBottom:`2.5px solid ${step===i+1?O:"transparent"}`,
                 display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
                 <div style={{width:20,height:20,borderRadius:"50%",flexShrink:0,
-                  background:step>i+1?O:step===i+1?O:BG3,
+                  background:step>i+1?OBG:step===i+1?OBG:BG3,
                   border:`2px solid ${step>=i+1?O:BDR}`,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:10,fontWeight:800,color:step>=i+1?"#fff":MUT}}>
@@ -1839,28 +2033,29 @@ function AdvertisePage({ onBack }) {
               <div key={b.label} onClick={()=>setBudget(i)}
                 onMouseEnter={()=>setHoveredPlan(i)}
                 onMouseLeave={()=>setHoveredPlan(null)}
-                style={{background:budget===i?O:BG2,
+                style={{background:budget===i?OBG:BG2,
                   border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"all 0.15s",
                   boxShadow:budget===i?`0 0 0 3px ${OA(20)}`:"none"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
-                    <span style={{fontSize:9,fontWeight:700,
-                      color:budget===i?"rgba(255,255,255,0.8)":MUT,
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:5}}>
+                    <span style={{fontSize:9,fontWeight:700,alignSelf:"flex-start",
+                      color:budget===i?"#fff":N,
                       background:budget===i?"rgba(255,255,255,0.2)":BG3,
+                      border:`1px solid ${budget===i?"rgba(255,255,255,0.4)":O}`,
                       borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
+                    <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
                   </div>
                   <span style={{fontSize:18,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:budget===i?"rgba(255,255,255,0.7)":MUT}}>/mo</span></span>
                 </div>
                 <div style={{height:1,background:budget===i?"rgba(255,255,255,0.25)":BDR,marginBottom:10}}/>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {[["👥",<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
-                    ["📍",b.placements],
-                    ["🎯",b.audience]
-                  ].map(([icon,text],j)=>(
+                  {[[Users,<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
+                    [MapPin,b.placements],
+                    [Target,b.audience]
+                  ].map(([Icon,text],j)=>(
                     <div key={j} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-                      <span style={{fontSize:12,lineHeight:"18px"}}>{icon}</span>
+                      <Icon size={14} color={budget===i?"rgba(255,255,255,0.9)":O} strokeWidth={2.5} style={{flexShrink:0,marginTop:2}}/>
                       <span style={{fontSize:12,color:budget===i?"rgba(255,255,255,0.9)":N,lineHeight:1.5}}>{text}</span>
                     </div>
                   ))}
@@ -1872,15 +2067,15 @@ function AdvertisePage({ onBack }) {
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"14px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
             <span style={{fontSize:14,lineHeight:"18px"}}>ℹ️</span>
-            <p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.7}}>
+            <p style={{fontSize:12,color:N,margin:0,lineHeight:1.7}}>
               No setup fees or hidden charges. Ad spend goes entirely toward impressions. Pause or cancel anytime from your dashboard.
             </p>
           </div>
 
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
+            border:"none",background:budget!==null?OBG:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
-            boxShadow:budget!==null?"0 4px 16px rgba(255,107,53,0.35)":"none"}}>
+            boxShadow:budget!==null?"0 4px 16px rgba(22,163,74,0.35)":"none"}}>
             Continue →
           </button>
         </>}
@@ -1903,7 +2098,7 @@ function AdvertisePage({ onBack }) {
                 {/* Image / upload tap target */}
                 <label style={{width:44,height:44,borderRadius:12,flexShrink:0,cursor:"pointer",
                   overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center",
-                  background:adImage?"transparent":O,border:adImage?"none":`2px dashed rgba(255,255,255,0.4)`}}>
+                  background:adImage?"transparent":OBG,border:adImage?"none":`2px dashed rgba(255,255,255,0.4)`}}>
                   {adImage
                     ? <img src={adImage} alt="ad" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -1924,8 +2119,8 @@ function AdvertisePage({ onBack }) {
                     {adForm.tagline||"Your tagline appears here"}
                   </div>
                 </div>
-                <div style={{padding:"6px 10px",borderRadius:8,background:O,
-                  color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:80,
+                <div style={{padding:"6px 10px",borderRadius:8,background:OBG,
+                  color:"#fff",fontSize:10,fontWeight:800,flexShrink:0,maxWidth:140,
                   whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",textAlign:"center"}}>
                   {adForm.cta||"Book now"}
                 </div>
@@ -1964,13 +2159,13 @@ function AdvertisePage({ onBack }) {
                     <button key={cta} onClick={()=>{setAdForm(f=>({...f,cta}));setCustomCta(false);}}
                       style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
                         border:`1.5px solid ${!customCta&&adForm.cta===cta?O:BDR}`,
-                        background:!customCta&&adForm.cta===cta?O:"transparent",
+                        background:!customCta&&adForm.cta===cta?OBG:"transparent",
                         color:!customCta&&adForm.cta===cta?"#fff":N,fontSize:11,fontWeight:700}}>{cta}</button>
                   ))}
                   <button onClick={()=>{setCustomCta(true);setAdForm(f=>({...f,cta:""}));}}
                     style={{padding:"6px 12px",borderRadius:8,cursor:"pointer",fontFamily:"inherit",
                       border:`1.5px solid ${customCta?O:BDR}`,
-                      background:customCta?O:"transparent",
+                      background:customCta?OBG:"transparent",
                       color:customCta?"#fff":N,fontSize:11,fontWeight:700}}>Custom…</button>
                 </div>
                 {customCta && (
@@ -1992,7 +2187,7 @@ function AdvertisePage({ onBack }) {
                 border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
                 fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
               <button onClick={()=>setStep(3)} style={{flex:2,padding:"12px",borderRadius:12,
-                border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+                border:"none",background:OBG,color:"#fff",fontSize:13,fontWeight:800,
                 cursor:"pointer",fontFamily:"inherit"}}>Continue →</button>
             </div>
           </>;
@@ -2051,9 +2246,9 @@ function AdvertisePage({ onBack }) {
               border:`1.5px solid ${BDR}`,background:"transparent",color:MUT,
               fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Back</button>
             <button onClick={()=>setLaunched(true)} style={{flex:2,padding:"12px",borderRadius:12,
-              border:"none",background:O,color:"#fff",fontSize:13,fontWeight:800,
+              border:"none",background:OBG,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit",
-              boxShadow:"0 4px 16px rgba(255,107,53,0.4)"}}>Launch campaign →</button>
+              boxShadow:"0 4px 16px rgba(22,163,74,0.4)"}}>Launch campaign →</button>
           </div>
           <p style={{textAlign:"center",fontSize:10,color:MUT,margin:0}}>
             Secured by Stripe · Cancel anytime in your dashboard
@@ -2063,9 +2258,9 @@ function AdvertisePage({ onBack }) {
         {/* SUCCESS */}
         {launched && (
           <div style={{textAlign:"center",padding:"40px 0"}}>
-            <div style={{width:72,height:72,borderRadius:20,background:O,
+            <div style={{width:72,height:72,borderRadius:20,background:OBG,
               display:"flex",alignItems:"center",justifyContent:"center",
-              margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(255,107,53,0.3)"}}>
+              margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(22,163,74,0.3)"}}>
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div style={{fontSize:22,fontWeight:900,color:N,marginBottom:8}}>Campaign live!</div>
@@ -2083,7 +2278,7 @@ function AdvertisePage({ onBack }) {
               ))}
             </div>
             <button onClick={onBack} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",
-              background:O,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+              background:OBG,color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
               Back to dashboard
             </button>
           </div>
@@ -2096,7 +2291,7 @@ function AdvertisePage({ onBack }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise, bizPhotos }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [subFilter,setSubFilter]= useState(null);
@@ -2146,7 +2341,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const sponsorAd = sponsorFor(cat);
+  const sponsorAd = sponsorFor(cat, bizPhotos);
   const sponsorMatches = sponsorAd &&
     (!subFilter||sponsorAd.bizSubtype===subFilter) &&
     (!search||sponsorAd.bizName.toLowerCase().includes(search.toLowerCase()));
@@ -2160,7 +2355,18 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   const hasMore  = (page+1)*PAGE < filtered.length;
   const hasPrev  = page > 0;
 
-  const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); };
+  // De-dupe photos across everything on screen together (sponsor card + this
+  // page of results) so no two visible cards ever show the same photo.
+  const photoTargets = [
+    ...(sponsorMatches ? [{id:sponsorAd.bizId, type:sponsorAd.bizType, subtype:sponsorAd.bizSubtype}] : []),
+    ...visible,
+  ];
+  const bizPhotoPools = dedupPhotoPools(photoTargets);
+
+  // Clear stale cross-category results immediately (don't wait on the async
+  // fetch) so switching tabs never shows the previous category's businesses,
+  // even momentarily.
+  const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); setResults(DEMOS[k]||DEMOS.food); };
 
   return (
     <div style={{width:"100%"}}>
@@ -2254,10 +2460,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Listings — sponsored card first */}
         {sponsorMatches && (
-          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
+          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark} photos={bizPhotoPools[sponsorAd.bizId]}/>
         )}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} photos={bizPhotoPools[b.id]} uploadedPhoto={bizPhotos?.[b.id]?.featured}/>
         ))}
 
         {/* Pagination */}
@@ -2286,7 +2492,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <div onClick={()=>setShowClaim(true)} style={{padding:"16px 18px",background:"transparent",
             border:`1.5px solid ${BDR}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
-              background:O,
+              background:OBG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -2298,13 +2504,13 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               <div style={{fontSize:11,color:MUT,marginTop:2}}>Free dashboard + AI training</div>
             </div>
             <button style={{padding:"8px 13px",borderRadius:10,border:"none",
-              background:O,color:"#fff",fontSize:11,fontWeight:700,
+              background:OBG,color:"#fff",fontSize:11,fontWeight:700,
               whiteSpace:"nowrap",fontFamily:"inherit",
-              boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
+              cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
-            border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:OBG,
+            border:`2px solid ${O}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
@@ -2341,40 +2547,46 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 // ============================================================
 // DONE SCREEN
 // ============================================================
+
+// ============================================================
+// DONE SCREEN
+// ============================================================
 function DoneScreen({ business, reviewData, onReset }) {
   const [shareOpen,setShare] = useState(false);
   return (
     <div style={{maxWidth:480,margin:"0 auto",padding:"4rem 1.5rem",textAlign:"center"}}>
       {shareOpen&&<ShareCard business={business} scores={reviewData?.scores||{}} onClose={()=>setShare(false)}/>}
-      <div style={{width:72,height:72,borderRadius:20,background:G,
+      <div style={{width:72,height:72,borderRadius:20,background:OBG,
         display:"flex",alignItems:"center",justifyContent:"center",
-        margin:"0 auto 20px",boxShadow:"0 8px 24px rgba(255,107,53,0.3)"}}>
+        margin:"0 auto 20px"}}>
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
         </svg>
       </div>
-      <div style={{fontSize:26,fontWeight:900,color:N,marginBottom:8,letterSpacing:"-0.5px"}}>
-        trufaro approved!
+      <div style={{fontSize:26,fontWeight:900,marginBottom:8,letterSpacing:"-0.5px"}}>
+        <span style={{color:N}}>green<span style={{color:O}}>chek</span> approved!</span>
       </div>
       <p style={{fontSize:14,color:MUT,lineHeight:1.8,marginBottom:32,textAlign:"center"}}>
         Your feedback is heading to {business?.name}.<br/>
         Honest reviews make every business better.
       </p>
       <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:300,margin:"0 auto"}}>
-        <PrimaryBtn full onClick={()=>setShare(true)}>
-          <span style={{display:"inline-flex",alignItems:"center",gap:8}}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-              <polyline points="16 6 12 2 8 6"/>
-              <line x1="12" y1="2" x2="12" y2="15"/>
-            </svg>
-            Share your review
-          </span>
-        </PrimaryBtn>
-        <button onClick={onReset}
+        <button onClick={()=>setShare(true)}
           style={{width:"100%",padding:"13px",borderRadius:14,
             border:`2px solid ${BDR}`,background:"transparent",color:N,
-            fontSize:14,fontWeight:700,fontFamily:"inherit"}}>
+            fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+          Share your review
+        </button>
+        <button onClick={onReset}
+          style={{width:"100%",padding:"13px",borderRadius:14,border:"none",
+            background:OBG,color:"#fff",
+            fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
           Rate another business
         </button>
       </div>
@@ -2391,7 +2603,7 @@ const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
 const AD_COPY = {
   food: { headline: "Best Italian in McKinney", tagline: "Authentic recipes since 1987" },
 };
-function sponsorFor(catKey) {
+function sponsorFor(catKey, bizPhotos) {
   const biz = DEMOS[catKey]?.[0];
   if (!biz) return null;
   const copy = AD_COPY[catKey] || { headline: `Best ${biz.subtype} in McKinney`, tagline: "Top-rated · Trusted locally" };
@@ -2401,7 +2613,7 @@ function sponsorFor(catKey) {
     bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     phone: biz.phone, website: biz.website, menuUrl: biz.menuUrl, about: biz.about,
     headline: copy.headline, tagline: copy.tagline,
-    image: null,
+    image: bizPhotos?.[biz.id]?.featured || null,
   };
 }
 
@@ -2413,7 +2625,7 @@ const WEEKLY = [
 ];
 const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
-function OwnerDashboard({ onBack, onAdvertise }) {
+function OwnerDashboard({ onBack, onAdvertise, bizPhotos, onUpdateBizPhoto }) {
   const [tab, setTab] = useState("overview");
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [tab]);
@@ -2430,6 +2642,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
+  const bizFeatured = bizPhotos?.[DEMO_BIZ.id]?.featured || null;
+  const bizSlider = bizPhotos?.[DEMO_BIZ.id]?.slider || [];
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -2468,15 +2682,15 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             Back
           </button>
           <div style={{flex:1}}/>
-          <div style={{width:8,height:8,borderRadius:"50%",background:O}}/>
+          <div style={{width:8,height:8,borderRadius:"50%",background:OBG}}/>
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
+          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} uploadedPhoto={bizPhotos?.[DEMO_BIZ.id]?.featured} size={44}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
-              <span>⭐ {DEMO_BIZ.rating}</span>
+              <span><span style={{color:ST}}>★</span> {DEMO_BIZ.rating}</span>
               <span>·</span>
               <span>{"$".repeat(DEMO_BIZ.price)}</span>
               <span>·</span>
@@ -2508,10 +2722,9 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="overview" && <>
           {/* Advertise CTA */}
           <button onClick={onAdvertise} style={{width:"100%",padding:"13px 16px",borderRadius:14,
-            border:`1.5px solid ${O}`,background:"transparent",color:O,fontSize:14,fontWeight:800,
+            border:`1.5px solid ${O}`,background:OBG,color:"#fff",fontSize:14,fontWeight:800,
             cursor:"pointer",fontFamily:"inherit",marginBottom:14,
-            display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-            boxShadow:`0 0 12px rgba(255,107,53,0.3), inset 0 0 12px rgba(255,107,53,0.05)`}}>
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 1 0 8"/><path d="M22 6a10 10 0 0 1 0 12"/><path d="M2 15V9a1 1 0 0 1 1-1h4l5-4v14l-5-4H3a1 1 0 0 1-1-1z"/></svg>
             Start Advertising
           </button>
@@ -2538,7 +2751,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             border:`1.5px solid ${OA(27)}`,borderRadius:16,padding:"16px",marginBottom:16}}>
             {/* Header */}
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-              <div style={{width:28,height:28,borderRadius:8,background:O,
+              <div style={{width:28,height:28,borderRadius:8,background:OBG,
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="white" stroke="none"/></svg>
               </div>
@@ -2592,7 +2805,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:14,padding:"12px 14px",marginBottom:8}}>
               <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
-                <div style={{width:26,height:26,borderRadius:"50%",background:O,
+                <div style={{width:26,height:26,borderRadius:"50%",background:OBG,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:11,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2620,7 +2833,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
             <div key={r.id} style={{background:BG2,border:`1.5px solid ${BDR}`,
               borderRadius:16,padding:"14px",marginBottom:10}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:O,
+                <div style={{width:30,height:30,borderRadius:"50%",background:OBG,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:13,fontWeight:800,color:"#fff",flexShrink:0}}>
                   {r.author?.[0]||"A"}
@@ -2653,7 +2866,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                         cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
                     <button onClick={()=>sendReply(r.id)}
                       style={{flex:2,padding:"8px",borderRadius:10,border:"none",
-                        background:O,color:"#fff",fontSize:12,fontWeight:700,
+                        background:OBG,color:"#fff",fontSize:12,fontWeight:700,
                         cursor:"pointer",fontFamily:"inherit"}}>Post reply</button>
                   </div>
                 </div>
@@ -2726,7 +2939,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                   <span style={{fontSize:12,fontWeight:800,color:O}}>{(cat.avg/2).toFixed(1)}</span>
                 </div>
                 <div style={{height:8,borderRadius:4,background:BG3,overflow:"hidden"}}>
-                  <div style={{height:"100%",borderRadius:4,background:O,
+                  <div style={{height:"100%",borderRadius:4,background:OBG,
                     width:`${cat.pct}%`,transition:"width 0.5s"}}/>
                 </div>
               </div>
@@ -2753,6 +2966,54 @@ function OwnerDashboard({ onBack, onAdvertise }) {
 
         {/* ── PROFILE ── */}
         {tab==="profile" && <>
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Photos</div>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Featured image</div>
+            <label style={{display:"flex",alignItems:"center",justifyContent:"center",
+              width:88,height:88,borderRadius:14,overflow:"hidden",background:BG3,
+              border:`1.5px dashed ${BDR}`,cursor:"pointer",marginBottom:18}}>
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const dataUrl = await fileToDataUrl(file);
+                onUpdateBizPhoto(DEMO_BIZ.id, { featured: dataUrl });
+                e.target.value = "";
+              }}/>
+              {bizFeatured
+                ? <img src={bizFeatured} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : <Camera size={26} color={MUT} strokeWidth={2}/>}
+            </label>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Slider images</div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {bizSlider.map((src,i)=>(
+                <div key={i} style={{position:"relative",width:64,height:64,borderRadius:10,overflow:"hidden"}}>
+                  <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  <button onClick={()=>onUpdateBizPhoto(DEMO_BIZ.id,{slider:bizSlider.filter((_,idx)=>idx!==i)})}
+                    style={{position:"absolute",top:2,right:2,width:18,height:18,borderRadius:"50%",
+                      border:"none",background:"rgba(0,0,0,0.6)",color:"#fff",fontSize:11,lineHeight:1,
+                      cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0}}>×</button>
+                </div>
+              ))}
+              <label style={{width:64,height:64,borderRadius:10,background:BG3,
+                border:`1.5px dashed ${BDR}`,cursor:"pointer",
+                display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <input type="file" accept="image/*" multiple style={{display:"none"}} onChange={async e=>{
+                  const files = Array.from(e.target.files||[]);
+                  if (!files.length) return;
+                  const dataUrls = await Promise.all(files.map(fileToDataUrl));
+                  onUpdateBizPhoto(DEMO_BIZ.id, { slider:[...bizSlider,...dataUrls] });
+                  e.target.value = "";
+                }}/>
+                <span style={{fontSize:20,color:MUT,lineHeight:1}}>+</span>
+              </label>
+            </div>
+          </div>
+
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"16px",marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
@@ -2782,7 +3043,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
               </div>
             ))}
             <button onClick={onAdvertise} style={{width:"100%",marginTop:14,padding:"12px",borderRadius:12,
-              border:`2px solid ${O}`,background:"transparent",color:O,fontSize:13,fontWeight:800,
+              border:`2px solid ${O}`,background:OBG,color:"#fff",fontSize:13,fontWeight:800,
               cursor:"pointer",fontFamily:"inherit"}}>🚀 Start Advertising on Trufaro</button>
           </div>
         </>}
@@ -2824,7 +3085,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
                   cursor:"pointer",fontFamily:"inherit"}}>Cancel</button>
               <button onClick={()=>{setProfile({...editForm});setEditOpen(false);}}
                 style={{flex:2,padding:"12px",borderRadius:12,border:"none",
-                  background:O,color:"#fff",fontSize:13,fontWeight:800,
+                  background:OBG,color:"#fff",fontSize:13,fontWeight:800,
                   cursor:"pointer",fontFamily:"inherit"}}>Save changes</button>
             </div>
           </div>
@@ -2842,9 +3103,15 @@ export default function ServedApp() {
   const [business,setBiz]    = useState(null);
   const [reviewData,setReview] = useState(null);
   const [isDark,setIsDark]   = useState(true);
+  const [bizPhotos,setBizPhotos] = useState(loadBizPhotos);
 
   useEffect(() => { applyTheme(DARK_VARS); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [view]);
+  useEffect(() => { saveBizPhotos(bizPhotos); }, [bizPhotos]);
+
+  const updateBizPhoto = useCallback((bizId, patch) => {
+    setBizPhotos(all => ({ ...all, [bizId]: { ...all[bizId], ...patch } }));
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
@@ -2862,11 +3129,11 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")}/>}
-        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos}/>}
+        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")} bizPhotos={bizPhotos}/>}
         {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
-        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos} onUpdateBizPhoto={updateBizPhoto}/>}
         {view==="advertise" && <AdvertisePage onBack={()=>setView("home")}/>}
       </div>
     </div>
