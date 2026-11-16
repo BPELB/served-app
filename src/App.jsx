@@ -525,17 +525,19 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-function IconBox({ type, size=44, emoji }) {
+function IconBox({ type, size=44, emoji, uploadedPhoto }) {
   const icon = CAT_ICONS[type] || CAT_ICONS.food;
   const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
   const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,overflow:"hidden",
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {emoji
-        ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
+      {uploadedPhoto
+        ? <img src={uploadedPhoto} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        : (emoji
+          ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
+          : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>)
       }
     </div>
   );
@@ -594,7 +596,7 @@ function LocationMap({ addr }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect, onRate, isDark }) {
+function BusinessCard({ b, onSelect, onRate, isDark, uploadedPhoto }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
@@ -610,7 +612,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox type={b.type} size={52} emoji={b.emoji}/>
+        <IconBox type={b.type} size={52} emoji={b.emoji} uploadedPhoto={uploadedPhoto}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
@@ -1086,12 +1088,12 @@ const CAT_PHOTOS = {
   automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
   homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
   pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
-  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
+  childcare:     ["1503676260728-1c00da094a0b","1560785496-3c9d27877182"], // object/building-only, no children in frame
   hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
   retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
   professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
   events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
-  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
+  education:     ["1546410531-bb4caa6b424d","1497633762265-9d179a990aa6"], // object/building-only, no children in frame
   entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
   moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
   techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
@@ -1108,6 +1110,24 @@ function hashStr(s) {
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
+// Business-uploaded photos (featured image + slider images), keyed by business
+// id, persisted to localStorage. A business's own uploaded featured image
+// always takes priority over the icon/stock pool everywhere it's shown.
+const BIZ_PHOTOS_KEY = "fy_biz_photos";
+function loadBizPhotos() {
+  try { return JSON.parse(localStorage.getItem(BIZ_PHOTOS_KEY)) || {}; } catch { return {}; }
+}
+function saveBizPhotos(all) {
+  try { localStorage.setItem(BIZ_PHOTOS_KEY, JSON.stringify(all)); } catch {}
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
@@ -1116,13 +1136,15 @@ function SliderPhoto({ src }) {
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
-function ImageSlider({ seed, type, subtype }) {
+function ImageSlider({ seed, type, subtype, overridePhotos }) {
   const ref = useRef(null);
   const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
   // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
-  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
+  const photos = (overridePhotos && overridePhotos.length)
+    ? overridePhotos
+    : rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
     width:22,height:22,borderRadius:"50%",border:"none",background:BG3,color:N,
@@ -1150,7 +1172,7 @@ function ImageSlider({ seed, type, subtype }) {
 // BUSINESS PAGE
 // ============================================================
 const REVIEWS_PAGE = 3;
-function BusinessPage({ business, onBack, onRate }) {
+function BusinessPage({ business, onBack, onRate, bizPhotos }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const [revPage,setRevPage] = useState(1);
@@ -1202,7 +1224,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(224,85,53,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox type={business.type} size={84} emoji={business.emoji}/>
+          <IconBox type={business.type} size={84} emoji={business.emoji} uploadedPhoto={bizPhotos?.[business.id]?.featured}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -1375,7 +1397,7 @@ function BusinessPage({ business, onBack, onRate }) {
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} overridePhotos={bizPhotos?.[business.id]?.slider}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
@@ -1872,13 +1894,13 @@ function AdvertisePage({ onBack }) {
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"14px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
             <span style={{fontSize:14,lineHeight:"18px"}}>ℹ️</span>
-            <p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.7}}>
+            <p style={{fontSize:12,color:N,margin:0,lineHeight:1.7}}>
               No setup fees or hidden charges. Ad spend goes entirely toward impressions. Pause or cancel anytime from your dashboard.
             </p>
           </div>
 
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
+            border:"none",background:budget!==null?O:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
             boxShadow:budget!==null?"0 4px 16px rgba(224,85,53,0.35)":"none"}}>
             Continue →
@@ -2096,7 +2118,7 @@ function AdvertisePage({ onBack }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise, bizPhotos }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [subFilter,setSubFilter]= useState(null);
@@ -2146,7 +2168,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const sponsorAd = sponsorFor(cat);
+  const sponsorAd = sponsorFor(cat, bizPhotos);
   const sponsorMatches = sponsorAd &&
     (!subFilter||sponsorAd.bizSubtype===subFilter) &&
     (!search||sponsorAd.bizName.toLowerCase().includes(search.toLowerCase()));
@@ -2257,7 +2279,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
           <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
         )}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} uploadedPhoto={bizPhotos?.[b.id]?.featured}/>
         ))}
 
         {/* Pagination */}
@@ -2391,7 +2413,7 @@ const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
 const AD_COPY = {
   food: { headline: "Best Italian in McKinney", tagline: "Authentic recipes since 1987" },
 };
-function sponsorFor(catKey) {
+function sponsorFor(catKey, bizPhotos) {
   const biz = DEMOS[catKey]?.[0];
   if (!biz) return null;
   const copy = AD_COPY[catKey] || { headline: `Best ${biz.subtype} in McKinney`, tagline: "Top-rated · Trusted locally" };
@@ -2401,7 +2423,7 @@ function sponsorFor(catKey) {
     bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     phone: biz.phone, website: biz.website, menuUrl: biz.menuUrl, about: biz.about,
     headline: copy.headline, tagline: copy.tagline,
-    image: null,
+    image: bizPhotos?.[biz.id]?.featured || null,
   };
 }
 
@@ -2413,7 +2435,7 @@ const WEEKLY = [
 ];
 const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
-function OwnerDashboard({ onBack, onAdvertise }) {
+function OwnerDashboard({ onBack, onAdvertise, bizPhotos, onUpdateBizPhoto }) {
   const [tab, setTab] = useState("overview");
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [tab]);
@@ -2430,6 +2452,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
+  const bizFeatured = bizPhotos?.[DEMO_BIZ.id]?.featured || null;
+  const bizSlider = bizPhotos?.[DEMO_BIZ.id]?.slider || [];
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -2472,7 +2496,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
+          <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji} uploadedPhoto={bizPhotos?.[DEMO_BIZ.id]?.featured}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
@@ -2755,6 +2779,57 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="profile" && <>
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Photos</div>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Featured image</div>
+            <label style={{display:"flex",alignItems:"center",justifyContent:"center",
+              width:88,height:88,borderRadius:14,overflow:"hidden",background:BG3,
+              border:`1.5px dashed ${BDR}`,cursor:"pointer",marginBottom:18}}>
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const dataUrl = await fileToDataUrl(file);
+                onUpdateBizPhoto(DEMO_BIZ.id, { featured: dataUrl });
+                e.target.value = "";
+              }}/>
+              {bizFeatured
+                ? <img src={bizFeatured} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={MUT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>}
+            </label>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Slider images</div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {bizSlider.map((src,i)=>(
+                <div key={i} style={{position:"relative",width:64,height:64,borderRadius:10,overflow:"hidden"}}>
+                  <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  <button onClick={()=>onUpdateBizPhoto(DEMO_BIZ.id,{slider:bizSlider.filter((_,idx)=>idx!==i)})}
+                    style={{position:"absolute",top:2,right:2,width:18,height:18,borderRadius:"50%",
+                      border:"none",background:"rgba(0,0,0,0.6)",color:"#fff",fontSize:11,lineHeight:1,
+                      cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0}}>×</button>
+                </div>
+              ))}
+              <label style={{width:64,height:64,borderRadius:10,background:BG3,
+                border:`1.5px dashed ${BDR}`,cursor:"pointer",
+                display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <input type="file" accept="image/*" multiple style={{display:"none"}} onChange={async e=>{
+                  const files = Array.from(e.target.files||[]);
+                  if (!files.length) return;
+                  const dataUrls = await Promise.all(files.map(fileToDataUrl));
+                  onUpdateBizPhoto(DEMO_BIZ.id, { slider:[...bizSlider,...dataUrls] });
+                  e.target.value = "";
+                }}/>
+                <span style={{fontSize:20,color:MUT,lineHeight:1}}>+</span>
+              </label>
+            </div>
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
               <div style={{fontSize:12,fontWeight:800,color:N}}>Business info</div>
               <button onClick={()=>{setEditOpen(true);setEditForm({...profile});}}
@@ -2842,9 +2917,15 @@ export default function ServedApp() {
   const [business,setBiz]    = useState(null);
   const [reviewData,setReview] = useState(null);
   const [isDark,setIsDark]   = useState(true);
+  const [bizPhotos,setBizPhotos] = useState(loadBizPhotos);
 
   useEffect(() => { applyTheme(DARK_VARS); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [view]);
+  useEffect(() => { saveBizPhotos(bizPhotos); }, [bizPhotos]);
+
+  const updateBizPhoto = useCallback((bizId, patch) => {
+    setBizPhotos(all => ({ ...all, [bizId]: { ...all[bizId], ...patch } }));
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
@@ -2862,11 +2943,11 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")}/>}
-        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos}/>}
+        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")} bizPhotos={bizPhotos}/>}
         {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
-        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos} onUpdateBizPhoto={updateBizPhoto}/>}
         {view==="advertise" && <AdvertisePage onBack={()=>setView("home")}/>}
       </div>
     </div>
