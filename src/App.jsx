@@ -1,4 +1,24 @@
 import { useState, useEffect, useRef, useCallback, Fragment } from "react"; // v3
+import {
+  Pizza, Flame, Hamburger, Soup, Croissant, Wine, Beef, Salad, CakeSlice, Grape,
+  Scissors, Sparkles, Droplet,
+  Stethoscope, Smile, Glasses,
+  Dumbbell, Flower2, Activity,
+  Wrench, Droplets, Car,
+  Hammer, SprayCan,
+  HeartPulse, Dog,
+  Baby, BookOpen,
+  Hotel, BedDouble,
+  Shirt, Library, Smartphone,
+  Gavel, Calculator,
+  PartyPopper, Camera,
+  Gamepad2, Target, Users, MapPin,
+  Truck, Package,
+  TabletSmartphone, Monitor,
+  WashingMachine,
+  Landmark, Receipt,
+  Flower, Building2, IdCard,
+} from "lucide-react";
 
 // ============================================================
 // CONFIG — paste your keys here
@@ -17,6 +37,7 @@ const CONFIG = {
 const O   = "var(--accent)";
 const OA  = pct => `color-mix(in srgb, ${O} ${pct}%, transparent)`;
 const G   = `linear-gradient(135deg,${O},#8b2a14)`;
+const OBG = "var(--accent-bg)"; // solid accent-fill backgrounds — darker burnt-orange for better white-text contrast in dark mode; same value as O in light mode, so light mode is unaffected
 
 // CSS variable references — all theme colors live on :root
 const BG  = "var(--bg)";
@@ -26,9 +47,10 @@ const BDR = "var(--bdr)";
 const N   = "var(--text)";
 const HOV = "var(--hover)";
 const MUT = "var(--muted)";
+const IC  = "var(--iconfg)"; // business icon color — white in dark mode, accent in light mode
 
-const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#2a5568","--text":"#ffffff","--muted":"rgba(255,255,255,0.65)","--hover":"#0f3040","--accent":"#e05535" };
-const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f5f5f5","--bg3":"#eeeeee","--bdr":"#0d2b35","--text":"#0f1a20","--muted":"rgba(15,26,32,0.75)","--hover":"#f0f0f0","--accent":"#e05535" };
+const DARK_VARS  = { "--bg":"#0d2b35","--bg2":"#0a2029","--bg3":"#071820","--bdr":"#2a5568","--text":"#ffffff","--muted":"rgba(255,255,255,0.65)","--hover":"#0f3040","--accent":"#e05535","--accent-bg":"#9c3d1f","--iconfg":"#ffffff" };
+const LIGHT_VARS = { "--bg":"#ffffff","--bg2":"#f5f5f5","--bg3":"#eeeeee","--bdr":"#0d2b35","--text":"#0f1a20","--muted":"rgba(15,26,32,0.75)","--hover":"#f0f0f0","--accent":"#e05535","--accent-bg":"#9c3d1f","--iconfg":"#e05535" };
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
@@ -523,17 +545,83 @@ const CAT_ICONS = {
   government:   <><path d="M3 22V12M7 22V12M11 22V12M15 22V12M19 22V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 3L2 8h20L12 3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/><path d="M2 22h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M2 8h20" stroke="currentColor" strokeWidth="1.5"/></>,
 };
 
-function IconBox({ type, size=44, emoji }) {
-  const icon = CAT_ICONS[type] || CAT_ICONS.food;
-  const box  = BT[type]?.box || { bg:"#FFF0EC", bd:"#F9C4B0", ic:"#C84B1F" };
+// Hand-drawn icons for foods Lucide has no literal glyph for, built to match
+// Lucide's own stroke style exactly (24x24 viewBox, round cap/join) so they're
+// indistinguishable from the imported set at a glance.
+function Sushi({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="3.5"/>
+      <circle cx="7" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="8" r="1" fill={color} stroke="none"/>
+      <circle cx="7" cy="16" r="1" fill={color} stroke="none"/>
+      <circle cx="17" cy="16" r="1" fill={color} stroke="none"/>
+    </svg>
+  );
+}
+function Taco({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 13a9 9 0 0 1 18 0"/>
+      <line x1="3" y1="13" x2="21" y2="13"/>
+      <path d="M7 13V9M11 13V6M15 13V9"/>
+    </svg>
+  );
+}
+function TakeoutBox({ size=24, color="currentColor", strokeWidth=2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 8l1-3h14l1 3"/>
+      <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/>
+      <path d="M9 8c0-2 1-3 3-3s3 1 3 3"/>
+    </svg>
+  );
+}
+
+// Per-business icons — every business gets its own specific icon (not just one
+// per category/subtype) so businesses in the same category list are visually
+// distinct from each other at a glance. Lucide covers most; a few literal foods
+// Lucide has no glyph for (sushi, taco, takeout box) are hand-drawn above to match.
+const BIZ_ICONS = {
+  d1: Pizza, d2: Salad, d3: Sushi, d4: Taco, d5: Hamburger, d6: Soup,
+  d7: Croissant, d8: TakeoutBox, d9: Wine, d10: Beef, d11: Grape, d12: CakeSlice,
+  b1: Scissors, b2: Sparkles, b3: Droplet,
+  h1: Stethoscope, h2: Smile, h3: Glasses,
+  f1: Dumbbell, f2: Flower2, f3: Activity,
+  a1: Wrench, a2: Droplets, a3: Sparkles,
+  hs1: Hammer, hs2: SprayCan, hs3: Droplets,
+  p1: HeartPulse, p2: Scissors, p3: Dog,
+  c1: Baby, c2: BookOpen,
+  ho1: Hotel, ho2: BedDouble,
+  r1: Shirt, r2: Library, r3: Smartphone,
+  pr1: Gavel, pr2: Calculator,
+  e1: PartyPopper, e2: Camera,
+  ed1: BookOpen, ed2: Car,
+  en1: Gamepad2, en2: Target,
+  m1: Truck, m2: Package,
+  t1: TabletSmartphone, t2: Monitor,
+  l1: Shirt, l2: WashingMachine,
+  fi1: Landmark, fi2: Receipt,
+  fu1: Flower,
+  g1: Building2, g2: IdCard,
+};
+
+function IconBox({ id, type, subtype, photos, uploadedPhoto, size=44 }) {
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = photos || rotatedPool(id, type, subtype);
+  const photoUrl = uploadedPhoto || (photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null);
+  const BizIcon = BIZ_ICONS[id];
   const s = size * 0.55;
   return (
-    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,
+    <div style={{width:size,height:size,borderRadius:16,flexShrink:0,overflow:"hidden",
       background:BG3,border:`1.5px solid ${BDR}`,
       display:"flex",alignItems:"center",justifyContent:"center"}}>
-      {emoji
-        ? <span style={{fontSize:size*0.42,lineHeight:1}}>{emoji}</span>
-        : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:O}}>{icon}</svg>
+      {photoUrl
+        ? <img src={photoUrl} alt="" onError={()=>!uploadedPhoto && setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        : (BizIcon
+            ? <BizIcon size={s} color={IC} strokeWidth={2.5}/>
+            : <svg width={s} height={s} viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[type]||CAT_ICONS.food}</svg>)
       }
     </div>
   );
@@ -593,7 +681,7 @@ function LocationMap({ addr }) {
 }
 
 // Category filter pill
-function BusinessCard({ b, onSelect, onRate, isDark }) {
+function BusinessCard({ b, onSelect, onRate, isDark, photos, uploadedPhoto }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const bt = BT[b.type||"food"];
@@ -609,7 +697,7 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
       {/* Main row */}
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px"}}
         onClick={()=>onSelect(b)}>
-        <IconBox type={b.type} size={52} emoji={b.emoji}/>
+        <IconBox id={b.id} type={b.type} subtype={b.subtype} photos={photos} uploadedPhoto={uploadedPhoto} size={52}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:16,fontWeight:800,color:N,marginBottom:3,
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
@@ -702,15 +790,19 @@ function BusinessCard({ b, onSelect, onRate, isDark }) {
 }
 
 // Mock active sponsored ad — in production this comes from the DB
-function SponsoredCard({ ad, onSelect, isDark }) {
+function SponsoredCard({ ad, onSelect, isDark, photos }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const todayKey = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
   const W = "rgba(255,255,255,0.9)";
   const WM = "rgba(255,255,255,0.85)";
+  const BizIcon = BIZ_ICONS[ad.bizId];
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const pool = photos || rotatedPool(ad.bizId, ad.bizType, ad.bizSubtype);
+  const photoUrl = photoIdx < pool.length ? thumbUrl(pool[photoIdx]) : null;
   return (
-    <div style={{background:O,border:"none",borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
+    <div style={{background:OBG,border:`2px solid ${O}`,borderRadius:18,marginBottom:10,overflow:"hidden",cursor:"pointer"}}
       onClick={()=>onSelect({id:ad.bizId,name:ad.bizName,type:ad.bizType,emoji:ad.bizEmoji,
         subtype:ad.bizSubtype,addr:ad.addr,rating:ad.bizRating,price:ad.bizPrice,open:ad.bizOpen,hours:ad.bizHours,
         phone:ad.phone,website:ad.website,menuUrl:ad.menuUrl,about:ad.about})}>
@@ -728,7 +820,11 @@ function SponsoredCard({ ad, onSelect, isDark }) {
           display:"flex",alignItems:"center",justifyContent:"center"}}>
           {ad.image
             ? <img src={ad.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-            : <span style={{fontSize:26}}>{ad.bizEmoji||"🏪"}</span>
+            : (photoUrl
+                ? <img src={photoUrl} alt="" onError={()=>setPhotoIdx(i=>i+1)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : (BizIcon
+                    ? <BizIcon size={24} color={IC} strokeWidth={2.5}/>
+                    : <svg width="24" height="24" viewBox="0 0 24 24" style={{color:IC}}>{CAT_ICONS[ad.bizType]||CAT_ICONS.food}</svg>))
           }
         </div>
         <div style={{flex:1,minWidth:0}}>
@@ -1058,34 +1154,36 @@ const CAT_PHOTOS = {
   Italian:       ["1513104890138-7c749659a591","1548365328-9f547fb0953b","1551183053-bf91a1d81141","1546549032-9571cd6b27df"],
   American:      ["1550547660-d9450f859349","1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1553979459-d2229ba7433b"],
   Japanese:      ["1579584425555-c3ce17fd4351","1553621042-f6e147245754","1611143669185-af224c5e3252","1553163147-622ab57be1c7"],
-  Mexican:       ["1565299624946-b28f40a0ae38","1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
+  Mexican:       ["1551504734-5ee1c4a1479b","1552332386-f8dd00dc2f85","1613514785940-daed07799d9b"],
   Burgers:       ["1568901346375-23c9450c58cd","1571091718767-18b5b1457add","1550547660-d9450f859349","1586190848861-99aa4a171e90"],
-  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1567188040759-fb8a883dc6d8","1631452180519-c014fe946bc7"],
+  Indian:        ["1585937421612-70a008356fbe","1596797038530-2c107229654b","1631452180519-c014fe946bc7"],
   French:        ["1555507036-ab1f4038808a","1550617931-e17a7b70dce2","1608198093002-ad4e005484ec","1608039829572-78524f79c4c7"],
   Chinese:       ["1585032226651-759b368d7246","1563245372-f21724e3856d","1526318896980-cf78c088247c","1552611052-33e04de081de"],
   Korean:        ["1590301157890-4810ed352733","1580651315530-69c8e0026377","1583224964978-2257b960c3d3"],
   Mediterranean: ["1540420773420-3366772f4999","1512058564366-18510be2db19","1615719413546-198b25453f85"],
   // Top-level category fallback
   food:          ["1517248135467-4c7edcad34c4","1414235077428-338989a2e8c0","1517244683847-7456b63c5969"],
-  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035"],
-  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907"],
-  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b"],
-  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3"],
-  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837"],
-  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b"],
-  childcare:     ["1587654780291-39c9404d746b","1503454537195-1dcabb73ffb9"],
+  beauty:        ["1522337360788-8b13dee7a37e","1560066984-138dadb4c035","1521590832167-7bcbfaa6381f"],
+  health:        ["1519494026892-80bbd2d6fd0d","1538108149393-fbbd81895907","1629909613654-28e377c37b09"],
+  fitness:       ["1534438327276-14e5300c3a48","1571019613454-1cb2f99b2d8b","1518611012118-696072aa579a"],
+  automotive:    ["1503376780353-7e6692767b70","1486262715619-67b85e0b08d3","1620891549027-942fdc95d3f5"],
+  homeservices:  ["1581578731548-c64695cc6952","1581092160562-40aa08e78837","1581092918056-0c4c3acd3789"],
+  pets:          ["1450778869180-41d0601e046e","1548199973-03cce0bbc87b","1516734212186-a967f81ad0d7"],
   hospitality:   ["1566073771259-6a8506099945","1551882547-ff40c63fe5fa"],
-  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc"],
+  retail:        ["1441986300917-64674bd600d8","1472851294608-062f824d29cc","1489987707025-afc232f7ea0f"],
   professional:  ["1497366216548-37526070297c","1497366811353-6870744d04b2"],
   events:        ["1519167758481-83f550bb49b3","1464366400600-7168b8af9bc3"],
-  education:     ["1580582932707-520aed937b7b","1503676260728-1c00da094a0b"],
   entertainment: ["1489599849927-2ee91cede3ba","1478720568477-152d9b164e26"],
   moving:        ["1600518464441-9154a4dea21b","1600585152220-90363fe7e115"],
   techrepair:    ["1518770660439-4636190af475","1550009158-9ebf69173e03"],
-  laundry:       ["1545173168-9f1947eebb7f"],
+  laundry:       ["1545173168-9f1947eebb7f","1604335398980-ac1695fa2be7"],
   financial:     ["1450101499163-c8848c66ca85","1553729459-efe14ef6055d"],
   funeral:       ["1509023464722-18d996393ca8","1490750967868-88aa4486c946"],
-  government:    ["1541872703-74c5e44368f9","1461170168-8dc7edf1e59f"],
+  government:    ["1523292562811-8fa7962a78c8","1461170168-8dc7edf1e59f"],
+  // Object/building-only photos — no people in frame, so no risk of depicting
+  // minors. Content-safety rule: never show real photos of children.
+  childcare:     ["1503676260728-1c00da094a0b","1560785496-3c9d27877182"],
+  education:     ["1546410531-bb4caa6b424d","1497633762265-9d179a990aa6"],
 };
 function photoPool(type, subtype) {
   return CAT_PHOTOS[subtype] || CAT_PHOTOS[type] || CAT_PHOTOS.food;
@@ -1095,6 +1193,52 @@ function hashStr(s) {
   for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
   return Math.abs(h);
 }
+// Same photo pool, rotated to a per-business starting point (via hashStr) so
+// businesses sharing a subtype don't all show the same photo first.
+function rotatedPool(id, type, subtype) {
+  const pool = photoPool(type, subtype);
+  if (!id || !pool.length) return [];
+  const base = hashStr(id) % pool.length;
+  return [...pool.slice(base), ...pool.slice(0,base)];
+}
+function thumbUrl(photoId) {
+  return `https://images.unsplash.com/photo-${photoId}?w=200&h=200&fit=crop&q=80`;
+}
+// Business-uploaded photos (featured image + slider images), keyed by business
+// id, persisted to localStorage. A business's own uploaded featured image
+// always takes priority over the curated stock pool and its icon fallback —
+// once a business has one, there's nothing left to guess or dedupe.
+const BIZ_PHOTOS_KEY = "gc_biz_photos";
+function loadBizPhotos() {
+  try { return JSON.parse(localStorage.getItem(BIZ_PHOTOS_KEY)) || {}; } catch { return {}; }
+}
+function saveBizPhotos(all) {
+  try { localStorage.setItem(BIZ_PHOTOS_KEY, JSON.stringify(all)); } catch {}
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+// Assigns each business in a currently-visible list a de-duplicated photo pool
+// (its own rotatedPool, reordered so the first entry never collides with an
+// earlier business's pick in the same list) — so two cards on screen together
+// never show the same photo. Falls back to allowing a repeat only once a
+// business's whole pool has already been claimed by others.
+function dedupPhotoPools(list) {
+  const used = new Set();
+  const map = {};
+  for (const b of list) {
+    const pool = rotatedPool(b.id, b.type, b.subtype);
+    const chosen = pool.find(p=>!used.has(p));
+    if (chosen) { used.add(chosen); map[b.id] = [chosen, ...pool.filter(p=>p!==chosen)]; }
+    else map[b.id] = [];
+  }
+  return map;
+}
 function SliderPhoto({ src }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
@@ -1103,13 +1247,15 @@ function SliderPhoto({ src }) {
       borderRadius:14,flexShrink:0,scrollSnapAlign:"start"}}/>
   );
 }
-function ImageSlider({ seed, type, subtype }) {
+function ImageSlider({ seed, type, subtype, overridePhotos }) {
   const ref = useRef(null);
   const pool = photoPool(type, subtype);
   const base = hashStr(String(seed));
   // Rotate the starting point per-business so businesses sharing a subtype don't all show the same order.
   const rotated = pool.length ? [...pool.slice(base%pool.length), ...pool.slice(0,base%pool.length)] : [];
-  const photos = rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
+  const photos = (overridePhotos && overridePhotos.length)
+    ? overridePhotos
+    : rotated.map(id=>`https://images.unsplash.com/photo-${id}?w=400&h=300&fit=crop&q=80`);
   const scroll = dir => ref.current?.scrollBy({left:dir*196, behavior:"smooth"});
   const arrowStyle = {position:"absolute",top:"50%",transform:"translateY(-50%)",
     width:22,height:22,borderRadius:"50%",border:"none",background:BG3,color:N,
@@ -1137,7 +1283,7 @@ function ImageSlider({ seed, type, subtype }) {
 // BUSINESS PAGE
 // ============================================================
 const REVIEWS_PAGE = 3;
-function BusinessPage({ business, onBack, onRate }) {
+function BusinessPage({ business, onBack, onRate, bizPhotos }) {
   const [sort,setSort]       = useState("highest");
   const [helpedIds,setHelped]= useState([]);
   const [revPage,setRevPage] = useState(1);
@@ -1189,7 +1335,7 @@ function BusinessPage({ business, onBack, onRate }) {
         <div style={{position:"absolute",top:-20,right:-20,width:80,height:80,
           borderRadius:"50%",background:"rgba(255,107,53,0.15)"}}/>
         <div style={{display:"flex",alignItems:"center",gap:12,position:"relative",marginLeft:-14}}>
-          <IconBox type={business.type} size={84} emoji={business.emoji}/>
+          <IconBox id={business.id} type={business.type} subtype={business.subtype} uploadedPhoto={bizPhotos?.[business.id]?.featured} size={84}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:10,fontWeight:700,color:O,textTransform:"uppercase",
               letterSpacing:"0.08em",marginBottom:2}}>{bt.label}</div>
@@ -1362,7 +1508,7 @@ function BusinessPage({ business, onBack, onRate }) {
         Give us your feedback!
       </button>
 
-      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype}/>
+      <ImageSlider seed={business.id||business.name} type={business.type} subtype={business.subtype} overridePhotos={bizPhotos?.[business.id]?.slider}/>
 
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         marginBottom:12,flexWrap:"wrap",gap:6}}>
@@ -1826,28 +1972,29 @@ function AdvertisePage({ onBack }) {
               <div key={b.label} onClick={()=>setBudget(i)}
                 onMouseEnter={()=>setHoveredPlan(i)}
                 onMouseLeave={()=>setHoveredPlan(null)}
-                style={{background:budget===i?O:BG2,
+                style={{background:budget===i?OBG:BG2,
                   border:`1.5px solid ${budget===i||hoveredPlan===i?O:BDR}`,
                   borderRadius:16,padding:"14px 16px",cursor:"pointer",transition:"all 0.15s",
                   boxShadow:budget===i?`0 0 0 3px ${OA(20)}`:"none"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
-                    <span style={{fontSize:9,fontWeight:700,
-                      color:budget===i?"rgba(255,255,255,0.8)":MUT,
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:5}}>
+                    <span style={{fontSize:9,fontWeight:700,alignSelf:"flex-start",
+                      color:budget===i?"#fff":N,
                       background:budget===i?"rgba(255,255,255,0.2)":BG3,
+                      border:`1px solid ${budget===i?"rgba(255,255,255,0.4)":O}`,
                       borderRadius:6,padding:"2px 7px",textTransform:"uppercase",letterSpacing:"0.05em"}}>Best for {b.best}</span>
+                    <span style={{fontSize:20,fontWeight:900,color:budget===i?"#fff":N}}>{b.label}</span>
                   </div>
                   <span style={{fontSize:18,fontWeight:900,color:budget===i?"#fff":O}}>${b.amount}<span style={{fontSize:11,fontWeight:600,color:budget===i?"rgba(255,255,255,0.7)":MUT}}>/mo</span></span>
                 </div>
                 <div style={{height:1,background:budget===i?"rgba(255,255,255,0.25)":BDR,marginBottom:10}}/>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {[["👥",<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
-                    ["📍",b.placements],
-                    ["🎯",b.audience]
-                  ].map(([icon,text],j)=>(
+                  {[[Users,<><strong>{b.reach}</strong> est. views/mo · {b.cpm} CPM</>],
+                    [MapPin,b.placements],
+                    [Target,b.audience]
+                  ].map(([Icon,text],j)=>(
                     <div key={j} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-                      <span style={{fontSize:12,lineHeight:"18px"}}>{icon}</span>
+                      <Icon size={14} color={budget===i?"rgba(255,255,255,0.9)":O} strokeWidth={2.5} style={{flexShrink:0,marginTop:2}}/>
                       <span style={{fontSize:12,color:budget===i?"rgba(255,255,255,0.9)":N,lineHeight:1.5}}>{text}</span>
                     </div>
                   ))}
@@ -1859,15 +2006,15 @@ function AdvertisePage({ onBack }) {
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"14px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
             <span style={{fontSize:14,lineHeight:"18px"}}>ℹ️</span>
-            <p style={{fontSize:12,color:MUT,margin:0,lineHeight:1.7}}>
+            <p style={{fontSize:12,color:N,margin:0,lineHeight:1.7}}>
               No setup fees or hidden charges. Ad spend goes entirely toward impressions. Pause or cancel anytime from your dashboard.
             </p>
           </div>
 
           <button onClick={()=>budget!==null&&setStep(2)} style={{width:"100%",padding:"14px",borderRadius:12,
-            border:"none",background:budget!==null?O:BDR,color:"#fff",fontSize:14,fontWeight:800,
+            border:"none",background:budget!==null?OBG:BDR,color:budget!==null?"#fff":MUT,fontSize:14,fontWeight:800,
             cursor:budget!==null?"pointer":"default",fontFamily:"inherit",
-            boxShadow:budget!==null?"0 4px 16px rgba(255,107,53,0.35)":"none"}}>
+            boxShadow:budget!==null?"0 4px 16px rgba(224,85,53,0.35)":"none"}}>
             Continue →
           </button>
         </>}
@@ -2083,7 +2230,7 @@ function AdvertisePage({ onBack }) {
 // ============================================================
 // HOME
 // ============================================================
-function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise }) {
+function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise, bizPhotos }) {
   const [search,setSearch]      = useState("");
   const [cat,setCat]            = useState("food");
   const [subFilter,setSubFilter]= useState(null);
@@ -2133,7 +2280,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
     },400);
   },[search,cat,loc]);
 
-  const sponsorAd = sponsorFor(cat);
+  const sponsorAd = sponsorFor(cat, bizPhotos);
   const sponsorMatches = sponsorAd &&
     (!subFilter||sponsorAd.bizSubtype===subFilter) &&
     (!search||sponsorAd.bizName.toLowerCase().includes(search.toLowerCase()));
@@ -2146,6 +2293,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
   const visible  = filtered.slice(page*PAGE,(page+1)*PAGE);
   const hasMore  = (page+1)*PAGE < filtered.length;
   const hasPrev  = page > 0;
+  const bizPhotoPools = dedupPhotoPools(visible);
 
   const changeCat = k => { setCat(k); setPage(0); setSearch(""); setSubFilter(null); };
 
@@ -2215,6 +2363,7 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
         {/* Category header */}
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
           <IconBox type={cat} size={30}/>
+
           <div>
             <p style={{fontSize:12,fontWeight:700,color:N,textTransform:"uppercase",letterSpacing:"0.08em"}}>
               {BT[cat].label}
@@ -2241,10 +2390,10 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
 
         {/* Listings — sponsored card first */}
         {sponsorMatches && (
-          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark}/>
+          <SponsoredCard ad={sponsorAd} onSelect={onSelect} isDark={isDark} photos={bizPhotoPools[sponsorAd.bizId]}/>
         )}
         {visible.map(b=>(
-          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark}/>
+          <BusinessCard key={b.id} b={b} onSelect={onSelect} onRate={onRate} isDark={isDark} photos={bizPhotoPools[b.id]} uploadedPhoto={bizPhotos?.[b.id]?.featured}/>
         ))}
 
         {/* Pagination */}
@@ -2290,8 +2439,8 @@ function Home({ onSelect, onRate, isDark, toggleTheme, onDashboard, onAdvertise 
               boxShadow:"0 2px 8px rgba(255,107,53,0.3)",cursor:"pointer"}} onClick={()=>setShowClaim(true)}>Claim for free →</button>
           </div>
           {/* Advertise */}
-          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:O,
-            border:"none",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+          <div onClick={()=>onAdvertise()} style={{padding:"16px 18px",background:OBG,
+            border:`2px solid ${O}`,borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
             <div style={{width:46,height:46,borderRadius:13,
               background:BG,
               display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
@@ -2378,7 +2527,7 @@ const DEMO_BIZ = DEMOS.food[0]; // Osteria Romana as demo owner biz
 const AD_COPY = {
   food: { headline: "Best Italian in McKinney", tagline: "Authentic recipes since 1987" },
 };
-function sponsorFor(catKey) {
+function sponsorFor(catKey, bizPhotos) {
   const biz = DEMOS[catKey]?.[0];
   if (!biz) return null;
   const copy = AD_COPY[catKey] || { headline: `Best ${biz.subtype} in McKinney`, tagline: "Top-rated · Trusted locally" };
@@ -2387,7 +2536,7 @@ function sponsorFor(catKey) {
     bizSubtype: biz.subtype, bizRating: biz.rating, bizPrice: biz.price,
     bizOpen: biz.open, bizHours: biz.hours, addr: biz.addr,
     headline: copy.headline, tagline: copy.tagline,
-    image: null,
+    image: bizPhotos?.[biz.id]?.featured || null,
     phone: biz.phone, website: biz.website, menuUrl: biz.menuUrl, about: biz.about,
   };
 }
@@ -2400,7 +2549,7 @@ const WEEKLY = [
 ];
 const maxR = Math.max(...WEEKLY.map(d=>d.reviews));
 
-function OwnerDashboard({ onBack, onAdvertise }) {
+function OwnerDashboard({ onBack, onAdvertise, bizPhotos, onUpdateBizPhoto }) {
   const [tab, setTab] = useState("overview");
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [tab]);
@@ -2417,6 +2566,8 @@ function OwnerDashboard({ onBack, onAdvertise }) {
     description: "Authentic Italian cuisine in the heart of McKinney. Family recipes since 1987.",
   });
   const [editForm, setEditForm] = useState({...profile});
+  const bizFeatured = bizPhotos?.[DEMO_BIZ.id]?.featured || null;
+  const bizSlider = bizPhotos?.[DEMO_BIZ.id]?.slider || [];
 
   const allVals = DEMO_REVIEWS.flatMap(r=>Object.values(r.scores||{}).filter(Boolean));
   const overall = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : 0;
@@ -2459,7 +2610,7 @@ function OwnerDashboard({ onBack, onAdvertise }) {
           <span style={{fontSize:11,color:O,fontWeight:700}}>Live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-          <IconBox type={DEMO_BIZ.type} size={44} emoji={DEMO_BIZ.emoji}/>
+          <IconBox id={DEMO_BIZ.id} type={DEMO_BIZ.type} subtype={DEMO_BIZ.subtype} uploadedPhoto={bizFeatured} size={44}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:16,fontWeight:900,color:N,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{profile.name}</div>
             <div style={{fontSize:11,color:MUT,marginTop:2,display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
@@ -2742,6 +2893,54 @@ function OwnerDashboard({ onBack, onAdvertise }) {
         {tab==="profile" && <>
           <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
             padding:"16px",marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:800,color:N,marginBottom:14}}>Photos</div>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Featured image</div>
+            <label style={{display:"flex",alignItems:"center",justifyContent:"center",
+              width:88,height:88,borderRadius:14,overflow:"hidden",background:BG3,
+              border:`1.5px dashed ${BDR}`,cursor:"pointer",marginBottom:18}}>
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const dataUrl = await fileToDataUrl(file);
+                onUpdateBizPhoto(DEMO_BIZ.id, { featured: dataUrl });
+                e.target.value = "";
+              }}/>
+              {bizFeatured
+                ? <img src={bizFeatured} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                : <Camera size={26} color={MUT} strokeWidth={2}/>}
+            </label>
+
+            <div style={{fontSize:10,fontWeight:700,color:MUT,textTransform:"uppercase",
+              letterSpacing:"0.06em",marginBottom:8}}>Slider images</div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {bizSlider.map((src,i)=>(
+                <div key={i} style={{position:"relative",width:64,height:64,borderRadius:10,overflow:"hidden"}}>
+                  <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  <button onClick={()=>onUpdateBizPhoto(DEMO_BIZ.id,{slider:bizSlider.filter((_,idx)=>idx!==i)})}
+                    style={{position:"absolute",top:2,right:2,width:18,height:18,borderRadius:"50%",
+                      border:"none",background:"rgba(0,0,0,0.6)",color:"#fff",fontSize:11,lineHeight:1,
+                      cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0}}>×</button>
+                </div>
+              ))}
+              <label style={{width:64,height:64,borderRadius:10,background:BG3,
+                border:`1.5px dashed ${BDR}`,cursor:"pointer",
+                display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <input type="file" accept="image/*" multiple style={{display:"none"}} onChange={async e=>{
+                  const files = Array.from(e.target.files||[]);
+                  if (!files.length) return;
+                  const dataUrls = await Promise.all(files.map(fileToDataUrl));
+                  onUpdateBizPhoto(DEMO_BIZ.id, { slider:[...bizSlider,...dataUrls] });
+                  e.target.value = "";
+                }}/>
+                <span style={{fontSize:20,color:MUT,lineHeight:1}}>+</span>
+              </label>
+            </div>
+          </div>
+
+          <div style={{background:BG2,border:`1.5px solid ${BDR}`,borderRadius:16,
+            padding:"16px",marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
               <div style={{fontSize:12,fontWeight:800,color:N}}>Business info</div>
               <button onClick={()=>{setEditOpen(true);setEditForm({...profile});}}
@@ -2829,9 +3028,15 @@ export default function ServedApp() {
   const [business,setBiz]    = useState(null);
   const [reviewData,setReview] = useState(null);
   const [isDark,setIsDark]   = useState(true);
+  const [bizPhotos,setBizPhotos] = useState(loadBizPhotos);
 
   useEffect(() => { applyTheme(DARK_VARS); }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [view]);
+  useEffect(() => { saveBizPhotos(bizPhotos); }, [bizPhotos]);
+
+  const updateBizPhoto = useCallback((bizId, patch) => {
+    setBizPhotos(all => ({ ...all, [bizId]: { ...all[bizId], ...patch } }));
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setIsDark(d => {
@@ -2849,11 +3054,11 @@ export default function ServedApp() {
   return (
     <div style={{minHeight:"100vh",background:"#111",display:"flex",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:430,background:BG,minHeight:"100vh",color:N,position:"relative",borderRadius:24,overflow:"hidden"}}>
-        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")}/>}
-        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")}/>}
+        {view==="home"      && <Home onSelect={select} onRate={rate} isDark={isDark} toggleTheme={toggleTheme} onDashboard={()=>setView("dashboard")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos}/>}
+        {view==="business"  && <BusinessPage business={business} onBack={()=>setView("home")} onRate={()=>setView("rate")} bizPhotos={bizPhotos}/>}
         {view==="rate"      && <RateView business={business} onBack={()=>setView("business")} onDone={done}/>}
         {view==="done"      && <DoneScreen business={business} reviewData={reviewData} onReset={reset}/>}
-        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")}/>}
+        {view==="dashboard" && <OwnerDashboard onBack={()=>setView("home")} onAdvertise={()=>setView("advertise")} bizPhotos={bizPhotos} onUpdateBizPhoto={updateBizPhoto}/>}
         {view==="advertise" && <AdvertisePage onBack={()=>setView("home")}/>}
       </div>
     </div>
